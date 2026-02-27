@@ -69,6 +69,7 @@ model User {
   password       String
   role           Role    @default(APPLICANT)
   profilePicture String?
+  profileUpdated Boolean @default(false)
 
   applicant Applicant?
   recruiter Recruiter?

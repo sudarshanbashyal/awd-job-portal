@@ -2,32 +2,42 @@
 import { Request, RequestHandler, Response } from "express";
 
 // libraries
-import { prisma } from "../lib/prisma";
+import { AuthRequest, prisma } from "../lib";
 
-export const getUsers: RequestHandler = async (
-  _req: Request,
+export const getProfile: RequestHandler = async (
+  req: AuthRequest,
   res: Response,
-  next,
 ) => {
   try {
-    // const user = await prisma.user.create({
-    //   data: {
-    //     email: "test@gmail.com",
-    //     password: "test123",
-    //     role: "APPLICANT",
-    //   },
-    // });
-    // res.json({
-    //   ok: true,
-    // data: user,
-    // });
+    const payload = req.user;
+    if (!payload) throw new Error();
 
-    res.locals = {
-      data: "hello 123",
-    };
-    next();
+    const user = await prisma.user.findFirst({
+      where: {
+        email: payload.email as string,
+      },
+      select: {
+        id: true,
+        email: true,
+      }
+      ,
+    });
+
+    if (!user) {
+      res.status(404).json({
+        ok: false,
+        errors: ["User not found."],
+      });
+      return;
+    }
+
+    res.json({
+      ok: true,
+      data: {
+        user
+      }
+    })
   } catch (error) {
-    console.log(error);
     res.status(500).json({ ok: false });
   }
 };
