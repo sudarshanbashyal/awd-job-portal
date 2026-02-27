@@ -4,24 +4,24 @@ import dotenv from "dotenv";
 import Express, { json } from "express";
 
 // routes
-import UserRouter from "./routes/user.route";
+import { authRouter, userRouter } from "./routes";
 
 const init = async () => {
-    dotenv.config();
-    const app = Express();
+  dotenv.config();
+  const app = Express();
 
-    app.use(
-        json({
-            limit: "50mb",
-        }),
-        cors(),
-    );
+  app.use(
+    json({
+      limit: "50mb",
+    }),
+    cors(),
+  );
 
-    app.use([UserRouter]);
+  app.use([userRouter, authRouter]);
 
-    app.listen(process.env.PORT || 3000, () => {
-        console.log(`Up and up on ${process.env.PORT}!!`);
-    });
+  app.listen(process.env.PORT || 3000, () => {
+    console.log(`Up and up on ${process.env.PORT}!!`);
+  });
 };
 
 init();

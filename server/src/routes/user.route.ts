@@ -2,16 +2,11 @@
 import { Router } from "express";
 
 // controllers
-import { getUsers } from "../controllers/user.controller";
+import * as Controller from "../controllers";
 
-const router = Router();
+// libs
+import { isAuth } from "../lib";
 
-router.get("/users", getUsers, (req, res) => {
-  console.log("res: ", res.locals);
+export const userRouter = Router();
 
-  res.json({
-    ok: true,
-  });
-});
-
-export default router;
+userRouter.get("/profile", isAuth, Controller.getProfile);
