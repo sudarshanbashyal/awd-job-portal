@@ -12,11 +12,63 @@ enum Role {
   RECRUITER
 }
 
+enum Level {
+  ENTRY_LEVEL
+  JUNIOR
+  MID_LEVEL
+  SENIOR
+}
+
+enum JobStatus {
+  DRAFTED
+  OPEN
+  CLOSED
+}
+
+enum JobType {
+  PART_TIME
+  FULL_TIME
+}
+
+enum JobArrangement {
+  ONSITE
+  REMOTE
+  HYBRID
+}
+
+enum JobApplicationStatus {
+  APPLIED
+  SHORTLISTED
+  REJECTED
+
+  ASSESSMENT
+  ASSESSMENT_PASSED
+
+  INTERVIEW
+  INTERVIEW_PASSED
+
+  OFFERED
+  OFFER_ACCEPTED
+  OFFER_REJECTED
+}
+
+enum ParsedResumeStatus {
+  PARSING
+  PARSED
+  FAILED
+}
+
+enum SkillType {
+  SOFT_SKILL
+  HARD_SKILL
+}
+
 model User {
-  id       String @id @default(uuid())
-  email    String @unique
-  password String
-  role     Role   @default(APPLICANT)
+  id             String  @id @default(uuid())
+  email          String  @unique
+  password       String
+  role           Role    @default(APPLICANT)
+  profilePicture String?
 
   applicant Applicant?
   recruiter Recruiter?
@@ -28,11 +80,67 @@ model User {
 model Applicant {
   id String @id @default(uuid())
 
-  firstName String
-  lastName  String
+  firstName   String
+  lastName    String
+  profile     String?
+  location    String?
+  phoneNumber String?
 
   user   User?  @relation(fields: [userId], references: [id])
   userId String @unique
+
+  skills                 Skills?
+  professionalExperience ProfessionalExperience?
+  education              Education?
+  jobApplication         JobApplication?
+
+  skillAssessment SkillAssessment?
+}
+
+model Skills {
+  id          String @id @default(uuid())
+  skill       String
+  skillRating Int?
+
+  applicant   Applicant? @relation(fields: [applicantId], references: [id])
+  applicantId String     @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProfessionalExperience {
+  id String @id @default(uuid())
+
+  role        String
+  companyName String
+  location    String
+  startedAt   DateTime
+  endedAt     DateTime
+  description String
+
+  applicant   Applicant? @relation(fields: [applicantId], references: [id])
+  applicantId String     @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Education {
+  id String @id @default(uuid())
+
+  role        String
+  companyName String
+  location    String
+  startedAt   DateTime
+  endedAt     DateTime
+  description String
+
+  applicant   Applicant? @relation(fields: [applicantId], references: [id])
+  applicantId String     @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Recruiter {
@@ -45,4 +153,84 @@ model Recruiter {
 
   user   User?  @relation(fields: [userId], references: [id])
   userId String @unique
+
+  jobPostings JobPosting[]
+}
+
+model JobPosting {
+  id                String         @id @default(uuid())
+  summary           String
+  description       String
+  salaryFrom        Int?
+  salaryTo          Int?
+  level             Level?
+  yearsOfExperience Int?
+  jobType           JobType        @default(FULL_TIME)
+  location          String
+  arrangement       JobArrangement @default(ONSITE)
+
+  postedBy    Recruiter @relation(fields: [recruiterId], references: [id])
+  recruiterId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model JobApplication {
+  id String @id @default(uuid())
+
+  resumeLink String
+
+  applicant   Applicant? @relation(fields: [applicantId], references: [id])
+  applicantId String     @unique
+
+  applicationStatus JobApplicationStatus @default(APPLIED)
+  parsedResumes     ParsedResume[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ParsedResume {
+  id String @id @default(uuid())
+
+  status            ParsedResumeStatus @default(PARSING)
+  yearsOfExperience Float
+  rating            Int
+
+  application   JobApplication @relation(fields: [applicationId], references: [id])
+  applicationId String
+
+  extractedSkills ExtractedSkills[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ExtractedSkills {
+  id String @id @default(uuid())
+
+  skill      String
+  confidence Int
+  skillType  SkillType?
+
+  parsedResume   ParsedResume @relation(fields: [parsedResumeId], references: [id])
+  parsedResumeId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SkillAssessment {
+  id String @id @default(uuid())
+
+  status      ParsedResumeStatus @default(PARSING)
+  description String
+  rating      Int
+
+  applicant   Applicant? @relation(fields: [applicantId], references: [id])
+  applicantId String     @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
