@@ -1,5 +1,5 @@
 // packages
-import { Request, RequestHandler, Response } from "express";
+import { RequestHandler, Response } from "express";
 
 // libraries
 import { AuthRequest, prisma } from "../lib";
@@ -19,8 +19,7 @@ export const getProfile: RequestHandler = async (
       select: {
         id: true,
         email: true,
-      }
-      ,
+      },
     });
 
     if (!user) {
@@ -34,9 +33,9 @@ export const getProfile: RequestHandler = async (
     res.json({
       ok: true,
       data: {
-        user
-      }
-    })
+        user,
+      },
+    });
   } catch (error) {
     res.status(500).json({ ok: false });
   }

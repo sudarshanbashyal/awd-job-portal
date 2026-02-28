@@ -10,12 +10,18 @@ import {
 } from "../lib";
 
 // prisma
-import { Role } from "generated/prisma/enums";
+import { Role } from "../../generated/prisma/enums";
 
 interface RegisterUserDto {
   email: string;
   password: string;
   role: Role;
+
+  firstName: string;
+  lastName: string;
+
+  companyName?: string;
+  companyAddress?: string;
 }
 
 interface LoginDto {
@@ -40,21 +46,46 @@ export const register: RequestHandler = async (req: Request, res: Response) => {
 
     const hashedPw = await encryptPassword(registerUserDto.password);
 
-    const newUser = await prisma.user.create({
-      data: {
-        email: registerUserDto.email,
-        role: registerUserDto.role,
-        password: hashedPw,
-      },
+    const result = await prisma.$transaction(async (tx) => {
+      const newUser = await prisma.user.create({
+        data: {
+          email: registerUserDto.email,
+          role: registerUserDto.role,
+          password: hashedPw,
+        },
+      });
+
+      if (registerUserDto.role === "APPLICANT") {
+        await prisma.applicant.create({
+          data: {
+            firstName: registerUserDto.firstName,
+            lastName: registerUserDto.lastName,
+            userId: newUser.id,
+          },
+        });
+      } else {
+        await prisma.recruiter.create({
+          data: {
+            firstName: registerUserDto.firstName,
+            lastName: registerUserDto.lastName,
+            companyName: registerUserDto.companyName!,
+            companyAddress: registerUserDto.companyAddress!,
+            userId: newUser.id,
+          },
+        });
+      }
+
+      return newUser;
     });
 
     res.status(201).json({
       ok: true,
       data: {
-        email: newUser.email,
+        id: result.id,
       },
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ ok: false });
   }
 };
@@ -66,6 +97,10 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
     const user = await prisma.user.findFirst({
       where: {
         email: loginDto.email,
+      },
+      include: {
+        applicant: true,
+        recruiter: true,
       },
     });
 
@@ -84,6 +119,7 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ ok: false });
   }
 };
