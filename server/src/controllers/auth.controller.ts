@@ -12,6 +12,7 @@ import {
 // prisma
 import { Role } from "../../generated/prisma/enums";
 
+// types
 interface RegisterUserDto {
   email: string;
   password: string;
@@ -55,7 +56,7 @@ export const register: RequestHandler = async (req: Request, res: Response) => {
         },
       });
 
-      if (registerUserDto.role === "APPLICANT") {
+      if (registerUserDto.role === Role.APPLICANT) {
         await prisma.applicant.create({
           data: {
             firstName: registerUserDto.firstName,
