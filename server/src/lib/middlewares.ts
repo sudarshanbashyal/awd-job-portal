@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from "express";
 // prisma
 import { Role } from "../../generated/prisma/enums";
 
+// types
 export interface TokenPayload {
   id: String;
   email: String;

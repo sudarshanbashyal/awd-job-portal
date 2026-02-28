@@ -187,20 +187,21 @@ export const getJobPostings: RequestHandler = async (
       return;
     }
 
-    const searchConditions: Prisma.JobPostingWhereInput = {
+    const whereConditions: Prisma.JobPostingWhereInput = {
       recruiterId,
+      deletedAt: null,
     };
     if (queryParam.search?.trim()) {
-      searchConditions.title = {
+      whereConditions.title = {
         contains: queryParam.search,
       };
     }
     if (queryParam.status?.trim()) {
-      searchConditions.status = queryParam.status;
+      whereConditions.status = queryParam.status;
     }
 
     const jobPostings = await prisma.jobPosting.findMany({
-      where: searchConditions,
+      where: whereConditions,
       orderBy: {
         createdAt: "desc",
       },
@@ -223,40 +224,41 @@ export const search: RequestHandler = async (
   try {
     const queryParam = req.query as JobSearchQuery;
 
-    const searchConditions: Prisma.JobPostingWhereInput = {
+    const whereConditions: Prisma.JobPostingWhereInput = {
+      deletedAt: null,
       status: {
-        notIn: ["DRAFTED", "CLOSED"],
+        notIn: [JobStatus.DRAFTED, JobStatus.CLOSED],
       },
     };
     if (queryParam.search?.trim()) {
-      searchConditions.title = {
+      whereConditions.title = {
         contains: queryParam.search,
       };
     }
     if (queryParam.location?.trim()) {
-      searchConditions.location = {
+      whereConditions.location = {
         contains: queryParam.location,
       };
     }
     if (queryParam.workArrangement?.trim()) {
-      searchConditions.arrangement = queryParam.workArrangement;
+      whereConditions.arrangement = queryParam.workArrangement;
     }
     if (queryParam.workType?.trim()) {
-      searchConditions.jobType = queryParam.workType;
+      whereConditions.jobType = queryParam.workType;
     }
     if (queryParam.salaryFrom?.trim()) {
-      searchConditions.salaryFrom = {
+      whereConditions.salaryFrom = {
         gte: +queryParam.salaryFrom,
       };
     }
     if (queryParam.salaryTo?.trim()) {
-      searchConditions.salaryTo = {
+      whereConditions.salaryTo = {
         lte: +queryParam.salaryTo,
       };
     }
 
     const jobPostings = await prisma.jobPosting.findMany({
-      where: searchConditions,
+      where: whereConditions,
       orderBy: {
         createdAt: "desc",
       },
@@ -265,6 +267,91 @@ export const search: RequestHandler = async (
     res.json({
       ok: true,
       data: jobPostings,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const findJobById: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const id = req.params.id;
+
+    const job = await prisma.jobPosting.findFirst({
+      where: {
+        AND: [
+          {
+            id,
+          },
+          {
+            status: {
+              in: [JobStatus.OPEN, JobStatus.CLOSED],
+            },
+          },
+          {
+            deletedAt: null,
+          },
+        ],
+      },
+    });
+
+    if (!job) {
+      res.status(404).json({
+        ok: false,
+        errors: ["Job doesn't exist."],
+      });
+      return;
+    }
+
+    res.json({
+      ok: true,
+      data: job,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const findJobPostingById: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const id = req.params.id;
+    const recruiterId = req?.user?.recruiterId;
+
+    const job = await prisma.jobPosting.findFirst({
+      where: {
+        AND: [
+          {
+            recruiterId,
+          },
+          {
+            id,
+          },
+          {
+            deletedAt: null,
+          },
+        ],
+      },
+    });
+
+    if (!job) {
+      res.status(404).json({
+        ok: false,
+        errors: ["Job doesn't exist."],
+      });
+      return;
+    }
+
+    res.json({
+      ok: true,
+      data: job,
     });
   } catch (error) {
     console.error(error);

@@ -40,6 +40,7 @@ enum JobApplicationStatus {
   APPLIED
   SHORTLISTED
   REJECTED
+  WITHDRAWN
 
   ASSESSMENT
   ASSESSMENT_PASSED
@@ -86,6 +87,7 @@ model Applicant {
   profile     String?
   location    String?
   phoneNumber String?
+  resumeLink  String?
 
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique
@@ -176,6 +178,8 @@ model JobPosting {
   postedBy    Recruiter @relation(fields: [recruiterId], references: [id])
   recruiterId String
 
+  jobApplications JobApplication[]
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -189,8 +193,11 @@ model JobApplication {
   applicant   Applicant? @relation(fields: [applicantId], references: [id])
   applicantId String     @unique
 
+  jobPosting JobPosting @relation(fields: [jobId], references: [id])
+  jobId      String
+
   applicationStatus JobApplicationStatus @default(APPLIED)
-  parsedResumes     ParsedResume[]
+  parsedResume      ParsedResume?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -204,7 +211,7 @@ model ParsedResume {
   rating            Int
 
   application   JobApplication @relation(fields: [applicationId], references: [id])
-  applicationId String
+  applicationId String         @unique
 
   extractedSkills ExtractedSkills[]
 
