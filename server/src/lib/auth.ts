@@ -3,7 +3,15 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 // types
-import { User } from "generated/prisma/browser";
+import { Applicant, Recruiter, User } from "generated/prisma/browser";
+
+// types
+import { TokenPayload } from "./middlewares";
+
+interface UserWithRecruiterOrApplicant extends User {
+  recruiter?: Recruiter | null;
+  applicant?: Applicant | null;
+}
 
 export const encryptPassword = async (pw: string) => {
   try {
@@ -21,16 +29,21 @@ export const comparePassword = async (pw: string, hash: string) => {
   }
 };
 
-export const generateAccessToken = (user: User) => {
+export const generateAccessToken = (user: UserWithRecruiterOrApplicant) => {
   try {
-    return jwt.sign(
-      { email: user.email, role: user.role },
-      process.env.AUTH_KEY!,
-      {
-        algorithm: "HS256",
-        expiresIn: "3h",
-      },
-    );
+    const payload: TokenPayload = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    };
+
+    if (user.recruiter) payload.recruiterId = user.recruiter.id;
+    if (user.applicant) payload.applicantId = user.applicant.id;
+
+    return jwt.sign(payload, process.env.AUTH_KEY!, {
+      algorithm: "HS256",
+      expiresIn: "3h",
+    });
   } catch (error) {
     console.log(error);
     throw error;

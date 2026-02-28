@@ -87,15 +87,15 @@ model Applicant {
   location    String?
   phoneNumber String?
 
-  user   User?  @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @unique
 
-  skills                 Skills?
-  professionalExperience ProfessionalExperience?
-  education              Education?
-  jobApplication         JobApplication?
+  skills                 Skills[]
+  professionalExperience ProfessionalExperience[]
+  education              Education[]
+  jobApplications        JobApplication[]
 
-  skillAssessment SkillAssessment?
+  skillAssessments SkillAssessment[]
 }
 
 model Skills {
@@ -152,7 +152,7 @@ model Recruiter {
   companyName    String
   companyAddress String
 
-  user   User?  @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @unique
 
   jobPostings JobPosting[]
@@ -160,6 +160,7 @@ model Recruiter {
 
 model JobPosting {
   id                String         @id @default(uuid())
+  title             String
   summary           String
   description       String
   salaryFrom        Int?
@@ -170,11 +171,14 @@ model JobPosting {
   location          String
   arrangement       JobArrangement @default(ONSITE)
 
+  status JobStatus @default(DRAFTED)
+
   postedBy    Recruiter @relation(fields: [recruiterId], references: [id])
   recruiterId String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
 
 model JobApplication {
