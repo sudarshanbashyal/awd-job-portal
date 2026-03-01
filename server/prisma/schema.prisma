@@ -106,7 +106,7 @@ model Skills {
   skillRating Int?
 
   applicant   Applicant? @relation(fields: [applicantId], references: [id])
-  applicantId String     @unique
+  applicantId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -119,11 +119,11 @@ model ProfessionalExperience {
   companyName String
   location    String
   startedAt   DateTime
-  endedAt     DateTime
+  endedAt     DateTime?
   description String
 
   applicant   Applicant? @relation(fields: [applicantId], references: [id])
-  applicantId String     @unique
+  applicantId String     
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -132,15 +132,15 @@ model ProfessionalExperience {
 model Education {
   id String @id @default(uuid())
 
-  role        String
-  companyName String
-  location    String
-  startedAt   DateTime
-  endedAt     DateTime
-  description String
+  instituteName String
+  course        String
+  location      String
+  description   String?
+  startedAt     DateTime
+  endedAt       DateTime?
 
   applicant   Applicant? @relation(fields: [applicantId], references: [id])
-  applicantId String     @unique
+  applicantId String     
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

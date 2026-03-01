@@ -63,7 +63,7 @@ export const isApplicant = (
       return;
     }
 
-    if (tokenPayload.role !== Role.APPLICANT) {
+    if (tokenPayload.role !== Role.APPLICANT || !tokenPayload.applicantId) {
       res.status(401).json({
         ok: false,
         errors: ["Only applicants can access this resource."],
@@ -93,7 +93,7 @@ export const isRecruiter = (
       return;
     }
 
-    if (tokenPayload.role !== Role.RECRUITER) {
+    if (tokenPayload.role !== Role.RECRUITER || !tokenPayload.recruiterId) {
       res.status(401).json({
         ok: false,
         errors: ["Only recruiters can access this resource."],
