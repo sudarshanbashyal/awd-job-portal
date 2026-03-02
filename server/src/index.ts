@@ -16,6 +16,8 @@ const init = async () => {
   dotenv.config();
   const app = Express();
 
+  app.use(Express.urlencoded({ extended: true }));
+
   app.use(
     json({
       limit: "50mb",

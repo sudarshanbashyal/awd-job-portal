@@ -1,5 +1,6 @@
 // packages
 import fs from "fs";
+import path from "path";
 import PDFDocument from "pdfkit";
 
 // prisma
@@ -11,11 +12,16 @@ import {
   ProfessionalExperience,
 } from "generated/prisma/browser";
 
-const PAGE_MARGIN = 50;
-const PAGE_BOTTOM = 750;
+// libs
+import { RESUME_PATH } from "./registry";
+
+// types
 type PDFFile = PDFKit.PDFDocument;
 
-export const generateResumeFromProfile = (
+const PAGE_MARGIN = 50;
+const PAGE_BOTTOM = 750;
+
+export const generateResumeFromProfile = async (
   applicant: Applicant,
   user: User,
   skills: Skills[],
@@ -23,19 +29,30 @@ export const generateResumeFromProfile = (
   experiences?: ProfessionalExperience[],
 ) => {
   try {
-    const outputPath = "resume.pdf";
-    const doc: PDFFile = new PDFDocument({
-      margin: PAGE_MARGIN,
+    const fileName = `${crypto.randomUUID()}.pdf`;
+    const outputPath = path.join(RESUME_PATH, fileName);
+
+    const doc = new PDFDocument({ margin: PAGE_MARGIN });
+
+    await new Promise<void>((resolve, reject) => {
+      const stream = fs.createWriteStream(outputPath);
+      doc.pipe(stream);
+
+      stream.on("finish", () => resolve());
+      stream.on("error", (err) => reject(err));
+
+      renderHeader(doc, user, applicant);
+      experiences?.length && renderExperience(doc, experiences);
+      renderEducation(doc, educations);
+      renderSkills(doc, skills);
+
+      doc.end();
     });
 
-    doc.pipe(fs.createWriteStream(outputPath));
+    const stats = fs.statSync(outputPath);
+    const fileSizeInBytes = stats.size;
 
-    renderHeader(doc, user, applicant);
-    experiences?.length && renderExperience(doc, experiences);
-    renderEducation(doc, educations);
-    renderSkills(doc, skills);
-
-    doc.end();
+    return { fileName, fileSizeInBytes };
   } catch (e) {
     console.error(e);
     return null;
