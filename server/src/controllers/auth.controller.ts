@@ -47,7 +47,7 @@ export const register: RequestHandler = async (req: Request, res: Response) => {
 
     const hashedPw = await encryptPassword(registerUserDto.password);
 
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (_tx) => {
       const newUser = await prisma.user.create({
         data: {
           email: registerUserDto.email,

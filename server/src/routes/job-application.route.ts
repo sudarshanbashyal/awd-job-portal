@@ -27,6 +27,12 @@ jobApplicationRouter.get(
   isRecruiter,
   Controller.getApplicantsByJobId,
 );
+
+jobApplicationRouter.get(
+  "/resume/:jobId/:applicationId",
+  isRecruiter,
+  Controller.getApplicantResume,
+);
 jobApplicationRouter.patch(
   "/application-status/:jobId/:applicationId",
   isRecruiter,
