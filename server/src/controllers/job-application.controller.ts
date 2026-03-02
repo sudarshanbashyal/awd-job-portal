@@ -1,9 +1,16 @@
 // packages
 import { RequestHandler, Response } from "express";
+import contentDisposition from "content-disposition";
 
 // libraries
-import { AuthRequest, prisma } from "../lib";
-import { JobApplicationStatus, JobStatus } from "../../generated/prisma/enums";
+import { AuthRequest, checkFile, prisma } from "../lib";
+
+// prisma
+import {
+  JobStatus,
+  UploadType,
+  JobApplicationStatus,
+} from "../../generated/prisma/enums";
 import { Prisma } from "generated/prisma/browser";
 
 // types
@@ -95,7 +102,15 @@ export const createNewApplication: RequestHandler = async (
       return;
     }
 
-    // TODO: check if resume actually exists in the vault
+    // check if resume actually exists in the registry
+    const filePath = checkFile(UploadType.RESUME, applicant.resumeLink);
+    if (!filePath) {
+      res.status(401).json({
+        ok: false,
+        errors: ["Failed to retrieve resume."],
+      });
+      return;
+    }
 
     const newApplication = await prisma.jobApplication.create({
       data: {
@@ -301,6 +316,79 @@ export const updateApplicationStatus: RequestHandler = async (
       ok: true,
       data: updatedApplication,
     });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const getApplicantResume: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const recruiterId = req.user?.recruiterId;
+
+    const jobId = req.params.jobId;
+    const applicationId = req.params.applicationId;
+
+    const jobPosting = await prisma.jobPosting.findFirst({
+      where: {
+        id: jobId,
+      },
+    });
+
+    if (jobPosting?.recruiterId !== recruiterId) {
+      res.status(401).json({
+        ok: false,
+        errors: ["Unauthorized access."],
+      });
+      return;
+    }
+
+    const application = await prisma.jobApplication.findFirst({
+      where: {
+        id: applicationId,
+      },
+    });
+
+    if (!application) {
+      res.status(404).json({
+        ok: false,
+        errors: ["Application not found."],
+      });
+      return;
+    }
+
+    const uploadedFile = await prisma.uploadedFile.findFirst({
+      where: {
+        storedName: application.resumeLink,
+      },
+    });
+
+    if (!uploadedFile) {
+      res.status(404).json({
+        ok: false,
+        errors: ["Application resume not found."],
+      });
+      return;
+    }
+
+    const filePath = checkFile(UploadType.RESUME, application.resumeLink);
+
+    if (!filePath) {
+      res.status(204).json({
+        ok: true,
+      });
+      return;
+    }
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      contentDisposition(uploadedFile.originalName),
+    );
+    res.sendFile(filePath);
   } catch (error) {
     console.error(error);
     res.status(500).json({ ok: false });

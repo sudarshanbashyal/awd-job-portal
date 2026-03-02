@@ -5,11 +5,23 @@ import { Router } from "express";
 import * as Controller from "../controllers";
 
 // libs
-import { isApplicant, isRecruiter } from "../lib";
+import { isApplicant, isAuth, isRecruiter, upload } from "../lib";
 
 export const profileRouter = Router();
 
 // applicant functionalities
+profileRouter.post(
+  "/resume",
+  isApplicant,
+  upload.single("file"),
+  Controller.uploadResume,
+);
+profileRouter.get(
+  "/resume",
+  isApplicant,
+  upload.single("file"),
+  Controller.getResume,
+);
 profileRouter.patch(
   "/applicant-profile",
   isApplicant,
@@ -26,3 +38,12 @@ profileRouter.patch(
   isRecruiter,
   Controller.updateRecruiterProfile,
 );
+
+// applicant and recruiter functionalities
+profileRouter.post(
+  "/profile-picture",
+  isAuth,
+  upload.single("file"),
+  Controller.uploadProfilePicture,
+);
+profileRouter.get("/profile-picture", isAuth, Controller.getProfilePicture);

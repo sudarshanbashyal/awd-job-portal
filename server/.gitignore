@@ -5,3 +5,7 @@ node_modules
 /generated/prisma
 
 dev.db
+
+/src/registry/profile/*
+/src/registry/resume/*
+uploads/
