@@ -21,6 +21,7 @@ interface ApplicantsQuery {
 
 interface UpdateApplicationStatusDto {
   status: JobApplicationStatus;
+  note?: string;
 }
 
 export const createNewApplication: RequestHandler = async (
