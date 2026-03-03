@@ -5,7 +5,6 @@ import Express, { json } from "express";
 
 // routes
 import {
-  userRouter,
   authRouter,
   profileRouter,
   jobPostingRouter,
@@ -25,13 +24,7 @@ const init = async () => {
     cors(),
   );
 
-  app.use([
-    userRouter,
-    authRouter,
-    profileRouter,
-    jobPostingRouter,
-    jobApplicationRouter,
-  ]);
+  app.use([authRouter, profileRouter, jobPostingRouter, jobApplicationRouter]);
 
   app.listen(process.env.PORT || 3000, () => {
     console.log(`Up and up on ${process.env.PORT}!!`);

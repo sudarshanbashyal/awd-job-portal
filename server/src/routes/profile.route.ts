@@ -46,4 +46,6 @@ profileRouter.post(
   upload.single("file"),
   Controller.uploadProfilePicture,
 );
+profileRouter.get("/profile", isAuth, Controller.getprofile);
+profileRouter.delete("/account", isAuth, Controller.deleteAccount);
 profileRouter.get("/profile-picture", isAuth, Controller.getProfilePicture);

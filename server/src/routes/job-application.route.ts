@@ -20,10 +20,15 @@ jobApplicationRouter.patch(
   isApplicant,
   Controller.withdrawApplication,
 );
+jobApplicationRouter.get(
+  "/my-applications",
+  isApplicant,
+  Controller.getApplicantApplications,
+);
 
 // recruiter functionalities
 jobApplicationRouter.get(
-  "/applicants/:jobId",
+  "/:jobId/applicants",
   isRecruiter,
   Controller.getApplicantsByJobId,
 );

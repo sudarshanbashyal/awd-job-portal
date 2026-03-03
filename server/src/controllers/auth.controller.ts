@@ -4,6 +4,7 @@ import { Request, RequestHandler, Response } from "express";
 // libraries
 import {
   prisma,
+  AuthRequest,
   comparePassword,
   encryptPassword,
   generateAccessToken,
@@ -28,6 +29,11 @@ interface RegisterUserDto {
 interface LoginDto {
   email: string;
   password: string;
+}
+
+interface ChangePasswordDto {
+  oldPassword: string;
+  newPassword: string;
 }
 
 export const register: RequestHandler = async (req: Request, res: Response) => {
@@ -105,10 +111,18 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
       },
     });
 
-    if (!user || !comparePassword(loginDto.password, user.password)) {
+    if (!user || !(await comparePassword(loginDto.password, user.password))) {
       res.status(404).json({
         ok: false,
         errors: ["Incorrect email or password."],
+      });
+      return;
+    }
+
+    if (user.deletedAt) {
+      res.status(401).json({
+        ok: false,
+        errors: ["Account has been deleted."],
       });
       return;
     }
@@ -117,6 +131,60 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
       ok: true,
       data: {
         accessToken: generateAccessToken(user),
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const changePassword: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const userId = req?.user?.id;
+    const changePasswordDto: ChangePasswordDto = req.body;
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId as string,
+      },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        ok: false,
+        errors: ["User not found"],
+      });
+      return;
+    }
+
+    if (
+      !(await comparePassword(changePasswordDto.oldPassword, user.password))
+    ) {
+      res.status(404).json({
+        ok: false,
+        errors: ["Incorrect password"],
+      });
+      return;
+    }
+
+    const hashedPw = await encryptPassword(changePasswordDto.newPassword);
+    await prisma.user.update({
+      where: {
+        id: userId as string,
+      },
+      data: {
+        password: hashedPw,
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        message: "Password updated",
       },
     });
   } catch (error) {
