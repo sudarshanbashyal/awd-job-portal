@@ -197,7 +197,7 @@ model JobApplication {
   resumeLink String
 
   applicant   Applicant? @relation(fields: [applicantId], references: [id])
-  applicantId String     @unique
+  applicantId String
 
   jobPosting JobPosting @relation(fields: [jobId], references: [id])
   jobId      String
@@ -247,7 +247,7 @@ model SkillAssessment {
   rating      Int
 
   applicant   Applicant? @relation(fields: [applicantId], references: [id])
-  applicantId String     @unique
+  applicantId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -263,7 +263,7 @@ model UploadedFile {
   uploadType   UploadType
 
   user   User   @relation(fields: [userId], references: [id])
-  userId String 
+  userId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

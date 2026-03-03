@@ -3,7 +3,13 @@ import { RequestHandler, Response } from "express";
 import contentDisposition from "content-disposition";
 
 // libraries
-import { AuthRequest, checkFile, prisma } from "../lib";
+import {
+  prisma,
+  checkFile,
+  AuthRequest,
+  sendStatusUpdatedEmail,
+  sendApplicationReceivedEmail,
+} from "../lib";
 
 // prisma
 import {
@@ -21,6 +27,7 @@ interface ApplicantsQuery {
 
 interface UpdateApplicationStatusDto {
   status: JobApplicationStatus;
+  note?: string;
 }
 
 export const createNewApplication: RequestHandler = async (
@@ -93,6 +100,19 @@ export const createNewApplication: RequestHandler = async (
         id: applicantId,
       },
     });
+    const user = await prisma.user.findFirst({
+      where: {
+        id: applicant?.userId,
+      },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        ok: false,
+        errors: ["User not found."],
+      });
+      return;
+    }
 
     if (!applicant?.resumeLink) {
       res.status(401).json({
@@ -120,7 +140,13 @@ export const createNewApplication: RequestHandler = async (
       },
     });
 
-    //TODO: initiaite AI resume parsing
+    // send application received email
+    sendApplicationReceivedEmail(user.email, {
+      firstName: applicant.firstName,
+      jobTitle: job.title,
+    });
+
+    // TODO: initiaite AI resume parsing
 
     res.status(201).json({
       ok: true,
@@ -281,7 +307,7 @@ export const updateApplicationStatus: RequestHandler = async (
       },
     });
 
-    if (jobPosting?.recruiterId !== recruiterId) {
+    if (!jobPosting || jobPosting?.recruiterId !== recruiterId) {
       res.status(401).json({
         ok: false,
         errors: ["Unauthorized access."],
@@ -303,6 +329,25 @@ export const updateApplicationStatus: RequestHandler = async (
       return;
     }
 
+    const applicant = await prisma.applicant.findFirst({
+      where: {
+        id: application?.applicantId,
+      },
+    });
+    const user = await prisma.user.findFirst({
+      where: {
+        id: applicant?.userId,
+      },
+    });
+
+    if (!applicant || !user) {
+      res.status(404).json({
+        ok: false,
+        errors: ["User not found"],
+      });
+      return;
+    }
+
     const updatedApplication = await prisma.jobApplication.update({
       where: {
         id: applicationId,
@@ -310,6 +355,14 @@ export const updateApplicationStatus: RequestHandler = async (
       data: {
         applicationStatus: updateApplicationDto.status,
       },
+    });
+
+    // Send application status change email
+    sendStatusUpdatedEmail(user.email, {
+      firstName: applicant.firstName,
+      jobTitle: jobPosting?.title,
+      newStatus: updateApplicationDto.status,
+      message: updateApplicationDto.note,
     });
 
     res.json({
