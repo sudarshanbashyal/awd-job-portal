@@ -7,6 +7,8 @@ import {
   prisma,
   checkFile,
   AuthRequest,
+  assessApplication,
+  parseResumeDetails,
   sendStatusUpdatedEmail,
   sendApplicationReceivedEmail,
 } from "../lib";
@@ -146,7 +148,12 @@ export const createNewApplication: RequestHandler = async (
       jobTitle: job.title,
     });
 
-    // TODO: initiaite AI resume parsing
+    // initiaite AI resume parsing
+    parseResumeDetails(
+      newApplication.id,
+      newApplication.resumeLink,
+      job.description,
+    );
 
     res.status(201).json({
       ok: true,
@@ -471,6 +478,59 @@ export const getApplicantApplications: RequestHandler = async (
     res.json({
       ok: true,
       data: jobApplications,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const assessmentApplication: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const applicantId = req.user?.applicantId;
+    const jobId = req.params.jobId;
+
+    const applicant = await prisma.applicant.findFirst({
+      where: {
+        id: applicantId,
+      },
+    });
+
+    if (!applicant?.resumeLink || !applicantId) {
+      res.status(404).json({
+        ok: false,
+        errors: ["Resume not found."],
+      });
+      return;
+    }
+
+    const job = await prisma.jobPosting.findFirst({
+      where: {
+        id: jobId,
+      },
+    });
+
+    if (!job) {
+      res.status(404).json({
+        ok: false,
+        errors: ["Job not found."],
+      });
+      return;
+    }
+
+    const assessmentResponse = await assessApplication(
+      applicantId,
+      jobId,
+      applicant.resumeLink,
+      job?.description,
+    );
+
+    res.json({
+      ok: true,
+      data: assessmentResponse,
     });
   } catch (error) {
     console.error(error);
