@@ -580,7 +580,15 @@ export const getprofile: RequestHandler = async (
         profilePicture: true,
         role: true,
         recruiter: !!authUser?.recruiterId,
-        applicant: !!authUser?.applicantId,
+        applicant: authUser?.applicantId
+          ? {
+              include: {
+                skills: true,
+                education: true,
+                professionalExperience: true,
+              },
+            }
+          : false,
       },
     });
 
