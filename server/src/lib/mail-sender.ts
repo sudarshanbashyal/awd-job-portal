@@ -7,6 +7,7 @@ import nodemailer from "nodemailer";
 import {
   STATUS_CHANGED_FILEPATH,
   APPLICATION_RECEIVED_FILEPATH,
+  STATUS_CHANGED_WITH_MESSAGE_FILEPATH,
 } from "./email-templates";
 
 // prisma
@@ -22,6 +23,7 @@ interface StatusUpdatedEmailVars {
   firstName: string;
   jobTitle: string;
   newStatus: JobApplicationStatus;
+  message?: string;
 }
 
 const transporter = nodemailer.createTransport({
@@ -87,13 +89,18 @@ export const sendStatusUpdatedEmail = async (
   emailVariables: StatusUpdatedEmailVars,
 ) => {
   try {
-    const template = await renderTemplate(STATUS_CHANGED_FILEPATH, {
-      ...emailVariables,
-      newStatus: emailVariables.newStatus
-        .toLowerCase()
-        .replace(/_/g, " ")
-        .replace(/\b\w/g, (char) => char.toUpperCase()),
-    });
+    const template = await renderTemplate(
+      emailVariables.message
+        ? STATUS_CHANGED_WITH_MESSAGE_FILEPATH
+        : STATUS_CHANGED_FILEPATH,
+      {
+        ...emailVariables,
+        newStatus: emailVariables.newStatus
+          .toLowerCase()
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (char) => char.toUpperCase()),
+      },
+    );
     if (template)
       await sendMail(receiverEmail, "Application updated", template);
   } catch (e) {

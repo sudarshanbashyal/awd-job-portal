@@ -7,8 +7,8 @@ import {
   prisma,
   checkFile,
   AuthRequest,
-  sendApplicationReceivedEmail,
   sendStatusUpdatedEmail,
+  sendApplicationReceivedEmail,
 } from "../lib";
 
 // prisma
@@ -362,6 +362,7 @@ export const updateApplicationStatus: RequestHandler = async (
       firstName: applicant.firstName,
       jobTitle: jobPosting?.title,
       newStatus: updateApplicationDto.status,
+      message: updateApplicationDto.note,
     });
 
     res.json({
