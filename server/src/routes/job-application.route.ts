@@ -21,6 +21,11 @@ jobApplicationRouter.patch(
   Controller.withdrawApplication,
 );
 jobApplicationRouter.get(
+  "/assess/:jobId",
+  isApplicant,
+  Controller.assessmentApplication,
+);
+jobApplicationRouter.get(
   "/my-applications",
   isApplicant,
   Controller.getApplicantApplications,

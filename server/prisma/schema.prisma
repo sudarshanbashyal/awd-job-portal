@@ -81,8 +81,8 @@ model User {
   recruiter     Recruiter?
   uploadedFiles UploadedFile[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 }
 
@@ -185,7 +185,8 @@ model JobPosting {
   postedBy    Recruiter @relation(fields: [recruiterId], references: [id])
   recruiterId String
 
-  jobApplications JobApplication[]
+  jobApplications  JobApplication[]
+  skillAssessments SkillAssessment[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -214,8 +215,8 @@ model ParsedResume {
   id String @id @default(uuid())
 
   status            ParsedResumeStatus @default(PARSING)
-  yearsOfExperience Float
-  rating            Int
+  yearsOfExperience Float?
+  rating            Int?
 
   application   JobApplication @relation(fields: [applicationId], references: [id])
   applicationId String         @unique
@@ -230,7 +231,7 @@ model ExtractedSkills {
   id String @id @default(uuid())
 
   skill      String
-  confidence Int
+  confidence Int?
   skillType  SkillType?
 
   parsedResume   ParsedResume @relation(fields: [parsedResumeId], references: [id])
@@ -247,8 +248,11 @@ model SkillAssessment {
   description String
   rating      Int
 
-  applicant   Applicant? @relation(fields: [applicantId], references: [id])
+  applicant   Applicant @relation(fields: [applicantId], references: [id])
   applicantId String
+
+  jobPosting JobPosting @relation(fields: [jobId], references: [id])
+  jobId      String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
