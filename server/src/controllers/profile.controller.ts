@@ -536,3 +536,67 @@ export const getResume: RequestHandler = async (
     res.status(500).json({ ok: false });
   }
 };
+
+export const deleteAccount: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const userId = req.user?.id;
+    await prisma.user.update({
+      where: {
+        id: userId as string,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        message: "Account deleted.",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const getprofile: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const authUser = req.user;
+    const user = await prisma.user.findFirst({
+      where: {
+        id: authUser?.id as string,
+      },
+      select: {
+        id: true,
+        email: true,
+        profilePicture: true,
+        role: true,
+        recruiter: !!authUser?.recruiterId,
+        applicant: !!authUser?.applicantId,
+      },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        ok: false,
+        errors: ["User not found."],
+      });
+    }
+
+    res.json({
+      ok: true,
+      data: user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};

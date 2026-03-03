@@ -447,3 +447,33 @@ export const getApplicantResume: RequestHandler = async (
     res.status(500).json({ ok: false });
   }
 };
+
+export const getApplicantApplications: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const applicantId = req.user?.applicantId;
+
+    const jobApplications = await prisma.jobApplication.findMany({
+      where: {
+        applicantId,
+      },
+      include: {
+        jobPosting: {
+          include: {
+            postedBy: true,
+          },
+        },
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: jobApplications,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};

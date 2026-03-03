@@ -42,7 +42,7 @@ export const generateAccessToken = (user: UserWithRecruiterOrApplicant) => {
 
     return jwt.sign(payload, process.env.AUTH_KEY!, {
       algorithm: "HS256",
-      expiresIn: "3h",
+      expiresIn: "8h",
     });
   } catch (error) {
     console.log(error);
