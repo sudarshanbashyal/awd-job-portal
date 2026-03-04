@@ -5,6 +5,7 @@ import nodemailer from "nodemailer";
 
 // libs
 import {
+  RESET_TOKEN_FILEPATH,
   STATUS_CHANGED_FILEPATH,
   APPLICATION_RECEIVED_FILEPATH,
   STATUS_CHANGED_WITH_MESSAGE_FILEPATH,
@@ -24,6 +25,11 @@ interface StatusUpdatedEmailVars {
   jobTitle: string;
   newStatus: JobApplicationStatus;
   message?: string;
+}
+
+interface ResetPasswordEmailVars {
+  firstName: string;
+  token: string;
 }
 
 const transporter = nodemailer.createTransport({
@@ -103,6 +109,18 @@ export const sendStatusUpdatedEmail = async (
     );
     if (template)
       await sendMail(receiverEmail, "Application updated", template);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const sendResetTokenEmail = async (
+  receiverEmail: string,
+  emailVariables: ResetPasswordEmailVars,
+) => {
+  try {
+    const template = await renderTemplate(RESET_TOKEN_FILEPATH, emailVariables);
+    if (template) await sendMail(receiverEmail, "Password reset", template);
   } catch (e) {
     console.error(e);
   }
