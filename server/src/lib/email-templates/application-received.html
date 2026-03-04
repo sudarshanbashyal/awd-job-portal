@@ -1,26 +1,80 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Exported from Figma" />
-    <title>Application Received</title>
-    <link
-      href="https://fonts.googleapis.com/css?family=Inter&display=swap"
-      rel="stylesheet"
-    />
-  </head>
 
-  <body>
-    <div>
-      <p>Hello, {{firstName}}</p>
-      <br />
-      <p>We have succesfully received your application for {{jobTitle}}.</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Exported from Figma" />
+  <title>Application Received</title>
+  <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      font-family: sans-serif;
+    }
+
+    p {
+      color: #636363;
+      font-size: 14px;
+    }
+
+    .outer-container {
+      margin: auto;
+      width: 80%;
+      background-color: #f5f5f4;
+      padding: 50px;
+    }
+
+    .paragraph-muted {
+      color: #9ca3af !important;
+    }
+
+    .inner-container {
+      max-width: 500px;
+      background-color: white;
+      margin: auto;
+      padding: 20px;
+      padding-top: 0px;
+      margin: auto;
+      border-radius: 20px;
+      position: relative;
+    }
+
+    .logo {
+      left: 20px;
+      width: 65px;
+      margin-bottom: 15px;
+    }
+
+    .intro-paragraph {
+      display: block;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="outer-container">
+    <div class="inner-container">
+      <img class="logo"
+        src="https://res.cloudinary.com/sudarshanbashyal/image/upload/v1772630673/Group_40_uwwlkt.png" />
+
+      <p class="intro-paragraph">Hi {{firstName}},</p>
       <p>
-        You will receive an email notification if your application is moved by
-        the recruiter.
+        Thanks for applying for the <strong>{{jobTitle}}</strong> position,
+        we’ve successfully received your application. <br /><br />
+
+        The recruiting team will review your profile, and you’ll be notified
+        by email if your application moves forward to the next stage. <br />We
+        appreciate the time and effort you put into applying. Wishing you the
+        very best of luck!<br /><br />
       </p>
-      <p>Good luck!</p>
+
+      <p class="paragraph-muted">
+        Best Regards,<br />
+        Hire.ly
+      </p>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>
