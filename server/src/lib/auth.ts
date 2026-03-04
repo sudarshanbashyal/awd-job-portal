@@ -3,10 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 // types
-import { Applicant, Recruiter, User } from "generated/prisma/browser";
-
-// types
 import { TokenPayload } from "./middlewares";
+import { Applicant, Recruiter, User } from "generated/prisma/browser";
 
 interface UserWithRecruiterOrApplicant extends User {
   recruiter?: Recruiter | null;
@@ -48,4 +46,8 @@ export const generateAccessToken = (user: UserWithRecruiterOrApplicant) => {
     console.log(error);
     throw error;
   }
+};
+
+export const generateToken = () => {
+  return Math.floor(Math.random() * 90000);
 };

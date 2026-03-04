@@ -80,6 +80,7 @@ model User {
   applicant     Applicant?
   recruiter     Recruiter?
   uploadedFiles UploadedFile[]
+  resetTokens   ResetTokens[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -272,4 +273,15 @@ model UploadedFile {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model ResetTokens {
+  id String @id @default(uuid())
+
+  token       Int
+  generatedBy User   @relation(fields: [userId], references: [id])
+  userId      String
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime
 }
