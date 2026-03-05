@@ -5,9 +5,11 @@ import { Request, RequestHandler, Response } from "express";
 import {
   prisma,
   AuthRequest,
+  generateToken,
   comparePassword,
   encryptPassword,
   generateAccessToken,
+  sendResetTokenEmail,
 } from "../lib";
 
 // prisma
@@ -33,6 +35,15 @@ interface LoginDto {
 
 interface ChangePasswordDto {
   oldPassword: string;
+  newPassword: string;
+}
+
+interface ResetTokenDto {
+  token: number;
+}
+
+interface ResetPasswordDto {
+  token: number;
   newPassword: string;
 }
 
@@ -172,6 +183,154 @@ export const changePassword: RequestHandler = async (
     }
 
     const hashedPw = await encryptPassword(changePasswordDto.newPassword);
+    await prisma.user.update({
+      where: {
+        id: userId as string,
+      },
+      data: {
+        password: hashedPw,
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        message: "Password updated",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const generateResetToken: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const userId = req?.user?.id;
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId as string,
+      },
+      include: {
+        applicant: true,
+        recruiter: true,
+      },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        ok: false,
+        errors: ["User not found."],
+      });
+      return;
+    }
+
+    const resetToken = await prisma.resetTokens.create({
+      data: {
+        token: generateToken(),
+        userId: userId as string,
+        expiresAt: new Date(new Date().getTime() + 60 * 60 * 1000),
+      },
+    });
+
+    const firstName = user?.applicant?.firstName || user?.recruiter?.firstName;
+    sendResetTokenEmail(user?.email, {
+      firstName: firstName as string,
+      token: resetToken.token.toString(),
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        messsage: "Token sent",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const checkToken: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const userId = req?.user?.id;
+    const resetTokenDto: ResetTokenDto = req.body;
+
+    const latestToken = await prisma.resetTokens.findFirst({
+      where: {
+        AND: [
+          {
+            userId: userId as string,
+          },
+          {
+            expiresAt: {
+              gt: new Date(),
+            },
+          },
+        ],
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    if (resetTokenDto.token !== latestToken?.token) {
+      res.status(401).json({
+        ok: false,
+        errors: ["Token mismatch."],
+      });
+    }
+
+    res.json({
+      ok: true,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const resetPassword: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const userId = req?.user?.id;
+    const resetPasswordDto: ResetPasswordDto = req.body;
+
+    const latestToken = await prisma.resetTokens.findFirst({
+      where: {
+        AND: [
+          {
+            userId: userId as string,
+          },
+          {
+            expiresAt: {
+              gt: new Date(),
+            },
+          },
+        ],
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    if (resetPasswordDto.token !== latestToken?.token) {
+      res.status(401).json({
+        ok: false,
+        errors: ["Token mismatch."],
+      });
+    }
+
+    const hashedPw = await encryptPassword(resetPasswordDto.newPassword);
     await prisma.user.update({
       where: {
         id: userId as string,
