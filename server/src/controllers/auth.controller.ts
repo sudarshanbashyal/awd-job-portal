@@ -55,7 +55,7 @@ export const register: RequestHandler = async (req: Request, res: Response) => {
     });
 
     if (user) {
-      res.json({
+      res.status(401).json({
         ok: false,
         errors: ["User with email already exists."],
       });

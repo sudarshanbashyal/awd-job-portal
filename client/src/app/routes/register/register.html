@@ -1,1 +1,94 @@
-<p>register works!</p>
+<div class="register-container">
+  <div class="register-form">
+    <p class="welcome-text">Let's get you <span>ready & rolling</span></p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="input-group">
+        <div>
+          <label class="required" for="first-name">First Name</label>
+          <input id="first-name" formControlName="firstName" placeholder="John" />
+          <p *ngIf="submitted && form.get('firstName')?.invalid" class="error">
+            First Name is required
+          </p>
+        </div>
+
+        <div>
+          <label class="required" for="last-name">Last Name</label>
+          <input id="last-name" formControlName="lastName" placeholder="Doe" />
+          <p *ngIf="submitted && form.get('lastName')?.invalid" class="error">
+            Last Name is required
+          </p>
+        </div>
+      </div>
+
+      <label class="required" for="email">Email Address</label>
+      <input id="email" formControlName="email" placeholder="john@doe.com" />
+      <p *ngIf="submitted && form.get('email')?.errors?.['required']" class="error">
+        Email is required
+      </p>
+      <p *ngIf="submitted && form.get('email')?.errors?.['email']" class="error">
+        Please enter a valid email
+      </p>
+      <p *ngIf="submitted && form.errors?.['duplicateEmail']" class="error">Email already taken</p>
+
+      <div class="input-group">
+        <div>
+          <label class="required" for="password">Password</label>
+          <input type="password" class="required" id="password" formControlName="password" placeholder="********" />
+          <p *ngIf="submitted && form.get('password')?.errors?.['required']" class="error">
+            Password is required
+          </p>
+          <p *ngIf="submitted && form.get('password')?.errors?.['minlength']" class="error">
+            Password must be at least 8 characters long
+          </p>
+        </div>
+
+        <div>
+          <label class="required" for="repeat-password">Repeat Password</label>
+          <input type="password" id="repeat-password" formControlName="repeatPassword" placeholder="********" />
+          <p *ngIf="submitted && form.get('repeatPassword')?.errors?.['required']" class="error">
+            Please confirm your password
+          </p>
+          <p *ngIf="submitted && form.errors?.['passwordMismatch']" class="error">
+            Your passwords must match
+          </p>
+        </div>
+      </div>
+
+      <label class="required" for="role">Your Role</label>
+      <select id="role" formControlName="role">
+        <option>-</option>
+        <option value="APPLICANT">Applicant</option>
+        <option value="RECRUITER">Recruiter</option>
+      </select>
+      <p *ngIf="submitted && form.get('role')?.errors?.['required']" class="error">
+        Role is required
+      </p>
+
+      <div class="input-group" *ngIf="form.get('role')?.value === 'RECRUITER'">
+        <div>
+          <label class="required" for="company-name">Company Name</label>
+          <input id="company-name" formControlName="companyName" placeholder="Abcd Gmbh" />
+          <p *ngIf="submitted && form.get('companyName')?.errors?.['required']" class="error">
+            Company Name is required
+          </p>
+        </div>
+
+        <div>
+          <label class="required" for="company-address">Company Address</label>
+          <input id="company-address" formControlName="companyAddress" placeholder="XYZ Street, Germany" />
+          <p *ngIf="submitted && form.get('companyAddress')?.errors?.['required']" class="error">
+            Company Address is required
+          </p>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary">Create Account</button>
+    </form>
+
+    <div class="login-text">
+      <span>Already have an account?</span>
+      <a routerLink="/login" class="nav-link"> Login Here</a>
+    </div>
+  </div>
+</div>
