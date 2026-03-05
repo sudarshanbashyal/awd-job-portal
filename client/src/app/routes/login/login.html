@@ -1,1 +1,36 @@
-<p>login works!</p>
+<div class="login-container">
+  <div class="login-form">
+    <p class="welcome-text">Sign in to <span>Hire.ly</span></p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label class="required" for="email">Email Address</label>
+      <input id="email" formControlName="email" placeholder="john@doe.com" />
+      <p *ngIf="submitted && form.get('email')?.errors?.['required']" class="error">
+        Email is required
+      </p>
+      <p *ngIf="submitted && form.get('email')?.errors?.['email']" class="error">
+        Please enter a valid email
+      </p>
+
+      <label class="required" for="password">Password</label>
+      <input
+        type="password"
+        class="required"
+        id="password"
+        formControlName="password"
+        placeholder="********"
+      />
+      <p *ngIf="submitted && form.get('password')?.errors?.['required']" class="error">
+        Password is required
+      </p>
+      <p *ngIf="isIncorrectCredentials" class="error">Incorrect email or password</p>
+
+      <button type="submit" class="btn-primary">Sign In</button>
+    </form>
+
+    <div class="login-text">
+      <span>Don't have an account?</span>
+      <a routerLink="/register" class="nav-link"> Register Here</a>
+    </div>
+  </div>
+</div>

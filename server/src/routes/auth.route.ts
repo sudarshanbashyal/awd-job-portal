@@ -9,7 +9,7 @@ import * as Controller from "../controllers";
 
 export const authRouter = Router();
 
-authRouter.get("/auth/login", Controller.login);
+authRouter.post("/auth/login", Controller.login);
 authRouter.post("/auth/register", Controller.register);
 authRouter.get("/auth/token", isAuth, Controller.checkToken);
 authRouter.patch("/auth/password", isAuth, Controller.changePassword);
