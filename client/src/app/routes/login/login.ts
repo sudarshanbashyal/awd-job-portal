@@ -1,14 +1,15 @@
 // packages
 import { finalize } from 'rxjs';
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 // forms
 import { FormGroup, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 // services
 import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -18,15 +19,26 @@ import { ApiService } from '../../services/api.service';
 })
 export class Login {
   public form: FormGroup;
+  public loading = false;
   public submitted = false;
   public submissionSuccessful = false;
-  public loading = false;
   public isIncorrectCredentials = false;
 
   constructor(
     private fb: FormBuilder,
+    private readonly router: Router,
     private readonly apiService: ApiService,
+    private readonly authService: AuthService,
   ) {
+    // redirect user to main page if already logged in
+    effect(() => {
+      const user = this.authService.getUser();
+      if (user) {
+        console.log('saved user: ', user.role);
+        router.navigate(user.role === 'APPLICANT' ? ['/search'] : ['/job-postings']);
+      }
+    });
+
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -44,7 +56,7 @@ export class Login {
   }
 
   submit() {
-    if (this.loading || this.submissionSuccessful) return;
+    if (this.loading) return;
 
     this.submissionSuccessful = false;
     this.submitted = true;
@@ -64,7 +76,9 @@ export class Login {
             if (res.ok) {
               this.submissionSuccessful = true;
               this.isIncorrectCredentials = false;
-              console.log(res);
+
+              // save token to local storage
+              this.authService.saveUserToken(res.data.accessToken);
             }
           },
           error: (err) => {

@@ -8,7 +8,7 @@ import { environment } from '../environments/environment';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // auth services
   login(credentials: LoginRequest): Observable<LoginResponse> {
@@ -17,5 +17,9 @@ export class ApiService {
 
   register(payload: RegisterRequest): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, payload);
+  }
+
+  getProfile(): Observable<ProfileResponse> {
+    return this.http.get<ProfileResponse>(`${environment.apiUrl}/profile`);
   }
 }

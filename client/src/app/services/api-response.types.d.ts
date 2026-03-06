@@ -15,3 +15,14 @@ interface RegisterResponse extends BaseApiResponse {
     id: string;
   };
 }
+
+interface ProfileResponse extends BaseApiResponse {
+  data: {
+    id: string;
+    email: string;
+    profilePicture?: string;
+    role: UserType;
+    applicant?: Applicant;
+    recruiter?: Recruiter;
+  };
+}

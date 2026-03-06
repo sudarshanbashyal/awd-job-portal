@@ -1,24 +1,67 @@
 // packages
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 // services
 import { ApiService } from './api.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private userSubject = new BehaviorSubject<User | null>(null);
-  private accessTokenSubject = new BehaviorSubject<AccessToken | null>(null);
+  private token = signal<string | null>(null);
+  user = signal<UserProfile | null>(null);
 
-  user$ = this.userSubject.asObservable();
+  constructor(private api: ApiService) {}
 
-  constructor(private api: ApiService) { }
+  private isTokenExpired(token: string): boolean {
+    const payload = JSON.parse(atob(token.split('.')[1]));
 
-  login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.api.login(credentials).pipe(tap((res) => this.accessTokenSubject.next(res.data)));
+    const expiry = payload.exp * 1000;
+
+    return Date.now() > expiry;
+  }
+
+  saveUserToken(token: string) {
+    localStorage.setItem('access-token', token);
+    this.token.set(token);
+
+    this.loadUser();
+  }
+
+  loadUserToken() {
+    const token = localStorage.getItem('access-token');
+    if (token) {
+      if (this.isTokenExpired(token)) {
+        this.logout();
+        return;
+      }
+
+      this.token.set(token);
+    }
+  }
+
+  getUserToken() {
+    return this.token();
+  }
+
+  loadUser() {
+    if (!this.token() || this.user()) return;
+
+    this.api.getProfile().subscribe({
+      next: (res) => {
+        console.log(res);
+        if (res.ok) {
+          this.user.set(res.data);
+        }
+      },
+    });
+  }
+
+  getUser() {
+    return this.user();
   }
 
   logout() {
-    this.userSubject.next(null);
+    localStorage.removeItem('access-token');
+    this.token.set(null);
+    this.user.set(null);
   }
 }

@@ -3,7 +3,7 @@ import { finalize } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 
 // forms
 import {
@@ -18,6 +18,7 @@ import {
 
 // services
 import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -37,7 +38,17 @@ export class Register {
     private fb: FormBuilder,
     private readonly router: Router,
     private readonly apiService: ApiService,
+    private readonly authService: AuthService,
   ) {
+    // redirect user to main page if already logged in
+    effect(() => {
+      const user = this.authService.getUser();
+      if (user) {
+        console.log('saved user: ', user.role);
+        router.navigate(user.role === 'APPLICANT' ? ['/search'] : ['/job-postings']);
+      }
+    });
+
     this.form = this.fb.group(
       {
         firstName: ['', [Validators.required]],
