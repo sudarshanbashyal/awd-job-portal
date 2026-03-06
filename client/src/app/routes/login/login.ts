@@ -3,8 +3,6 @@ import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Component, effect } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-
-// forms
 import { FormGroup, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 // services
@@ -33,7 +31,6 @@ export class Login {
     effect(() => {
       const user = this.authService.getUser();
       if (user) {
-        console.log('saved user: ', user.role);
         router.navigate(user.role === 'APPLICANT' ? ['/search'] : ['/job-postings']);
       }
     });

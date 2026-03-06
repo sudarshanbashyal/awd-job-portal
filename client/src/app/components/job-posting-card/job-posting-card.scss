@@ -1,0 +1,76 @@
+@use '../../../styles.scss' as *;
+
+.job-post-card {
+  background-color: white;
+  padding: 20px;
+  height: 150px;
+  border: 1px solid $border-primary;
+  border-radius: 8px;
+
+  &:hover {
+    .edit-icon {
+      visibility: visible !important;
+    }
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .edit-icon {
+      visibility: hidden;
+    }
+
+    .job-info {
+      display: flex;
+      align-items: center;
+      max-width: 75%;
+
+      .job-title {
+        font-size: 16px;
+        color: black;
+        font-weight: 600;
+        text-decoration: none;
+        margin-right: 5px;
+
+        display: -webkit-box;
+        line-clamp: 1;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  hr {
+    border: 0.5px solid $border-primary;
+  }
+
+  .info {
+    display: flex;
+    align-items: center;
+    margin: 10px 0px;
+
+    .posted-date {
+      font-size: 11px;
+    }
+
+    .total-applicants {
+      color: $text-muted;
+      font-size: 11px;
+      margin-left: 10px;
+    }
+  }
+
+  .summary {
+    margin-top: 10px;
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

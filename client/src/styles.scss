@@ -21,6 +21,8 @@ $error-bg: #ffc6c6;
 $warning-text: #b66a0e;
 $warning-bg: #ffe9b1;
 
+$max-width: 1200px;
+
 // placeholder mixin
 @mixin placeholder {
   &::-webkit-input-placeholder {
@@ -64,13 +66,14 @@ button {
 }
 
 .main {
+  min-height: 100vh;
   background-color: $background-color;
 }
 
 .btn-primary {
   color: white;
   background-color: $purple-primary;
-  border: none;
+  border: 1px solid $purple-primary;
   padding: 10px 25px;
   border-radius: 3px;
   cursor: pointer;
@@ -81,7 +84,18 @@ button {
   }
 }
 
+.btn-secondary {
+  color: $purple-primary;
+  background-color: white;
+  border: 1px solid $purple-primary;
+  padding: 10px 25px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
 input,
+textarea,
 select {
   border: 1px solid $gray-placeholder;
   border-radius: 3px;
@@ -93,6 +107,10 @@ select {
     color: $gray-placeholder;
     font-weight: 200;
   }
+}
+
+input {
+  padding: 10px 15px;
 }
 
 label {
@@ -134,4 +152,15 @@ a,
 button,
 input {
   -webkit-tap-highlight-color: transparent;
+}
+
+.stylized-text {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 800;
+  color: $purple-text;
+}
+
+svg {
+  scale: (0.7);
 }

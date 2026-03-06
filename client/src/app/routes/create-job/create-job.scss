@@ -1,0 +1,55 @@
+@use '../../../styles.scss' as *;
+
+.job-form-container {
+  margin: auto;
+  margin-top: 60px;
+  max-width: 700px;
+  padding-bottom: 50px;
+
+  .header {
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+
+    h2 {
+      margin-right: 10px;
+    }
+  }
+
+  .job-form {
+    background-color: white;
+    border: 1px solid $border-primary;
+    border-radius: 12px;
+    padding: 20px 40px;
+    padding-bottom: 30px;
+
+    #description {
+      height: 100px;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+
+      div {
+        width: 48%;
+      }
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      button {
+        width: 49%;
+      }
+    }
+  }
+}
