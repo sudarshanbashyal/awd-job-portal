@@ -1,4 +1,5 @@
-import { AuthService } from './auth.service';
+// service
+import { AuthService } from '../services';
 
 export function initAuth(auth: AuthService) {
   return () => auth.loadUserToken();

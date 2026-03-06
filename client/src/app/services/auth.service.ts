@@ -12,11 +12,16 @@ export class AuthService {
   constructor(private api: ApiService) {}
 
   private isTokenExpired(token: string): boolean {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
 
-    const expiry = payload.exp * 1000;
+      const expiry = payload.exp * 1000;
 
-    return Date.now() > expiry;
+      return Date.now() > expiry;
+    } catch (e) {
+      console.error(e);
+      return true;
+    }
   }
 
   saveUserToken(token: string) {
@@ -29,6 +34,7 @@ export class AuthService {
   loadUserToken() {
     const token = localStorage.getItem('access-token');
     if (token) {
+      // clear tokens in case of faulty/expired token
       if (this.isTokenExpired(token)) {
         this.logout();
         return;

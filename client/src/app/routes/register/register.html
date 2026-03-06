@@ -34,7 +34,13 @@
       <div class="input-group">
         <div>
           <label class="required" for="password">Password</label>
-          <input type="password" class="required" id="password" formControlName="password" placeholder="********" />
+          <input
+            type="password"
+            class="required"
+            id="password"
+            formControlName="password"
+            placeholder="********"
+          />
           <p *ngIf="submitted && form.get('password')?.errors?.['required']" class="error">
             Password is required
           </p>
@@ -45,7 +51,12 @@
 
         <div>
           <label class="required" for="repeat-password">Repeat Password</label>
-          <input type="password" id="repeat-password" formControlName="repeatPassword" placeholder="********" />
+          <input
+            type="password"
+            id="repeat-password"
+            formControlName="repeatPassword"
+            placeholder="********"
+          />
           <p *ngIf="submitted && form.get('repeatPassword')?.errors?.['required']" class="error">
             Please confirm your password
           </p>
@@ -76,7 +87,11 @@
 
         <div>
           <label class="required" for="company-address">Company Address</label>
-          <input id="company-address" formControlName="companyAddress" placeholder="XYZ Street, Germany" />
+          <input
+            id="company-address"
+            formControlName="companyAddress"
+            placeholder="XYZ Street, Germany"
+          />
           <p *ngIf="submitted && form.get('companyAddress')?.errors?.['required']" class="error">
             Company Address is required
           </p>

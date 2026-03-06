@@ -1,8 +1,8 @@
 // packages
 import { finalize } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 import { Component, effect, inject } from '@angular/core';
 
 // forms
@@ -17,8 +17,7 @@ import {
 } from '@angular/forms';
 
 // services
-import { ApiService } from '../../services/api.service';
-import { AuthService } from '../../services/auth.service';
+import { ApiService, AuthService } from '../../services';
 
 @Component({
   selector: 'app-register',

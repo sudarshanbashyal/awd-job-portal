@@ -7,17 +7,18 @@ import {
 } from '@angular/core';
 import { provideToastr } from 'ngx-toastr';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 // routes
 import { routes } from './app.routes';
 
 // services
-import { AuthService } from './services/auth.service';
-import { initAuth, initUser } from './services/app-initializer';
-import { tokenInterceptor } from './services/interceptor/http-interceptor';
+import { AuthService } from './services';
+
+// libs
+import { initAuth, initUser, tokenInterceptor } from './lib';
 
 export const appConfig: ApplicationConfig = {
   providers: [

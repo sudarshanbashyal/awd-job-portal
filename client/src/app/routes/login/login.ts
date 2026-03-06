@@ -1,15 +1,14 @@
 // packages
 import { finalize } from 'rxjs';
-import { Component, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, effect } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 // forms
 import { FormGroup, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 // services
-import { ApiService } from '../../services/api.service';
-import { AuthService } from '../../services/auth.service';
+import { ApiService, AuthService } from '../../services';
 
 @Component({
   selector: 'app-login',
