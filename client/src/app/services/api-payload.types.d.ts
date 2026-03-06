@@ -12,3 +12,8 @@ interface RegisterRequest {
   companyName?: string;
   companyAddress?: string;
 }
+
+interface GetJobPostingsRequest {
+  search: string;
+  status: string;
+}

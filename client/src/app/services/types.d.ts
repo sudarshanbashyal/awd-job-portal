@@ -70,3 +70,19 @@ interface Recruiter {
   companyAddress: string;
   userId: string;
 }
+
+interface JobPosting {
+  id: string;
+  title: string;
+  summary: string;
+  description: string;
+  salaryFrom?: number;
+  salaryTo?: number | null;
+  yearsOfExperience?: number;
+  jobType: string;
+  level?: string | null;
+  location: string;
+  arrangement: string;
+  status: string;
+  createdAt: string;
+}

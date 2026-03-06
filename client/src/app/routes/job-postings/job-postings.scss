@@ -1,0 +1,37 @@
+@use '../../../styles.scss' as *;
+
+.job-postings-container {
+  margin: auto;
+  margin-top: 80px;
+  max-width: 1100px;
+
+  .search-bar {
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    border-bottom: 1px solid $border-primary;
+
+    input,
+    select {
+      margin-top: -12px;
+      width: 200px;
+    }
+
+    .status-search {
+      margin-left: 10px;
+    }
+
+    button {
+      margin-left: 10px;
+      width: 200px;
+    }
+  }
+
+  .job-cards {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 350px));
+  }
+}

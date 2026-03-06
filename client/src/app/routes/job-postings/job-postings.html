@@ -1,1 +1,30 @@
-<p>job-postings works!</p>
+<div class="job-postings-container">
+  <strong>Hello, {{ user?.recruiter?.firstName }}</strong>
+  <h2>Let's find you the <span class="stylized-text">perfect candidate.</span></h2>
+
+  <form [formGroup]="form">
+    <div class="search-bar">
+      <div>
+        <label>Search by Title</label><br />
+        <input formControlName="search" placeholder="Search" />
+      </div>
+
+      <div class="status-search">
+        <label>Search by Status</label><br />
+        <select formControlName="status">
+          <option value="">All</option>
+          <option value="OPEN">Open</option>
+          <option value="CLOSED">Closed</option>
+        </select>
+      </div>
+
+      <button (click)="search()" class="btn-primary">Search</button>
+    </div>
+  </form>
+
+  <div class="job-cards">
+    @for (item of jobPostings; track item) {
+    <app-job-posting-card [jobPost]="item"></app-job-posting-card>
+    }
+  </div>
+</div>

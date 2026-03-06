@@ -1,0 +1,45 @@
+@use '../../../styles.scss' as *;
+
+.job-post-card {
+  background-color: white;
+  padding: 20px;
+  height: 150px;
+  border: 1px solid $border-primary;
+  border-radius: 8px;
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  hr {
+    border: 0.5px solid $border-primary;
+  }
+
+  .info {
+    display: flex;
+    align-items: center;
+    margin: 10px 0px;
+
+    .posted-date {
+      font-size: 11px;
+    }
+
+    .total-applicants {
+      color: $text-muted;
+      font-size: 11px;
+      margin-left: 10px;
+    }
+  }
+
+  .summary {
+    margin-top: 10px;
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

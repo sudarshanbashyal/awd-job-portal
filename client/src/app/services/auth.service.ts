@@ -53,7 +53,6 @@ export class AuthService {
 
     this.api.getProfile().subscribe({
       next: (res) => {
-        console.log(res);
         if (res.ok) {
           this.user.set(res.data);
         }

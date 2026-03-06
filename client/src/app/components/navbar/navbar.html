@@ -1,0 +1,13 @@
+<div class="navbar-container" *ngIf="isAuth">
+  <nav>
+    <img src="navbar-logo.svg" />
+
+    <div class="nav-options">
+      <a routerLink="/">Home</a>
+      <a routerLink="/">My Applications</a>
+      <a routerLink="/">Profile</a>
+      <button class="log-out" (click)="logout()">Log Out</button>
+      <img src="user-icon.svg" />
+    </div>
+  </nav>
+</div>

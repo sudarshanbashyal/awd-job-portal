@@ -26,3 +26,9 @@ interface ProfileResponse extends BaseApiResponse {
     recruiter?: Recruiter;
   };
 }
+
+type JobPostingsWithApplicationsCount = JobPosting & { _count: { jobApplications: number } };
+
+interface JobPostingsResponse extends BaseApiResponse {
+  data: JobPostingsWithApplicationsCount[];
+}

@@ -1,0 +1,15 @@
+<div class="job-post-card">
+  <div class="header">
+    <h3>{{ jobPost?.title }}</h3>
+    <app-tag [type]="jobPost?.status === 'OPEN' ? 'Success' : 'Error'"
+      [title]="jobPost?.status?.toLowerCase() || ''"></app-tag>
+  </div>
+
+  <div class="info">
+    <p class="text-muted posted-date">{{ formattedDate }}</p>
+    <p class="total-applicants">Total Applications: {{ jobPost?._count?.jobApplications }}</p>
+  </div>
+  <hr />
+
+  <p class="summary">{{ jobPost?.summary }}</p>
+</div>
