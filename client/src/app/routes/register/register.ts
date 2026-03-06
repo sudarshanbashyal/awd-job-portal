@@ -6,18 +6,13 @@ import { Router, RouterModule } from '@angular/router';
 import { Component, effect, inject } from '@angular/core';
 
 // forms
-import {
-  FormGroup,
-  Validators,
-  FormBuilder,
-  ValidatorFn,
-  AbstractControl,
-  ValidationErrors,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 // services
 import { ApiService, AuthService } from '../../services';
+
+// libs
+import { passwordMatchValidator } from '../../lib';
 
 @Component({
   selector: 'app-register',
@@ -103,7 +98,7 @@ export class Register {
         .subscribe({
           next: (res) => {
             if (res.ok) {
-              this.submissionSuccessful;
+              this.submissionSuccessful = true;
               this.toastr.success('Redirecting you to login', 'Account created', {
                 progressBar: false,
                 positionClass: 'toast-top-center',
@@ -122,16 +117,3 @@ export class Register {
     }
   }
 }
-
-export const passwordMatchValidator: ValidatorFn = (
-  control: AbstractControl,
-): ValidationErrors | null => {
-  const password = control.get('password')?.value;
-  const repeatPassword = control.get('repeatPassword')?.value;
-
-  if (password && repeatPassword && password !== repeatPassword) {
-    return { passwordMismatch: true };
-  }
-
-  return null;
-};

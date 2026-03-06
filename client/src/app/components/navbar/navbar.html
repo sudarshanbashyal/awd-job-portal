@@ -3,9 +3,10 @@
     <img src="navbar-logo.svg" />
 
     <div class="nav-options">
-      <a routerLink="/">Home</a>
-      <a routerLink="/">My Applications</a>
-      <a routerLink="/">Profile</a>
+      @for (item of user?.role === 'RECRUITER' ? recruiterRoutes : applicantRoutes; track item) {
+        <a routerLink="/{{ item.link }}">{{ item.name }}</a>
+      }
+      <a routerLink="/profile">Profile</a>
       <button class="log-out" (click)="logout()">Log Out</button>
       <img src="user-icon.svg" />
     </div>

@@ -1,4 +1,5 @@
 // packages
+import { RouterModule } from '@angular/router';
 import { Component, Input } from '@angular/core';
 import { CommonModule, formatDate } from '@angular/common';
 
@@ -8,7 +9,7 @@ import { IconsModule } from '../icons/icons-module';
 
 @Component({
   selector: 'app-job-posting-card',
-  imports: [Tag, CommonModule, IconsModule],
+  imports: [Tag, CommonModule, IconsModule, RouterModule],
   templateUrl: './job-posting-card.html',
   styleUrl: './job-posting-card.scss',
 })

@@ -32,3 +32,13 @@ type JobPostingsWithApplicationsCount = JobPosting & { _count: { jobApplications
 interface JobPostingsResponse extends BaseApiResponse {
   data: JobPostingsWithApplicationsCount[];
 }
+
+interface CreateJobResponse extends BaseApiResponse {
+  data: {
+    id: string;
+  };
+}
+
+interface GetJobPostingResponse extends BaseApiResponse {
+  data: JobPosting;
+}

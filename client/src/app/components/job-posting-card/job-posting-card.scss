@@ -7,10 +7,41 @@
   border: 1px solid $border-primary;
   border-radius: 8px;
 
+  &:hover {
+    .edit-icon {
+      visibility: visible !important;
+    }
+  }
+
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .edit-icon {
+      visibility: hidden;
+    }
+
+    .job-info {
+      display: flex;
+      align-items: center;
+      max-width: 75%;
+
+      .job-title {
+        font-size: 16px;
+        color: black;
+        font-weight: 600;
+        text-decoration: none;
+        margin-right: 5px;
+
+        display: -webkit-box;
+        line-clamp: 1;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
 
   hr {

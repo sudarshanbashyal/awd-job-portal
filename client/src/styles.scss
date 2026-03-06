@@ -73,7 +73,7 @@ button {
 .btn-primary {
   color: white;
   background-color: $purple-primary;
-  border: none;
+  border: 1px solid $purple-primary;
   padding: 10px 25px;
   border-radius: 3px;
   cursor: pointer;
@@ -84,7 +84,18 @@ button {
   }
 }
 
+.btn-secondary {
+  color: $purple-primary;
+  background-color: white;
+  border: 1px solid $purple-primary;
+  padding: 10px 25px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
 input,
+textarea,
 select {
   border: 1px solid $gray-placeholder;
   border-radius: 3px;
@@ -148,4 +159,8 @@ input {
   font-style: italic;
   font-weight: 800;
   color: $purple-text;
+}
+
+svg {
+  scale: (0.7);
 }

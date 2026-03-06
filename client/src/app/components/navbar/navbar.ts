@@ -14,11 +14,23 @@ import { AuthService } from '../../services';
 })
 export class Navbar {
   isAuth = false;
+  user: UserProfile | null = null;
+
+  applicantRoutes = [
+    { link: '/search', name: 'Home' },
+    { link: 'my-applications', name: 'My Applications' },
+  ];
+
+  recruiterRoutes = [
+    { link: '/job-listings', name: 'Home' },
+    { link: '/job-post', name: 'Add Job' },
+  ];
 
   constructor(private readonly authService: AuthService) {
     effect(() => {
       const user = this.authService.getUser();
       this.isAuth = !!user;
+      this.user = user;
     });
   }
 
