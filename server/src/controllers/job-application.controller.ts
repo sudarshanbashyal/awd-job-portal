@@ -11,6 +11,7 @@ import {
   parseResumeDetails,
   sendStatusUpdatedEmail,
   sendApplicationReceivedEmail,
+  extractPayloadFromToken,
 } from "../lib";
 
 // prisma
@@ -485,12 +486,24 @@ export const getApplicantApplications: RequestHandler = async (
   }
 };
 
-export const assessmentApplication: RequestHandler = async (
+export const performApplicationAssessment: RequestHandler = async (
   req: AuthRequest,
   res: Response,
 ) => {
   try {
-    const applicantId = req.user?.applicantId;
+    // manually verifying JWT in case of assessment because of SSE
+    const token = req.query?.token;
+    req.headers.authorization = (token || "") as string;
+    const payload = extractPayloadFromToken(req);
+
+    if (!payload) {
+      res.status(401).json({
+        ok: false,
+        errors: ["Missing or expired token."],
+      });
+    }
+
+    const applicantId = payload?.applicantId;
     const jobId = req.params.jobId;
 
     const applicant = await prisma.applicant.findFirst({
@@ -521,17 +534,65 @@ export const assessmentApplication: RequestHandler = async (
       return;
     }
 
-    const assessmentResponse = await assessApplication(
-      applicantId,
-      jobId,
-      applicant.resumeLink,
-      job?.description,
-    );
+    // set headers for sse
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+    let progress = 0;
 
-    res.json({
-      ok: true,
-      data: assessmentResponse,
+    const interval = setInterval(() => {
+      const nextProgress = progress + Math.floor(Math.random() * 10) + 1;
+      if (nextProgress <= 90) progress = nextProgress;
+
+      res.write(
+        `data: ${JSON.stringify({ done: false, progress: progress })}\n\n`,
+      );
+    }, 2000);
+
+    req.on("close", () => {
+      clearInterval(interval);
+      res.end();
     });
+
+    try {
+      const assessmentResponse = await assessApplication(
+        applicantId,
+        jobId,
+        applicant.resumeLink,
+        job?.description,
+      );
+
+      clearInterval(interval);
+
+      const parsedAssessment = JSON.parse(assessmentResponse.description);
+
+      if (
+        parsedAssessment?.rating === null ||
+        parsedAssessment?.rating === undefined ||
+        !parsedAssessment?.summary ||
+        !parsedAssessment?.suggestedImprovements
+      ) {
+        res.write(
+          `event: error\n` +
+            `data: ${JSON.stringify({ message: "Skill Assessment Failed" })}\n\n`,
+        );
+        res.end();
+        return;
+      }
+
+      res.write(
+        `data: ${JSON.stringify({ done: true, progress: 100, assessment: parsedAssessment })}\n\n`,
+      );
+
+      res.end();
+    } catch (e) {
+      clearInterval(interval);
+      res.write(
+        `event: error\n` +
+          `data: ${JSON.stringify({ message: "Server Error" })}\n\n`,
+      );
+      res.end();
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ ok: false });

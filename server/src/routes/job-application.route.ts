@@ -21,11 +21,6 @@ jobApplicationRouter.patch(
   Controller.withdrawApplication,
 );
 jobApplicationRouter.get(
-  "/assess/:jobId",
-  isApplicant,
-  Controller.assessmentApplication,
-);
-jobApplicationRouter.get(
   "/my-applications",
   isApplicant,
   Controller.getApplicantApplications,
@@ -34,6 +29,10 @@ jobApplicationRouter.get(
   "/my-application/:jobId",
   isApplicant,
   Controller.findJobApplicationByJobId,
+);
+jobApplicationRouter.get(
+  "/assess/:jobId",
+  Controller.performApplicationAssessment,
 );
 
 // recruiter functionalities

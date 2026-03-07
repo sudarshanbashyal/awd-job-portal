@@ -180,7 +180,6 @@ export const assessApplication = async (
 
     const parsedJson: ResumeAssessmentResponse = JSON.parse(cleanedJson);
     if (!isValidAssessmentResponse(parsedJson)) throw new Error();
-    console.log(parsedJson);
 
     return await saveSkillAssessment(applicantId, jobId, parsedJson);
   } catch (error) {

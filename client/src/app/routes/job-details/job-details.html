@@ -54,9 +54,11 @@
     <button class="btn-primary apply-btn" (click)="changeApplicationStatus()">
       {{ jobApplicationId ? 'Withdraw Application' : 'Apply' }}
     </button>
-    <button class="btn-secondary">
+    <button class="btn-secondary" (click)="analyzeApplication()">
       <img src="ai-icon.svg" />
       Analyze your Application
     </button>
   </div>
+
+  <app-assessment-modal *ngIf="isPopupOpen" [jobId]="jobId" (closeModalEmitter)="closeModal()"></app-assessment-modal>
 </div>

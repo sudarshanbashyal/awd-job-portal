@@ -55,6 +55,12 @@ interface JobByIdResponse extends BaseApiResponse {
 interface JobApplicationByJobIdResponse extends BaseApiResponse {
   data: {
     id: string;
-    applicationStatus: 'string';
+    applicationStatus: string;
   };
+}
+
+interface AssessmentStreamResponse {
+  done: boolean;
+  progress: number;
+  assessment?: AssessmentReport;
 }

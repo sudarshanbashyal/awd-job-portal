@@ -11,10 +11,11 @@ import { ApiService, AuthService } from '../../services';
 // components
 import { Tag } from '../../components/tag/tag';
 import { IconsModule } from '../../components/icons/icons-module';
+import { AssessmentModal } from '../../components/assessment-modal/assessment-modal';
 
 @Component({
   selector: 'app-job-details',
-  imports: [Tag, IconsModule, CommonModule, RouterModule],
+  imports: [Tag, IconsModule, CommonModule, RouterModule, AssessmentModal],
   templateUrl: './job-details.html',
   styleUrl: './job-details.scss',
 })
@@ -29,6 +30,9 @@ export class JobDetails {
 
   public jobId = '';
   formattedDate = '';
+
+  assessmentResult = null;
+  isPopupOpen = false;
 
   constructor(
     private readonly router: Router,
@@ -54,6 +58,14 @@ export class JobDetails {
         this.getJobApplication();
       }
     });
+  }
+
+  analyzeApplication() {
+    this.isPopupOpen = true;
+  }
+
+  closeModal() {
+    this.isPopupOpen = false;
   }
 
   changeApplicationStatus() {
@@ -85,7 +97,7 @@ export class JobDetails {
 
   withdraw() {
     this.apiService
-      .withDrawApplication(this.jobId)
+      .withdrawApplication(this.jobId)
       .pipe(
         finalize(() => {
           this.loading = false;

@@ -18,7 +18,7 @@ export interface AuthRequest extends Request {
   user?: TokenPayload;
 }
 
-const extractPayloadFromToken = (req: AuthRequest) => {
+export const extractPayloadFromToken = (req: AuthRequest) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader?.startsWith("Bearer ")) return null;
