@@ -1,7 +1,7 @@
 <div class="job-entry">
   <div class="job-header">
     <div class="header-section">
-      <h3 class="job-title">{{ jobEntry?.title }}</h3>
+      <a class="job-title" routerLink="/job/{{ jobEntry?.id || '' }}">{{ jobEntry?.title }}</a>
       <app-tag [title]="jobEntry?.status?.toLowerCase() || ''" [type]="'Success'"></app-tag>
     </div>
 

@@ -30,6 +30,11 @@ jobApplicationRouter.get(
   isApplicant,
   Controller.getApplicantApplications,
 );
+jobApplicationRouter.get(
+  "/my-application/:jobId",
+  isApplicant,
+  Controller.findJobApplicationByJobId,
+);
 
 // recruiter functionalities
 jobApplicationRouter.get(

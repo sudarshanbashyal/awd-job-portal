@@ -231,7 +231,6 @@ export const search: RequestHandler = async (
 ) => {
   try {
     const queryParam = req.query as JobSearchQuery;
-    console.log(queryParam);
 
     const whereConditions: Prisma.JobPostingWhereInput = {
       deletedAt: null,
@@ -308,6 +307,9 @@ export const findJobById: RequestHandler = async (
             deletedAt: null,
           },
         ],
+      },
+      include: {
+        postedBy: true,
       },
     });
 

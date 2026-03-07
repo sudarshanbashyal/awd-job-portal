@@ -47,3 +47,14 @@ interface GetJobPostingResponse extends BaseApiResponse {
 interface SearchJobResponse extends BaseApiResponse {
   data: JobResultEntry[];
 }
+
+interface JobByIdResponse extends BaseApiResponse {
+  data: JobResultEntry;
+}
+
+interface JobApplicationByJobIdResponse extends BaseApiResponse {
+  data: {
+    id: string;
+    applicationStatus: 'string';
+  };
+}

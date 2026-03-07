@@ -537,3 +537,47 @@ export const assessmentApplication: RequestHandler = async (
     res.status(500).json({ ok: false });
   }
 };
+
+export const findJobApplicationByJobId: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const jobId = req.params.jobId;
+    const applicantId = req?.user?.applicantId;
+
+    const job = await prisma.jobApplication.findFirst({
+      where: {
+        AND: [
+          {
+            jobId,
+          },
+          {
+            applicantId,
+          },
+          {
+            applicationStatus: {
+              not: JobApplicationStatus.WITHDRAWN,
+            },
+          },
+        ],
+      },
+    });
+
+    if (!job) {
+      res.status(404).json({
+        ok: false,
+        errors: ["Job doesn't exist."],
+      });
+      return;
+    }
+
+    res.json({
+      ok: true,
+      data: job,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};

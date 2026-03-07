@@ -55,4 +55,28 @@ export class ApiService {
       },
     });
   }
+
+  getJobById(id: string): Observable<JobByIdResponse> {
+    return this.http.get<JobByIdResponse>(`${environment.apiUrl}/job/${id}`);
+  }
+
+  getJobApplicationByJobId(jobId: string): Observable<JobApplicationByJobIdResponse> {
+    return this.http.get<JobApplicationByJobIdResponse>(
+      `${environment.apiUrl}/my-application/${jobId}`,
+    );
+  }
+
+  createApplication(jobId: string): Observable<JobApplicationByJobIdResponse> {
+    return this.http.post<JobApplicationByJobIdResponse>(
+      `${environment.apiUrl}/apply/${jobId}`,
+      {},
+    );
+  }
+
+  withDrawApplication(jobId: string): Observable<JobApplicationByJobIdResponse> {
+    return this.http.patch<JobApplicationByJobIdResponse>(
+      `${environment.apiUrl}/withdraw/${jobId}`,
+      {},
+    );
+  }
 }
