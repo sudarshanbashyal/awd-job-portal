@@ -1,0 +1,14 @@
+<div class="navbar-container" *ngIf="isAuth">
+  <nav>
+    <img src="navbar-logo.svg" />
+
+    <div class="nav-options">
+      @for (item of user?.role === 'RECRUITER' ? recruiterRoutes : applicantRoutes; track item) {
+        <a routerLink="/{{ item.link }}">{{ item.name }}</a>
+      }
+      <a routerLink="/profile">Profile</a>
+      <button class="log-out" (click)="logout()">Log Out</button>
+      <img src="user-icon.svg" />
+    </div>
+  </nav>
+</div>

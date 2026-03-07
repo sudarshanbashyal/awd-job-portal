@@ -59,6 +59,7 @@ export const createJob: RequestHandler = async (
     const newJob = await prisma.jobPosting.create({
       data: {
         ...createJobDto,
+        status: JobStatus.OPEN,
         recruiterId: recruiterId as string,
       },
     });
@@ -202,6 +203,13 @@ export const getJobPostings: RequestHandler = async (
 
     const jobPostings = await prisma.jobPosting.findMany({
       where: whereConditions,
+      include: {
+        _count: {
+          select: {
+            jobApplications: true,
+          },
+        },
+      },
       orderBy: {
         createdAt: "desc",
       },

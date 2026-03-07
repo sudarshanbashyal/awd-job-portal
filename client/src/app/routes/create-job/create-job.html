@@ -1,0 +1,99 @@
+<div class="job-form-container">
+  <div class="header">
+    <a class="edit-icon" routerLink="/job-postings">
+      <app-icon-back/>
+    </a>
+
+    <h2 *ngIf="!previousJob">Create a new job</h2>
+    <h2 *ngIf="previousJob">Update Job - {{ previousJob.title }}</h2>
+    <app-tag *ngIf="previousJob" [type]="previousJob.status === 'OPEN' ? 'Success' : 'Error'"
+      [title]="previousJob.status.toLowerCase()"></app-tag>
+  </div>
+
+  <div class="job-form">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label class="required" for="title">Title</label>
+      <input id="title" formControlName="title" placeholder="Job Title" />
+      <p *ngIf="submitted && form.get('title')?.errors?.['required']" class="error">
+        Title is required
+      </p>
+
+      <label class="required" for="Summary">Summary</label>
+      <textarea id="summary" formControlName="summary" placeholder="Job Summary"></textarea>
+      <p *ngIf="submitted && form.get('summary')?.errors?.['required']" class="error">
+        Summary is required
+      </p>
+      <p *ngIf="submitted && form.get('summary')?.errors?.['minWords']" class="error">
+        Summary must be at least 50 words
+      </p>
+
+      <label class="required" for="description">Job Description</label>
+      <textarea id="description" formControlName="description" placeholder="Job Description"></textarea>
+      <p *ngIf="submitted && form.get('description')?.errors?.['required']" class="error">
+        Description is required
+      </p>
+      <p *ngIf="submitted && form.get('description')?.errors?.['minWords']" class="error">
+        Description must be at least 100 words
+      </p>
+
+      <label class="required" for="location">Location</label>
+      <input id="location" formControlName="location" placeholder="Job Location" />
+      <p *ngIf="submitted && form.get('location')?.errors?.['required']" class="error">
+        Job Location is required
+      </p>
+
+      <div class="input-group">
+        <div>
+          <label class="required" for="jobType">Job Type</label>
+          <select id="jobType" formControlName="jobType">
+            <option value="{{ null }}">-</option>
+            <option value="FULL_TIME">Full Time</option>
+            <option value="PART_TIME">Part Time</option>
+          </select>
+          <p *ngIf="submitted && form.get('jobType')?.errors?.['required']" class="error">
+            Job Type is required
+          </p>
+        </div>
+
+        <div>
+          <label class="required" for="arrangement">Work Arrangement</label>
+          <select id="arrangement" formControlName="arrangement">
+            <option value="{{ null }}">-</option>
+            <option value="ONSITE">Onsite</option>
+            <option value="REMOTE">Remote</option>
+            <option value="HYBRID">Hybrid</option>
+          </select>
+          <p *ngIf="submitted && form.get('arrangement')?.errors?.['required']" class="error">
+            Work Arrangement is required
+          </p>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div>
+          <label for="salaryFrom">Starting Salary</label>
+          <input type="number" id="salaryFrom" formControlName="salaryFrom" placeholder="Starting Salary" />
+          <p *ngIf="submitted && form.errors?.['invalidSalary']" class="error">
+            Starting salary cannot be more than max salary
+          </p>
+        </div>
+
+        <div>
+          <label for="salaryTo">Maximum Salary</label>
+          <input type="number" id="salaryTo" formControlName="salaryTo" placeholder="Maximum Salary" />
+        </div>
+      </div>
+
+      <div *ngIf="!loadingPrevJob">
+        <button *ngIf="!previousJob" type="submit" class="btn-primary">Publish Job</button>
+
+        <div *ngIf="previousJob" class="action-btn">
+          <button type="submit" class="btn-primary">Update Job</button>
+          <button class="btn-secondary" (click)="updateJobStatus()">
+            {{ previousJob.status === 'OPEN' ? 'Close' : 'Open' }} Job
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

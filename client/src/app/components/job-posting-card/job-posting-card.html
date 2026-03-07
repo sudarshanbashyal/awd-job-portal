@@ -1,0 +1,21 @@
+<div class="job-post-card">
+  <div class="header">
+    <div class="job-info">
+      <a class="job-title" routerLink="/job-post/{{ jobPost?.id || '' }}">{{ jobPost?.title }}</a>
+      <app-tag [type]="jobPost?.status === 'OPEN' ? 'Success' : 'Error'"
+        [title]="jobPost?.status?.toLowerCase() || ''"></app-tag>
+    </div>
+
+    <a class="edit-icon" routerLink="/job-post/{{ jobPost?.id || '' }}">
+      <app-icon-edit />
+    </a>
+  </div>
+
+  <div class="info">
+    <p class="text-muted posted-date">{{ formattedDate }}</p>
+    <p class="total-applicants">Total Applications: {{ jobPost?._count?.jobApplications }}</p>
+  </div>
+  <hr />
+
+  <p class="summary">{{ jobPost?.summary }}</p>
+</div>

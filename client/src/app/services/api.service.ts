@@ -22,4 +22,23 @@ export class ApiService {
   getProfile(): Observable<ProfileResponse> {
     return this.http.get<ProfileResponse>(`${environment.apiUrl}/profile`);
   }
+
+  // job posting services
+  getJobPostings(params: GetJobPostingsRequest): Observable<JobPostingsResponse> {
+    return this.http.get<JobPostingsResponse>(`${environment.apiUrl}/my-jobs`, {
+      params: { search: params.search, status: params.status },
+    });
+  }
+
+  createJob(payload: CreateJobRequest): Observable<CreateJobResponse> {
+    return this.http.post<RegisterResponse>(`${environment.apiUrl}/create-job`, payload);
+  }
+
+  getJobPosting(id: string): Observable<GetJobPostingResponse> {
+    return this.http.get<GetJobPostingResponse>(`${environment.apiUrl}/job-posting/${id}`);
+  }
+
+  updateJob(id: string, payload: CreateJobRequest): Observable<CreateJobResponse> {
+    return this.http.patch<RegisterResponse>(`${environment.apiUrl}/update-job/${id}`, payload);
+  }
 }
