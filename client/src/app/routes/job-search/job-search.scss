@@ -1,0 +1,18 @@
+@use '../../../styles.scss' as *;
+
+.job-search-container {
+  max-width: $max-width;
+  margin: auto;
+  margin-top: 100px;
+
+  display: flex;
+  align-items: flex-start;
+
+  .listing-wrapper {
+    margin-left: 60px;
+
+    .job-list {
+      margin-top: 50px;
+    }
+  }
+}

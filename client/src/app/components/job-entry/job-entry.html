@@ -1,0 +1,35 @@
+<div class="job-entry">
+  <div class="job-header">
+    <div class="header-section">
+      <a class="job-title" routerLink="/job/{{ jobEntry?.id || '' }}">{{ jobEntry?.title }}</a>
+      <app-tag [title]="jobEntry?.status?.toLowerCase() || ''" [type]="'Success'"></app-tag>
+    </div>
+
+    <div class="header-section">
+      <img src="user-icon.svg" />
+      <span>{{ jobEntry?.postedBy?.firstName }} {{ jobEntry?.postedBy?.lastName }}</span>
+    </div>
+  </div>
+
+  <div class="job-header job-info">
+    <div class="header-section">
+      <strong class="header-lower">{{ jobEntry?.postedBy?.companyName }}</strong>
+
+      <div class="header-section header-lower job-location">
+        <app-icon-location />
+        <span>{{ jobEntry?.location }}</span>
+      </div>
+
+      <div class="header-section header-lower work-arrangement">
+        <app-icon-info />
+        <span>{{ jobEntry?.arrangement?.toLowerCase() }}</span>
+      </div>
+    </div>
+
+    <div>
+      <span class="text-muted posted-date">{{ formattedDate }}</span>
+    </div>
+  </div>
+
+  <p class="summary">{{ jobEntry?.summary }}</p>
+</div>

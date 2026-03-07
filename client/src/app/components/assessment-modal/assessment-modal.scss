@@ -1,0 +1,97 @@
+@use '../../../styles.scss' as *;
+
+.modal-content {
+  .modal-title {
+    display: flex;
+    align-items: center;
+
+    .ai-image {
+      margin-left: 10px;
+    }
+
+    .ai-image-flashing {
+      animation: slow-flash 3s infinite;
+    }
+  }
+
+  .modal-body {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+
+  progress {
+    margin-top: 20px;
+    width: 100%;
+    height: 10px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  progress::-webkit-progress-bar {
+    background: $border-primary;
+    border-radius: wpx;
+  }
+
+  progress::-webkit-progress-value {
+    background: $purple-primary;
+    border-radius: wpx;
+  }
+
+  progress::-moz-progress-bar {
+    background: $purple-primary;
+    border-radius: wpx;
+  }
+
+  button {
+    margin-top: 30px;
+    display: block;
+    margin-left: auto;
+  }
+
+  .cancel-btn {
+    color: $red-primary;
+  }
+
+  .close-btn {
+    color: $purple-primary;
+  }
+
+  .assessment-result {
+    h2 {
+      margin: 10px 0px;
+
+      .rating-low {
+        color: $red-primary;
+      }
+
+      .rating-high {
+        color: $green-primary;
+      }
+
+      .rating-medium {
+        color: $yellow-primary;
+      }
+    }
+
+    .summary {
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+  }
+}
+
+@keyframes slow-flash {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+}
