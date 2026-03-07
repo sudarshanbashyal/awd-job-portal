@@ -8,7 +8,7 @@ import { environment } from '../environments/environment';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // auth services
   login(credentials: LoginRequest): Observable<LoginResponse> {
@@ -40,5 +40,19 @@ export class ApiService {
 
   updateJob(id: string, payload: CreateJobRequest): Observable<CreateJobResponse> {
     return this.http.patch<RegisterResponse>(`${environment.apiUrl}/update-job/${id}`, payload);
+  }
+
+  // job search/apply services
+  searchJob(params: SearchJobRequest): Observable<SearchJobResponse> {
+    return this.http.get<SearchJobResponse>(`${environment.apiUrl}/search`, {
+      params: {
+        search: params.search,
+        workType: params.workType,
+        location: params.location,
+        arrangement: params.arrangement,
+        salaryFrom: params.salaryFrom || '',
+        salaryTo: params.salaryTo || '',
+      },
+    });
   }
 }

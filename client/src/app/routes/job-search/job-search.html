@@ -1,1 +1,14 @@
-<p>job-search works!</p>
+<div class="job-search-container">
+  <app-job-filter (searchEventEmitter)="searchJobs($event)"></app-job-filter>
+
+  <div class="listing-wrapper">
+    <strong>Hello, {{ user?.applicant?.firstName }}</strong>
+    <h2>Let's find you the <span class="stylized-text">perfect job...</span></h2>
+
+    <div class="job-list">
+      @for (item of jobs; track item) {
+      <app-job-entry [jobEntry]="item"></app-job-entry>
+      }
+    </div>
+  </div>
+</div>

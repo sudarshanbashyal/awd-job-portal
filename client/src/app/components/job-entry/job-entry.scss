@@ -1,0 +1,69 @@
+@use '../../../styles.scss' as *;
+
+.job-entry {
+  margin-bottom: 30px;
+  border: 1px solid $border-primary;
+  background-color: white;
+  padding: 16px 18px;
+  border-radius: 8px;
+
+  .job-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .header-section {
+      display: flex;
+      align-items: center;
+
+      .job-title {
+        font-size: 18px;
+        margin-right: 5px;
+
+        display: -webkit-box;
+        line-clamp: 1;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      img {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .job-info {
+    margin-top: 3px;
+
+    .header-lower {
+      margin-right: 15px;
+    }
+
+    svg {
+      padding-top: 20px !important;
+    }
+
+    .work-arrangement {
+      span {
+        text-transform: capitalize;
+      }
+    }
+
+    .posted-date {
+      font-size: 11px;
+    }
+  }
+
+  .summary {
+    margin-top: 10px;
+
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

@@ -1,13 +1,16 @@
 <div class="job-form-container">
   <div class="header">
     <a class="edit-icon" routerLink="/job-postings">
-      <app-icon-back/>
+      <app-icon-back />
     </a>
 
     <h2 *ngIf="!previousJob">Create a new job</h2>
     <h2 *ngIf="previousJob">Update Job - {{ previousJob.title }}</h2>
-    <app-tag *ngIf="previousJob" [type]="previousJob.status === 'OPEN' ? 'Success' : 'Error'"
-      [title]="previousJob.status.toLowerCase()"></app-tag>
+    <app-tag
+      *ngIf="previousJob"
+      [type]="previousJob.status === 'OPEN' ? 'Success' : 'Error'"
+      [title]="previousJob.status.toLowerCase()"
+    ></app-tag>
   </div>
 
   <div class="job-form">
@@ -28,7 +31,11 @@
       </p>
 
       <label class="required" for="description">Job Description</label>
-      <textarea id="description" formControlName="description" placeholder="Job Description"></textarea>
+      <textarea
+        id="description"
+        formControlName="description"
+        placeholder="Job Description"
+      ></textarea>
       <p *ngIf="submitted && form.get('description')?.errors?.['required']" class="error">
         Description is required
       </p>
@@ -72,7 +79,12 @@
       <div class="input-group">
         <div>
           <label for="salaryFrom">Starting Salary</label>
-          <input type="number" id="salaryFrom" formControlName="salaryFrom" placeholder="Starting Salary" />
+          <input
+            type="number"
+            id="salaryFrom"
+            formControlName="salaryFrom"
+            placeholder="Starting Salary"
+          />
           <p *ngIf="submitted && form.errors?.['invalidSalary']" class="error">
             Starting salary cannot be more than max salary
           </p>
@@ -80,7 +92,12 @@
 
         <div>
           <label for="salaryTo">Maximum Salary</label>
-          <input type="number" id="salaryTo" formControlName="salaryTo" placeholder="Maximum Salary" />
+          <input
+            type="number"
+            id="salaryTo"
+            formControlName="salaryTo"
+            placeholder="Maximum Salary"
+          />
         </div>
       </div>
 

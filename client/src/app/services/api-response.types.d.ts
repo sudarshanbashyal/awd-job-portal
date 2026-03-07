@@ -1,3 +1,6 @@
+type JobPostingsWithApplicationsCount = JobPosting & { _count: { jobApplications: number } };
+type JobResultEntry = JobPosting & { postedBy: Recruiter };
+
 interface BaseApiResponse {
   ok: boolean;
   errors: string[];
@@ -27,8 +30,6 @@ interface ProfileResponse extends BaseApiResponse {
   };
 }
 
-type JobPostingsWithApplicationsCount = JobPosting & { _count: { jobApplications: number } };
-
 interface JobPostingsResponse extends BaseApiResponse {
   data: JobPostingsWithApplicationsCount[];
 }
@@ -41,4 +42,8 @@ interface CreateJobResponse extends BaseApiResponse {
 
 interface GetJobPostingResponse extends BaseApiResponse {
   data: JobPosting;
+}
+
+interface SearchJobResponse extends BaseApiResponse {
+  data: JobResultEntry[];
 }
