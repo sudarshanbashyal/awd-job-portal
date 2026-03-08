@@ -6,6 +6,7 @@ import contentDisposition from "content-disposition";
 import {
   prisma,
   checkFile,
+  uploadImage,
   AuthRequest,
   generateResumeFromProfile,
 } from "../lib";
@@ -326,47 +327,44 @@ export const uploadProfilePicture: RequestHandler = async (
   req: AuthRequest,
   res: Response,
 ) => {
-  const userId = req.user?.id;
-  const file = req.file;
-  if (!file) {
-    res.status(401).json({
-      ok: false,
-      errors: ["No file uploaded."],
-    });
-    return;
-  }
+  try {
+    const userId = req.user?.id;
+    const file = req.file;
+    if (!file) {
+      res.status(401).json({
+        ok: false,
+        errors: ["No file uploaded."],
+      });
+      return;
+    }
 
-  if (!file.mimetype.startsWith("image/")) {
-    res.status(401).json({
-      ok: false,
-      errors: ["Invalid file format. Only images allowed."],
-    });
-    return;
-  }
+    if (!file.mimetype.startsWith("image/")) {
+      res.status(401).json({
+        ok: false,
+        errors: ["Invalid file format. Only images allowed."],
+      });
+      return;
+    }
 
-  await prisma.$transaction(async (_tx) => {
-    await prisma.uploadedFile.create({
-      data: {
-        originalName: file.originalname,
-        storedName: file.filename,
-        mimeType: file.mimetype,
-        size: file.size,
-        uploadType: UploadType.PROFILE_PICTURE,
-        userId: userId as string,
-      },
-    });
+    const fileEncoding = file.buffer.toString("base64");
+    const fileUrl = await uploadImage(fileEncoding, file.filename);
+    if (!fileUrl?.url) {
+      res.status(500).json({
+        ok: false,
+        errors: ["Coudln't upload profile picture"],
+      });
+      return;
+    }
 
     await prisma.user.update({
       where: {
         id: userId as string,
       },
       data: {
-        profilePicture: file.filename,
+        profilePicture: fileUrl.url,
       },
     });
-  });
 
-  try {
     res.json({
       ok: true,
       data: {

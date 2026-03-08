@@ -5,7 +5,7 @@ import { Router } from "express";
 import * as Controller from "../controllers";
 
 // libs
-import { isApplicant, isAuth, isRecruiter, upload } from "../lib";
+import { isApplicant, isAuth, isRecruiter, memoryUpload, upload } from "../lib";
 
 export const profileRouter = Router();
 
@@ -51,7 +51,7 @@ profileRouter.patch(
 profileRouter.post(
   "/profile-picture",
   isAuth,
-  upload.single("file"),
+  memoryUpload.single("file"),
   Controller.uploadProfilePicture,
 );
 profileRouter.get("/profile", isAuth, Controller.getprofile);
