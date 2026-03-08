@@ -32,6 +32,14 @@ profileRouter.put("/education", isApplicant, Controller.addOrUpdateEducation);
 profileRouter.post("/generate-resume", isApplicant, Controller.generateResume);
 profileRouter.put("/experience", isApplicant, Controller.addOrUpdateExperience);
 
+profileRouter.delete(
+  "/experience/:id",
+  isApplicant,
+  Controller.deleteExperience,
+);
+profileRouter.delete("/skill/:id", isApplicant, Controller.deleteSkill);
+profileRouter.delete("/education/:id", isApplicant, Controller.deleteEducation);
+
 // recruiter functionalities
 profileRouter.patch(
   "/recruiter-profile",

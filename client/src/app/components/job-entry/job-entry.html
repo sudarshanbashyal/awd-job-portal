@@ -6,8 +6,11 @@
     </div>
 
     <div class="header-section">
-      <img src="user-icon.svg" />
-      <span>{{ jobEntry?.postedBy?.firstName }} {{ jobEntry?.postedBy?.lastName }}</span>
+      <app-profile-picture
+        [profile]="jobEntry?.postedBy"
+        [profilePicture]="jobEntry?.postedBy?.user?.profilePicture"
+      />
+      <span class="user-name">{{ jobEntry?.postedBy?.firstName }} {{ jobEntry?.postedBy?.lastName }}</span>
     </div>
   </div>
 

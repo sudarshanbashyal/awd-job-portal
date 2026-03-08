@@ -9,7 +9,7 @@ export class AuthService {
   private token = signal<string | null>(null);
   user = signal<UserProfile | null>(null);
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService) { }
 
   private isTokenExpired(token: string): boolean {
     try {
@@ -49,8 +49,6 @@ export class AuthService {
   }
 
   loadUser() {
-    if (!this.token() || this.user()) return;
-
     this.api.getProfile().subscribe({
       next: (res) => {
         if (res.ok) {

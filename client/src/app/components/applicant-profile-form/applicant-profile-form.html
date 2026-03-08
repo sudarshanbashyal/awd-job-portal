@@ -1,0 +1,42 @@
+<div class="applicant-form-wrapper">
+  <h3>Your Profile Information</h3>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="input-group">
+      <div>
+        <label class="required" for="firstName">First Name</label>
+        <input id="firstName" formControlName="firstName" placeholder="John" />
+        <p *ngIf="submitted && form.get('firstName')?.hasError('required')" class="error">
+          First Name is required
+        </p>
+      </div>
+
+      <div>
+        <label class="required" for="lastName">Last Name</label>
+        <input id="firstName" formControlName="lastName" placeholder="John" />
+        <p *ngIf="submitted && form.get('lastName')?.hasError('required')" class="error">
+          Last Name is required
+        </p>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <div>
+        <label for="location">Location</label>
+        <input id="location" formControlName="location" placeholder="Hildesheim" />
+      </div>
+
+      <div>
+        <label for="phone">Phone Number</label>
+        <input id="phone" formControlName="phoneNumber" placeholder="+49 123456789" />
+        <p *ngIf="submitted && form.get('phoneNumber')?.errors?.['invalidPhoneNumber']" class="error">
+          Phone number invalid
+        </p>
+      </div>
+    </div>
+
+    <label for="Profile">Profile</label>
+    <textarea id="profile" formControlName="profile" placeholder="profile"></textarea>
+
+    <button type="submit" class="text-btn">Update Profile</button>
+  </form>
+</div>

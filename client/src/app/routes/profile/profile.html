@@ -1,0 +1,9 @@
+<div class="profile-container">
+  <app-profile-header />
+  <div *ngIf="userProfile?.applicant">
+    <app-experience />
+    <app-education />
+    <app-skill />
+  </div>
+  <app-delete-account />
+</div>

@@ -1,5 +1,5 @@
 type JobPostingsWithApplicationsCount = JobPosting & { _count: { jobApplications: number } };
-type JobResultEntry = JobPosting & { postedBy: Recruiter };
+type JobResultEntry = JobPosting & { postedBy: Recruiter & { user: UserProfile } };
 
 interface BaseApiResponse {
   ok: boolean;
@@ -63,4 +63,34 @@ interface AssessmentStreamResponse {
   done: boolean;
   progress: number;
   assessment?: AssessmentReport;
+}
+
+interface ProfileResponse extends BaseApiResponse {
+  data:
+  | ({
+    id: string;
+    email: string;
+    profilePicture: string | null;
+  } & {
+    applicant: Applicant;
+  })
+  | { recruiter: Recruiter };
+}
+
+interface UpdateProfileResponse extends BaseApiResponse {
+  data: {
+    id: string;
+  };
+}
+
+interface DeleteAccountResponse extends BaseApiResponse {
+  data: {
+    message: string;
+  };
+}
+
+interface UpdateApplicantCredentials extends BaseApiResponse {
+  data: {
+    mesage: string;
+  };
 }

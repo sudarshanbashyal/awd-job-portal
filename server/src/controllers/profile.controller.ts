@@ -134,7 +134,7 @@ export const addOrUpdateSkills: RequestHandler = async (
     res.status(201).json({
       ok: true,
       data: {
-        msg: "Applicant skills updated.",
+        message: "Applicant skills updated.",
       },
     });
   } catch (error) {
@@ -172,7 +172,7 @@ export const addOrUpdateEducation: RequestHandler = async (
     res.status(201).json({
       ok: true,
       data: {
-        msg: "Applicant education updated.",
+        message: "Applicant education updated.",
       },
     });
   } catch (error) {
@@ -210,7 +210,7 @@ export const addOrUpdateExperience: RequestHandler = async (
     res.status(201).json({
       ok: true,
       data: {
-        msg: "Applicant experience updated.",
+        message: "Applicant experience updated.",
       },
     });
   } catch (error) {
@@ -582,12 +582,24 @@ export const getprofile: RequestHandler = async (
         recruiter: !!authUser?.recruiterId,
         applicant: authUser?.applicantId
           ? {
-              include: {
-                skills: true,
-                education: true,
-                professionalExperience: true,
+            include: {
+              skills: {
+                orderBy: {
+                  createdAt: "desc",
+                },
               },
-            }
+              education: {
+                orderBy: {
+                  createdAt: "desc",
+                },
+              },
+              professionalExperience: {
+                orderBy: {
+                  createdAt: "desc",
+                },
+              },
+            },
+          }
           : false,
       },
     });
@@ -602,6 +614,87 @@ export const getprofile: RequestHandler = async (
     res.json({
       ok: true,
       data: user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const deleteExperience: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const id = req.params?.id;
+    const applicantId = req.user?.applicantId;
+
+    await prisma.professionalExperience.delete({
+      where: {
+        id,
+        applicantId,
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        message: "Experience deleted",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const deleteEducation: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const id = req.params?.id;
+    const applicantId = req.user?.applicantId;
+
+    await prisma.education.delete({
+      where: {
+        id,
+        applicantId,
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        message: "Education deleted",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const deleteSkill: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const id = req.params?.id;
+    const applicantId = req.user?.applicantId;
+
+    await prisma.skills.delete({
+      where: {
+        id,
+        applicantId,
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        message: "Skill deleted",
+      },
     });
   } catch (error) {
     console.error(error);

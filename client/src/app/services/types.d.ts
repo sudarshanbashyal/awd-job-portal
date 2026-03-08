@@ -35,13 +35,13 @@ interface Applicant {
 }
 
 interface Skill {
-  id: string;
+  id?: string | null;
   skill: string;
   applicantId: string;
 }
 
 interface ProfessionalExperience {
-  id: string;
+  id?: string | null;
   role: string;
   companyName: string;
   location: string;
@@ -52,7 +52,7 @@ interface ProfessionalExperience {
 }
 
 interface Education {
-  id: string;
+  id?: string | null;
   instituteName: string;
   course: string;
   location: string;

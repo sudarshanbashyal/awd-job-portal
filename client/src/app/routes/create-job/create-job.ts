@@ -130,7 +130,7 @@ export class CreateJob {
             this.getJob();
           }
         },
-        error: () => {},
+        error: () => { },
       });
   }
 
@@ -165,7 +165,7 @@ export class CreateJob {
                 }, 1000);
               }
             },
-            error: () => {},
+            error: () => { },
           });
       } else {
         this.updateJob(this.form.value);

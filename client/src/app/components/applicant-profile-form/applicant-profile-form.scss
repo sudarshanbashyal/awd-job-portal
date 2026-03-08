@@ -1,0 +1,30 @@
+@use '../../../styles.scss' as *;
+
+.applicant-form-wrapper {
+  h3 {
+    margin-top: 20px;
+  }
+
+  label {
+    color: $gray-icon;
+    font-weight: 300;
+    font-size: 10px;
+  }
+
+  .input-group {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    div {
+      width: 48%;
+    }
+  }
+
+  .text-btn {
+    margin-top: 10px;
+    display: block;
+    color: $purple-primary;
+    margin-left: auto;
+  }
+}

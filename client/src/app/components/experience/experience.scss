@@ -1,0 +1,53 @@
+@use '../../../styles.scss' as *;
+
+.experience-container {
+  hr {
+    margin-top: 40px;
+  }
+
+  .add-exp-btn,
+  .edit-btn {
+    cursor: pointer !important;
+    border: none;
+    background: transparent;
+  }
+
+  .section-title {
+    margin: 20px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .experience-entry {
+    margin: 15px 0px;
+
+    .experience-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .role {
+        text-transform: capitalize;
+      }
+
+      .company {
+        font-style: italic;
+      }
+    }
+
+    .location,
+    .dates {
+      font-style: italic;
+      color: $text-muted;
+    }
+
+    .location {
+      margin-bottom: 10px;
+    }
+
+    .description-list {
+      padding-left: 10px;
+    }
+  }
+}

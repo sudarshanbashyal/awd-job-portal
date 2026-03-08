@@ -1,0 +1,24 @@
+<div class="profile-header-container">
+  <div class="user-profile">
+    <div class="user-info-section">
+      <h1 class="user-name">
+        {{
+        profile?.applicant
+        ? `${profile?.applicant?.firstName} ${profile?.applicant?.lastName}`
+        : `${profile?.recruiter?.firstName} ${profile?.recruiter?.lastName}`
+        }}
+      </h1>
+
+      <hr />
+      <app-applicant-profile-form *ngIf="profile?.applicant" />
+      <app-recruiter-profile-form *ngIf="profile?.recruiter" />
+    </div>
+
+    <div class="user-profile-picture">
+      <app-profile-picture [profile]="profile?.applicant || profile?.recruiter"
+        [profilePicture]="profile?.profilePicture" [avatarType]="'Big'" />
+
+      <button class="text-btn">Change Profile</button>
+    </div>
+  </div>
+</div>

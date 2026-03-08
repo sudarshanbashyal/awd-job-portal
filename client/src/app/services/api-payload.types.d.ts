@@ -38,3 +38,18 @@ interface SearchJobRequest {
   salaryFrom: string;
   salaryTo: string;
 }
+
+interface UpdateApplicantProfileRequest {
+  firstName: string;
+  lastName: string;
+  location: string | null;
+  phoneNumber: string | null;
+  profile: string | null;
+}
+
+interface UpdateRecruiterProfileRequest {
+  firstName: string;
+  lastName: string;
+  companyName: string;
+  companyAddress: string;
+}

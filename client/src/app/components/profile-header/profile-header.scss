@@ -1,0 +1,33 @@
+@use '../../../styles.scss' as *;
+
+.profile-header-container {
+  .user-profile {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .user-info-section {
+      width: 80%;
+
+      .user-name {
+        font-size: 30px;
+      }
+    }
+
+    hr {
+      margin-top: 20px;
+    }
+
+    .user-profile-picture {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+
+      button {
+        font-weight: normal;
+        font-size: 10px;
+        color: $purple-primary;
+      }
+    }
+  }
+}

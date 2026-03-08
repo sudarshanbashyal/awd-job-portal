@@ -1,0 +1,44 @@
+@use '../../../styles.scss' as *;
+
+.modal-content {
+  width: 600px;
+
+  .modal-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  .input-group {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    div {
+      width: 48%;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    margin-top: 20px;
+
+    .btn-primary {
+      margin-left: 20px;
+    }
+
+    .delete-btn {
+      color: $red-primary;
+      border: 1px solid $red-primary;
+    }
+  }
+}
