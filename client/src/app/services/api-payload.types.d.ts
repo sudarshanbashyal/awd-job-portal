@@ -29,3 +29,12 @@ interface CreateJobRequest {
   salaryTo?: number | null;
   status?: string;
 }
+
+interface SearchJobRequest {
+  search: string;
+  workType: string;
+  location: string;
+  arrangement: string;
+  salaryFrom: string;
+  salaryTo: string;
+}

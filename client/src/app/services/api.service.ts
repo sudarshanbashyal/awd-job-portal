@@ -1,14 +1,19 @@
 // packages
 import { Observable } from 'rxjs';
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable, NgZone } from '@angular/core';
 import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient) {}
+  private eventSource?: EventSource;
+
+  constructor(
+    private zone: NgZone,
+    private http: HttpClient,
+  ) { }
 
   // auth services
   login(credentials: LoginRequest): Observable<LoginResponse> {
@@ -40,5 +45,74 @@ export class ApiService {
 
   updateJob(id: string, payload: CreateJobRequest): Observable<CreateJobResponse> {
     return this.http.patch<RegisterResponse>(`${environment.apiUrl}/update-job/${id}`, payload);
+  }
+
+  // job search/apply services
+  searchJob(params: SearchJobRequest): Observable<SearchJobResponse> {
+    return this.http.get<SearchJobResponse>(`${environment.apiUrl}/search`, {
+      params: {
+        search: params.search,
+        workType: params.workType,
+        location: params.location,
+        arrangement: params.arrangement,
+        salaryFrom: params.salaryFrom || '',
+        salaryTo: params.salaryTo || '',
+      },
+    });
+  }
+
+  getJobById(id: string): Observable<JobByIdResponse> {
+    return this.http.get<JobByIdResponse>(`${environment.apiUrl}/job/${id}`);
+  }
+
+  getJobApplicationByJobId(jobId: string): Observable<JobApplicationByJobIdResponse> {
+    return this.http.get<JobApplicationByJobIdResponse>(
+      `${environment.apiUrl}/my-application/${jobId}`,
+    );
+  }
+
+  // job application and assessment services
+  createApplication(jobId: string): Observable<JobApplicationByJobIdResponse> {
+    return this.http.post<JobApplicationByJobIdResponse>(
+      `${environment.apiUrl}/apply/${jobId}`,
+      {},
+    );
+  }
+
+  withdrawApplication(jobId: string): Observable<JobApplicationByJobIdResponse> {
+    return this.http.patch<JobApplicationByJobIdResponse>(
+      `${environment.apiUrl}/withdraw/${jobId}`,
+      {},
+    );
+  }
+
+  streamApplicationAssessment(
+    jobId: string,
+    token: string,
+  ): Observable<AssessmentStreamResponse> {
+    return new Observable((observer) => {
+      this.eventSource = new EventSource(`${environment.apiUrl}/assess/${jobId}?token=${token}`);
+
+      this.eventSource.onmessage = (event) => {
+        this.zone.run(() => {
+          observer.next(JSON.parse(event.data));
+        });
+      };
+
+      this.eventSource.onerror = (error) => {
+        this.zone.run(() => {
+          observer.error(error);
+        });
+      };
+
+      return () => this?.eventSource?.close();
+    });
+  }
+
+  disconnectAssessmentStream() {
+    if (this.eventSource) {
+      this.eventSource.close();
+      this.eventSource = undefined;
+    }
   }
 }

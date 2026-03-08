@@ -86,3 +86,9 @@ interface JobPosting {
   status: string;
   createdAt: string;
 }
+
+interface AssessmentReport {
+  rating: number;
+  summary: string;
+  suggestedImprovements: string[];
+}

@@ -4,9 +4,10 @@ $purple-primary: #7869ff;
 $purple-dark: #6150f3;
 $red-primary: #f54848;
 $green-primary: #22cc97;
+$border-primary: #eadfdf;
+$yellow-primary: #ffcc00;
 
 $purple-text: #5a47ff;
-$border-primary: #d9d9d9;
 $table-header: #f9faff;
 $gray-placeholder: #c6c6c6;
 $gray-icon: #8f8f8f;
@@ -94,6 +95,13 @@ button {
   font-weight: 500;
 }
 
+.text-btn {
+  background-color: transparent;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 input,
 textarea,
 select {
@@ -162,5 +170,25 @@ input {
 }
 
 svg {
-  scale: (0.7);
+  margin-top: 3px;
+  scale: (0.6);
+}
+
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .modal-content {
+    background-color: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    max-width: 550px;
+  }
 }

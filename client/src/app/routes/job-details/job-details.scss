@@ -1,0 +1,109 @@
+@use '../../../styles.scss' as *;
+
+.job-details-container {
+  max-width: 850px;
+  margin: auto;
+  margin-top: 80px;
+  border: 1px solid $border-primary;
+  border-radius: 14px;
+
+  margin-bottom: 30px;
+  border: 1px solid $border-primary;
+  background-color: white;
+  padding: 40px 50px;
+  border-radius: 8px;
+
+  .job-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .job-title {
+      font-size: 20px;
+      color: black;
+      font-weight: 600;
+      text-decoration: none;
+      margin-right: 5px;
+
+      display: -webkit-box;
+      line-clamp: 1;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-section {
+      display: flex;
+      align-items: center;
+
+      .job-title {
+        font-size: 18px;
+        margin-right: 5px;
+
+        display: -webkit-box;
+        line-clamp: 1;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      img {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .job-info {
+    margin-top: 3px;
+
+    .header-lower {
+      margin-right: 15px;
+    }
+
+    svg {
+      padding-top: 20px !important;
+    }
+
+    .work-arrangement {
+      span {
+        text-transform: capitalize;
+      }
+    }
+
+    .posted-date {
+      font-size: 11px;
+    }
+  }
+
+  .details-section {
+    margin-top: 40px;
+  }
+
+  .summary {
+    margin-top: 10px;
+
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .action-buttons {
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    button {
+      width: 250px !important;
+    }
+
+    .apply-btn {
+      margin-right: 30px;
+    }
+  }
+}

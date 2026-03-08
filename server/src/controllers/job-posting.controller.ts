@@ -36,7 +36,7 @@ interface JobSearchQuery {
   location?: string;
   salaryFrom?: string;
   salaryTo?: string;
-  workArrangement?: JobArrangement;
+  arrangement?: JobArrangement;
   workType?: JobType;
 }
 
@@ -248,8 +248,8 @@ export const search: RequestHandler = async (
         contains: queryParam.location,
       };
     }
-    if (queryParam.workArrangement?.trim()) {
-      whereConditions.arrangement = queryParam.workArrangement;
+    if (queryParam.arrangement?.trim()) {
+      whereConditions.arrangement = queryParam.arrangement;
     }
     if (queryParam.workType?.trim()) {
       whereConditions.jobType = queryParam.workType;
@@ -267,6 +267,9 @@ export const search: RequestHandler = async (
 
     const jobPostings = await prisma.jobPosting.findMany({
       where: whereConditions,
+      include: {
+        postedBy: true,
+      },
       orderBy: {
         createdAt: "desc",
       },
@@ -304,6 +307,9 @@ export const findJobById: RequestHandler = async (
             deletedAt: null,
           },
         ],
+      },
+      include: {
+        postedBy: true,
       },
     });
 

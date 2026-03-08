@@ -1,0 +1,64 @@
+<div class="job-details-container">
+  <div class="job-header">
+    <div class="header-section">
+      <a class="edit-icon" routerLink="/job-postings">
+        <app-icon-back />
+      </a>
+      <h3 class="job-title">{{ job?.title }}</h3>
+      <app-tag [title]="job?.status?.toLowerCase() || ''" [type]="'Success'"></app-tag>
+    </div>
+
+    <div class="header-section">
+      <img src="user-icon.svg" />
+      <span>{{ job?.postedBy?.firstName }} {{ job?.postedBy?.lastName }}</span>
+    </div>
+  </div>
+
+  <div class="job-header job-info">
+    <div class="header-section">
+      <strong class="header-lower">{{ job?.postedBy?.companyName }}</strong>
+
+      <div class="header-section header-lower job-location">
+        <app-icon-location />
+        <span>{{ job?.location }}</span>
+      </div>
+
+      <div class="header-section header-lower work-arrangement">
+        <app-icon-info />
+        <span>{{ job?.arrangement?.toLowerCase() }}</span>
+      </div>
+
+      <div *ngIf="job?.salaryTo || job?.salaryFrom" class="header-section header-lower work-arrangement">
+        <app-icon-euro />
+        <span>{{ job?.salaryFrom || 'N/A ' }} - </span>
+        <span>{{ job?.salaryTo || ' N/A' }}</span>
+      </div>
+    </div>
+
+    <div>
+      <span class="text-muted posted-date">{{ formattedDate }}</span>
+    </div>
+  </div>
+
+  <div class="details-section">
+    <strong>Introduction</strong>
+    <p class="summary">{{ job?.summary }}</p>
+  </div>
+
+  <div class="details-section">
+    <strong>Description</strong>
+    <p class="description">{{ job?.description }}</p>
+  </div>
+
+  <div class="action-buttons">
+    <button class="btn-primary apply-btn" (click)="changeApplicationStatus()">
+      {{ jobApplicationId ? 'Withdraw Application' : 'Apply' }}
+    </button>
+    <button class="btn-secondary" (click)="analyzeApplication()">
+      <img src="ai-icon.svg" />
+      Analyze your Application
+    </button>
+  </div>
+
+  <app-assessment-modal *ngIf="isPopupOpen" [jobId]="jobId" (closeModalEmitter)="closeModal()"></app-assessment-modal>
+</div>
