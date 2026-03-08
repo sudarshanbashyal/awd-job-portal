@@ -14,17 +14,17 @@ import { IconsModule } from '../icons/icons-module';
 import { dateRangeValidator } from '../../lib';
 
 @Component({
-  selector: 'app-add-experience-modal',
+  selector: 'app-add-education-modal',
   imports: [ReactiveFormsModule, CommonModule, IconsModule],
-  templateUrl: './add-experience-modal.html',
-  styleUrl: './add-experience-modal.scss',
+  templateUrl: './add-education-modal.html',
+  styleUrl: './add-education-modal.scss',
 })
-export class AddExperienceModal {
+export class AddEducationModal {
   public form: FormGroup;
   public submitted = false;
   toastr = inject(ToastrService);
 
-  @Input() experience: ProfessionalExperience | null = null;
+  @Input() education: EducationProfile | null = null;
   @Output() closeModalEmitter = new EventEmitter();
 
   constructor(
@@ -32,15 +32,15 @@ export class AddExperienceModal {
     private readonly apiService: ApiService,
   ) {
     effect(() => {
-      if (this.experience) {
-        this.form.patchValue(this.experience);
+      if (this.education) {
+        this.form.patchValue(this.education);
 
-        const startedAt = new Date(this.experience.startedAt);
+        const startedAt = new Date(this.education.startedAt);
         const localDate = startedAt.toISOString().split('T')[0];
         this.form.get('startedAt')?.setValue(localDate);
 
-        if (this.experience.endedAt) {
-          const endedAt = new Date(this.experience.endedAt);
+        if (this.education.endedAt) {
+          const endedAt = new Date(this.education.endedAt);
           const localDate = endedAt.toISOString().split('T')[0];
           this.form.get('endedAt')?.setValue(localDate);
         }
@@ -49,12 +49,12 @@ export class AddExperienceModal {
 
     this.form = this.fb.group(
       {
-        role: ['', [Validators.required]],
-        companyName: ['', [Validators.required]],
+        course: ['', [Validators.required]],
+        instituteName: ['', [Validators.required]],
         location: ['', [Validators.required]],
         startedAt: ['', [Validators.required]],
         endedAt: [''],
-        description: ['', [Validators.required]],
+        description: [''],
       },
       {
         validators: dateRangeValidator,
@@ -67,16 +67,16 @@ export class AddExperienceModal {
 
     if (this.form.valid) {
       this.apiService
-        .addOrUpdateExperience({
+        .addOrUpdateEducation({
           ...this.form.value,
-          id: this.experience?.id,
+          id: this.education?.id,
           startedAt: new Date(this.form.value.startedAt).toISOString(),
           endedAt: this.form.value.endedAt ? new Date(this.form.value.endedAt).toISOString() : null,
         })
         .subscribe({
           next: (res) => {
             if (res.ok) {
-              this.toastr.success('Your experience has been updated', 'Experience update', {
+              this.toastr.success('Your education has been updated', 'Education update', {
                 progressBar: false,
                 positionClass: 'toast-top-center',
               });
@@ -88,13 +88,13 @@ export class AddExperienceModal {
     }
   }
 
-  deleteExperience() {
-    if (!this.experience?.id) return;
+  deleteEducation() {
+    if (!this.education?.id) return;
 
-    this.apiService.deleteExperience(this.experience.id).subscribe({
+    this.apiService.deleteEducation(this.education.id).subscribe({
       next: (res) => {
         if (res.ok) {
-          this.toastr.success('Your experience has been updated', 'Experience Deleted', {
+          this.toastr.success('Your education has been updated', 'Education Deleted', {
             progressBar: false,
             positionClass: 'toast-top-center',
           });

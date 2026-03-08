@@ -25,10 +25,8 @@
         {{ item.startedAt | date: 'dd/MM/yyyy' }}
       </span>
       <span> - {{ item.endedAt ? (item.endedAt | date: 'dd/MM/yyyy') : 'current' }} </span>
+      <span class="location">| {{ item.location }}</span>
     </div>
-    <p class="location">
-      {{ item.location }}
-    </p>
 
     <ul class="description-list">
       @for (desc of item.description.split('\n'); track desc) {

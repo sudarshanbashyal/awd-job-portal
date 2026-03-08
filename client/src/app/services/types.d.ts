@@ -29,12 +29,12 @@ interface Applicant {
   phoneNumber?: string;
   resumeLink?: string;
   userId: string;
-  skills?: SKill[];
-  education?: Education[];
+  skills?: UserSkill[];
+  education?: EducationProfile[];
   professionalExperience?: ProfessionalExperience[];
 }
 
-interface Skill {
+interface UserSkill {
   id?: string | null;
   skill: string;
   applicantId: string;
@@ -51,7 +51,7 @@ interface ProfessionalExperience {
   applicantId: string;
 }
 
-interface Education {
+interface EducationProfile {
   id?: string | null;
   instituteName: string;
   course: string;

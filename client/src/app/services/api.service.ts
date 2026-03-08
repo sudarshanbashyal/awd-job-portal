@@ -64,6 +64,29 @@ export class ApiService {
     );
   }
 
+  addOrUpdateEducation(payload: EducationProfile): Observable<UpdateApplicantCredentials> {
+    return this.http.put<UpdateApplicantCredentials>(`${environment.apiUrl}/education`, {
+      educations: [payload],
+    });
+  }
+
+  deleteEducation(id: string): Observable<UpdateApplicantCredentials> {
+    return this.http.delete<UpdateApplicantCredentials>(
+      `${environment.apiUrl}/education/${id}`,
+      {},
+    );
+  }
+
+  addOrUpdateSkill(payload: UserSkill): Observable<UpdateApplicantCredentials> {
+    return this.http.put<UpdateApplicantCredentials>(`${environment.apiUrl}/skills`, {
+      skills: [payload],
+    });
+  }
+
+  deleteSkill(id: string): Observable<UpdateApplicantCredentials> {
+    return this.http.delete<UpdateApplicantCredentials>(`${environment.apiUrl}/skill/${id}`, {});
+  }
+
   // job posting services
   getJobPostings(params: GetJobPostingsRequest): Observable<JobPostingsResponse> {
     return this.http.get<JobPostingsResponse>(`${environment.apiUrl}/my-jobs`, {
