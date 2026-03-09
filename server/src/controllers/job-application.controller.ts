@@ -10,8 +10,8 @@ import {
   assessApplication,
   parseResumeDetails,
   sendStatusUpdatedEmail,
-  sendApplicationReceivedEmail,
   extractPayloadFromToken,
+  sendApplicationReceivedEmail,
 } from "../lib";
 
 // prisma

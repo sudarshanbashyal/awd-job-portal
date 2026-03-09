@@ -251,17 +251,26 @@ export const generateResume: RequestHandler = async (
       where: {
         applicantId,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     const educations = await prisma.education.findMany({
       where: {
         applicantId,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     const experiences = await prisma.professionalExperience.findMany({
       where: {
         applicantId,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
