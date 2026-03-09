@@ -1,0 +1,39 @@
+<div class="profile-header-container">
+  <div class="user-profile">
+    <div class="user-info-section">
+      <h1 class="user-name">
+        {{
+          profile?.applicant
+            ? `${profile?.applicant?.firstName} ${profile?.applicant?.lastName}`
+            : `${profile?.recruiter?.firstName} ${profile?.recruiter?.lastName}`
+        }}
+      </h1>
+      <span class="user-email">{{ profile?.email }}</span>
+
+      <app-profile-resume *ngIf="profile?.applicant" />
+
+      <hr />
+      <app-applicant-profile-form *ngIf="profile?.applicant" />
+      <app-recruiter-profile-form *ngIf="profile?.recruiter" />
+    </div>
+
+    <div class="user-profile-picture">
+      <input
+        class="file-upload-input"
+        type="file"
+        id="uploader"
+        accept="image/jpeg, image/png"
+        #uploader
+        (change)="uploadProfile($event)"
+      />
+
+      <app-profile-picture
+        [profile]="profile?.applicant || profile?.recruiter"
+        [profilePicture]="profile?.profilePicture"
+        [avatarType]="'Big'"
+      />
+
+      <button class="text-btn" (click)="uploader.click()">Change Profile</button>
+    </div>
+  </div>
+</div>

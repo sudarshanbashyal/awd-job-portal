@@ -11,11 +11,12 @@ import { ApiService, AuthService } from '../../services';
 // components
 import { Tag } from '../../components/tag/tag';
 import { IconsModule } from '../../components/icons/icons-module';
+import { ProfilePicture } from '../../components/profile-picture/profile-picture';
 import { AssessmentModal } from '../../components/assessment-modal/assessment-modal';
 
 @Component({
   selector: 'app-job-details',
-  imports: [Tag, IconsModule, CommonModule, RouterModule, AssessmentModal],
+  imports: [Tag, IconsModule, CommonModule, RouterModule, AssessmentModal, ProfilePicture],
   templateUrl: './job-details.html',
   styleUrl: './job-details.scss',
 })
@@ -91,7 +92,7 @@ export class JobDetails {
             this.getJobApplication();
           }
         },
-        error: () => { },
+        error: () => {},
       });
   }
 
@@ -115,7 +116,7 @@ export class JobDetails {
             }
           }
         },
-        error: () => { },
+        error: () => {},
       });
   }
 
@@ -155,10 +156,11 @@ export class JobDetails {
         next: (res) => {
           if (res.ok) {
             this.job = res.data;
+            console.log('job: ', res.data);
             this.formattedDate = formatDate(res.data.createdAt, 'dd MMM, yyyy', 'en-US');
           }
         },
-        error: () => { },
+        error: () => {},
       });
   }
 }

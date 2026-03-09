@@ -1,0 +1,43 @@
+<div class="profile-resume-wrapper">
+  <div class="resume-section">
+    <img class="file-icon" src="file-icon.png" />
+    <input
+      class="file-upload-input"
+      type="file"
+      id="uploader"
+      accept="application/pdf"
+      #uploader
+      (change)="uploadResume($event)"
+    />
+
+    <div *ngIf="resumeInfo" class="resume-info">
+      <div>
+        <div class="resume-name">
+          <h3>{{ resumeInfo.originalName }}</h3>
+          <button (click)="downloadResume()">
+            <app-icon-download />
+          </button>
+        </div>
+
+        <button class="text-btn upload-resume" (click)="uploader.click()">
+          Upload Another File
+        </button>
+      </div>
+
+      <button class="delete-btn" (click)="deleteResume()"><app-icon-delete /></button>
+    </div>
+
+    <div *ngIf="!resumeInfo">
+      <div class="resume-name">
+        <h3>No Resume Uploaded</h3>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn-secondary upload-resume" (click)="uploader.click()">
+          Upload Resume
+        </button>
+        <button class="text-btn upload-resume" (click)="generateResume()">Generate Resume</button>
+      </div>
+    </div>
+  </div>
+</div>

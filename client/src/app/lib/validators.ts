@@ -30,3 +30,31 @@ export const passwordMatchValidator = (control: AbstractControl): ValidationErro
 
   return null;
 };
+
+export const phoneNumberValidator = (control: AbstractControl): ValidationErrors | null => {
+  const phoneNumber = control.value;
+
+  if (!phoneNumber) {
+    return null;
+  }
+
+  const phoneRegex = /^\+?[1-9]\d{7,14}$/;
+
+  const valid = phoneRegex.test(phoneNumber);
+
+  return valid ? null : { invalidPhoneNumber: true };
+};
+
+export const dateRangeValidator: ValidatorFn = (
+  group: AbstractControl,
+): ValidationErrors | null => {
+  const start = group.get('startedAt')?.value;
+  const end = group.get('endedAt')?.value;
+
+  if (!end) return null;
+
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  return startDate > endDate ? { dateRangeInvalid: true } : null;
+};

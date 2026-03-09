@@ -1,0 +1,29 @@
+@use '../../../styles.scss' as *;
+
+.skill-container {
+  hr {
+    margin-top: 40px;
+  }
+
+  .add-exp-btn,
+  .edit-btn {
+    cursor: pointer !important;
+    border: none;
+    background: transparent;
+  }
+
+  .section-title {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .skill-tag-wrapper {
+    .skill-tag {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+  }
+}

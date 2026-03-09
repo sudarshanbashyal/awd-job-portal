@@ -1,0 +1,58 @@
+@use '../../../styles.scss' as *;
+
+.profile-resume-wrapper {
+  margin-top: 20px;
+  border: 1px solid $border-primary;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: white;
+
+  .file-upload-input {
+    display: none;
+  }
+
+  .resume-section {
+    display: flex;
+    align-items: center;
+
+    .file-icon {
+      width: 50px;
+    }
+
+    .resume-info {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .resume-name {
+      margin-left: 15px;
+      display: flex;
+      align-items: center;
+
+      button {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        margin-left: 5px;
+      }
+    }
+
+    .delete-btn {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  .upload-resume {
+    font-size: 11px;
+    margin-left: 15px;
+    color: $purple-primary;
+  }
+
+  .action-buttons {
+    margin-top: 10px;
+  }
+}

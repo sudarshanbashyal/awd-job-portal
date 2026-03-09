@@ -268,7 +268,15 @@ export const search: RequestHandler = async (
     const jobPostings = await prisma.jobPosting.findMany({
       where: whereConditions,
       include: {
-        postedBy: true,
+        postedBy: {
+          include: {
+            user: {
+              select: {
+                profilePicture: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
@@ -309,7 +317,16 @@ export const findJobById: RequestHandler = async (
         ],
       },
       include: {
-        postedBy: true,
+        postedBy: {
+          include: {
+            user: {
+              select: {
+                profilePicture: true,
+                id: true,
+              },
+            },
+          },
+        },
       },
     });
 

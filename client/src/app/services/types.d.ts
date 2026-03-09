@@ -29,19 +29,19 @@ interface Applicant {
   phoneNumber?: string;
   resumeLink?: string;
   userId: string;
-  skills?: SKill[];
-  education?: Education[];
+  skills?: UserSkill[];
+  education?: EducationProfile[];
   professionalExperience?: ProfessionalExperience[];
 }
 
-interface Skill {
-  id: string;
+interface UserSkill {
+  id?: string | null;
   skill: string;
   applicantId: string;
 }
 
 interface ProfessionalExperience {
-  id: string;
+  id?: string | null;
   role: string;
   companyName: string;
   location: string;
@@ -51,8 +51,8 @@ interface ProfessionalExperience {
   applicantId: string;
 }
 
-interface Education {
-  id: string;
+interface EducationProfile {
+  id?: string | null;
   instituteName: string;
   course: string;
   location: string;
@@ -91,4 +91,9 @@ interface AssessmentReport {
   rating: number;
   summary: string;
   suggestedImprovements: string[];
+}
+
+interface ResumeInfo {
+  originalName: string;
+  size: number;
 }

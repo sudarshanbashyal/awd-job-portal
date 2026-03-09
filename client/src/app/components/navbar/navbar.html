@@ -8,7 +8,8 @@
       }
       <a routerLink="/profile">Profile</a>
       <button class="log-out" (click)="logout()">Log Out</button>
-      <img src="user-icon.svg" />
+
+      <app-profile-picture [profile]="user?.applicant || user?.recruiter" [profilePicture]="user?.profilePicture" />
     </div>
   </nav>
 </div>

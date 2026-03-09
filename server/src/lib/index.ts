@@ -3,6 +3,7 @@ export * from "./prisma";
 export * from "./parser";
 export * from "./prompts";
 export * from "./registry";
+export * from "./cloudinary";
 export * from "./middlewares";
 export * from "./mail-sender";
 export * from "./resume-builder";

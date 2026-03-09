@@ -1,0 +1,42 @@
+<div class="applicant-form-wrapper">
+  <h3>Your Profile Information</h3>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="input-group">
+      <div>
+        <label class="required" for="firstName">First Name</label>
+        <input id="firstName" formControlName="firstName" placeholder="John" />
+        <p *ngIf="submitted && form.get('firstName')?.hasError('required')" class="error">
+          First Name is required
+        </p>
+      </div>
+
+      <div>
+        <label class="required" for="lastName">Last Name</label>
+        <input id="firstName" formControlName="lastName" placeholder="John" />
+        <p *ngIf="submitted && form.get('lastName')?.hasError('required')" class="error">
+          Last Name is required
+        </p>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <div>
+        <label class="required" for="companyName">Company Name</label>
+        <input id="companyName" formControlName="companyName" placeholder="Hildesheim Gmbh" />
+        <p *ngIf="submitted && form.get('companyName')?.hasError('required')" class="error">
+          Company Name is required
+        </p>
+      </div>
+
+      <div>
+        <label class="required" for="companyAddress">Company Address</label>
+        <input id="companyAddress" formControlName="companyAddress" placeholder="Hildesheim" />
+        <p *ngIf="submitted && form.get('companyAddress')?.hasError('required')" class="error">
+          Company Address is required
+        </p>
+      </div>
+    </div>
+
+    <button type="submit" class="text-btn">Update Profile</button>
+  </form>
+</div>
