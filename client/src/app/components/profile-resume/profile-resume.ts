@@ -37,7 +37,6 @@ export class ProfileResume {
   loadResumeInfo() {
     this.apiService.getResumeInfo().subscribe({
       next: (res) => {
-        console.log('profile res: ', res);
         if (res?.data?.originalName) {
           this.resumeInfo = res.data;
         } else {
@@ -111,6 +110,34 @@ export class ProfileResume {
       },
       error: (err) => {
         console.error('Download failed', err);
+      },
+    });
+  }
+
+  uploadResume(event: Event) {
+    const element = event.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+
+    if (fileList?.length !== 1) return;
+
+    const [resumeFile] = fileList;
+    if (resumeFile.type !== 'application/pdf') {
+      this.toastr.error('Only pdf files are allowed', 'Invalid file format', {
+        progressBar: false,
+        positionClass: 'toast-top-center',
+      });
+      return;
+    }
+
+    this.apiService.uploadResume(resumeFile).subscribe({
+      next: (res) => {
+        if (res.ok) {
+          this.authService.loadUser();
+          this.toastr.success('Your resume has been succesfully uploaded', 'Resume uploaded', {
+            progressBar: false,
+            positionClass: 'toast-top-center',
+          });
+        }
       },
     });
   }

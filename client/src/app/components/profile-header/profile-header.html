@@ -8,7 +8,7 @@
             : `${profile?.recruiter?.firstName} ${profile?.recruiter?.lastName}`
         }}
       </h1>
-      <span class="user-email">{{profile?.email}}</span>
+      <span class="user-email">{{ profile?.email }}</span>
 
       <app-profile-resume *ngIf="profile?.applicant" />
 
@@ -18,13 +18,22 @@
     </div>
 
     <div class="user-profile-picture">
+      <input
+        class="file-upload-input"
+        type="file"
+        id="uploader"
+        accept="image/jpeg, image/png"
+        #uploader
+        (change)="uploadProfile($event)"
+      />
+
       <app-profile-picture
         [profile]="profile?.applicant || profile?.recruiter"
         [profilePicture]="profile?.profilePicture"
         [avatarType]="'Big'"
       />
 
-      <button class="text-btn">Change Profile</button>
+      <button class="text-btn" (click)="uploader.click()">Change Profile</button>
     </div>
   </div>
 </div>

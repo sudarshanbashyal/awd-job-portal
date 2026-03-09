@@ -7,6 +7,10 @@
   padding: 10px;
   background-color: white;
 
+  .file-upload-input {
+    display: none;
+  }
+
   .resume-section {
     display: flex;
     align-items: center;
