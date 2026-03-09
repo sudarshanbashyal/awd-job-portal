@@ -1,0 +1,44 @@
+<div class="education-container">
+  <hr />
+  <div class="section-title">
+    <h3>Educational History</h3>
+    <button class="add-exp-btn" (click)="openModal()" )>
+      <app-icon-add />
+    </button>
+  </div>
+
+  @for (item of userProfile?.applicant?.education; track item) {
+    <div class="experience-entry">
+      <div class="experience-info">
+        <div>
+          <strong class="role">{{ item.course }} </strong>
+          <span class="company"> - {{ item.instituteName }}</span>
+        </div>
+
+        <button class="edit-btn" (click)="openModal(item)">
+          <app-icon-edit />
+        </button>
+      </div>
+
+      <div class="dates">
+        <span>
+          {{ item.startedAt | date: 'dd/MM/yyyy' }}
+        </span>
+        <span> - {{ item.endedAt ? (item.endedAt | date: 'dd/MM/yyyy') : 'current' }} </span>
+        <span class="location">| {{ item.location }}</span>
+      </div>
+
+      <ul class="description-list">
+        @for (desc of item.description.split('\n'); track $index) {
+          <li *ngIf="desc" class="description-item">{{ desc }}</li>
+        }
+      </ul>
+    </div>
+  }
+
+  <app-add-education-modal
+    *ngIf="modalOpen"
+    [education]="editingEducation"
+    (closeModalEmitter)="closeModal()"
+  />
+</div>

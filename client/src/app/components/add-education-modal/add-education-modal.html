@@ -1,0 +1,82 @@
+<div class="modal-container">
+  <div class="modal-content">
+    <div class="modal-title">
+      <h3>{{ education ? 'Update Education' : 'Add Education' }}</h3>
+      <button (click)="closeModal()">
+        <app-icon-close />
+      </button>
+    </div>
+
+    <div class="education-form">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label class="required" for="course">Course</label>
+        <input id="course" formControlName="course" placeholder="Msc. Software Engineering" />
+        <p *ngIf="submitted && form.get('course')?.errors?.['required']" class="error">
+          Course is required
+        </p>
+
+        <div class="input-group">
+          <div>
+            <label class="required" for="instituteName">Institute Name</label>
+            <input
+              id="instituteName"
+              formControlName="instituteName"
+              placeholder="University of Hildesheim"
+            />
+            <p *ngIf="submitted && form.get('instituteName')?.errors?.['required']" class="error">
+              Institute Name is required
+            </p>
+          </div>
+
+          <div>
+            <label class="required" for="role">Location</label>
+            <input id="location" formControlName="location" placeholder="Hildesheim" />
+            <p *ngIf="submitted && form.get('hildesheim')?.errors?.['required']" class="error">
+              Location is required
+            </p>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div>
+            <label class="required" for="role">Started At</label>
+            <input id="startedAt" formControlName="startedAt" type="date" />
+            <p *ngIf="submitted && form.get('startedAt')?.errors?.['required']" class="error">
+              Start date is required
+            </p>
+          </div>
+
+          <div>
+            <label for="role">Ended At</label>
+            <input id="endedAt" formControlName="endedAt" type="date" />
+            <p class="error" *ngIf="form.errors?.['dateRangeInvalid'] && form.touched">
+              End date must be after start date.
+            </p>
+          </div>
+        </div>
+
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          placeholder="Describe what you did at your role"
+        ></textarea>
+
+        <div class="action-buttons">
+          <button
+            type="button"
+            class="btn-secondary delete-btn"
+            *ngIf="education"
+            (click)="deleteEducation()"
+          >
+            Delete
+          </button>
+
+          <button type="submit" class="btn-primary">
+            {{ education ? 'Update Education' : 'Add Education' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

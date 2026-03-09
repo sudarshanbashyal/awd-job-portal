@@ -1,0 +1,73 @@
+<div class="modal-container">
+  <div class="modal-content">
+    <div class="modal-title">
+      <h3>{{ experience ? 'Update Experience' : 'Add Experience' }}</h3>
+      <button (click)="closeModal()">
+        <app-icon-close />
+      </button>
+    </div>
+
+    <div class="exprience-form">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label class="required" for="role">Role</label>
+        <input id="title" formControlName="role" placeholder="Software Engineer" />
+        <p *ngIf="submitted && form.get('role')?.errors?.['required']" class="error">
+          Role is required
+        </p>
+
+        <div class="input-group">
+          <div>
+            <label class="required" for="role">Company Name</label>
+            <input id="title" formControlName="companyName" placeholder="Abc Gmbh" />
+            <p *ngIf="submitted && form.get('companyName')?.errors?.['required']" class="error">
+              Company is required
+            </p>
+          </div>
+
+          <div>
+            <label class="required" for="role">Location</label>
+            <input id="location" formControlName="location" placeholder="Hildesheim" />
+            <p *ngIf="submitted && form.get('hildesheim')?.errors?.['required']" class="error">
+              Location is required
+            </p>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div>
+            <label class="required" for="role">Started At</label>
+            <input id="startedAt" formControlName="startedAt" type="date" />
+            <p *ngIf="submitted && form.get('startedAt')?.errors?.['required']" class="error">
+              Start date is required
+            </p>
+          </div>
+
+          <div>
+            <label for="role">Ended At</label>
+            <input id="endedAt" formControlName="endedAt" type="date" />
+            <p class="error" *ngIf="form.errors?.['dateRangeInvalid'] && form.touched">
+              End date must be after start date.
+            </p>
+          </div>
+        </div>
+
+        <label class="required" for="description">Description</label>
+        <textarea id="description" formControlName="description"
+          placeholder="Describe what you did at your role"></textarea>
+        <p *ngIf="submitted && form.get('description')?.errors?.['required']" class="error">
+          Description is required
+        </p>
+
+        <div class="action-buttons">
+          <button type="button" class="btn-secondary delete-btn" *ngIf="experience" (click)="deleteExperience()">
+            Delete
+          </button>
+
+          <button type="submit" class="btn-primary">
+            {{ experience ? 'Update Experience' : 'Add Experience' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

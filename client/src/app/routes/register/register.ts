@@ -38,7 +38,6 @@ export class Register {
     effect(() => {
       const user = this.authService.getUser();
       if (user) {
-        console.log('saved user: ', user.role);
         router.navigate(user.role === 'APPLICANT' ? ['/search'] : ['/job-postings']);
       }
     });

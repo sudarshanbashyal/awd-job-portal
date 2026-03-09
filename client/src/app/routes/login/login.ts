@@ -78,7 +78,7 @@ export class Login {
             }
           },
           error: (err) => {
-            if (err.status === 404) this.isIncorrectCredentials = true;
+            if (err.status === 404 || err.status === 401) this.isIncorrectCredentials = true;
           },
         });
     }

@@ -13,7 +13,7 @@ export class ApiService {
   constructor(
     private zone: NgZone,
     private http: HttpClient,
-  ) { }
+  ) {}
 
   // auth services
   login(credentials: LoginRequest): Observable<LoginResponse> {
@@ -24,8 +24,97 @@ export class ApiService {
     return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, payload);
   }
 
+  // profile services
   getProfile(): Observable<ProfileResponse> {
     return this.http.get<ProfileResponse>(`${environment.apiUrl}/profile`);
+  }
+
+  updateApplicantProfile(
+    payload: UpdateApplicantProfileRequest,
+  ): Observable<UpdateProfileResponse> {
+    return this.http.patch<UpdateProfileResponse>(
+      `${environment.apiUrl}/applicant-profile`,
+      payload,
+    );
+  }
+
+  updateRecruiterProfile(
+    payload: UpdateRecruiterProfileRequest,
+  ): Observable<UpdateProfileResponse> {
+    return this.http.patch<UpdateProfileResponse>(
+      `${environment.apiUrl}/recruiter-profile`,
+      payload,
+    );
+  }
+
+  deleteAccount(): Observable<DeleteAccountResponse> {
+    return this.http.delete<DeleteAccountResponse>(`${environment.apiUrl}/account`);
+  }
+
+  addOrUpdateExperience(payload: ProfessionalExperience): Observable<UpdateApplicantCredentials> {
+    return this.http.put<UpdateApplicantCredentials>(`${environment.apiUrl}/experience`, {
+      experiences: [payload],
+    });
+  }
+
+  deleteExperience(id: string): Observable<UpdateApplicantCredentials> {
+    return this.http.delete<UpdateApplicantCredentials>(
+      `${environment.apiUrl}/experience/${id}`,
+      {},
+    );
+  }
+
+  addOrUpdateEducation(payload: EducationProfile): Observable<UpdateApplicantCredentials> {
+    return this.http.put<UpdateApplicantCredentials>(`${environment.apiUrl}/education`, {
+      educations: [payload],
+    });
+  }
+
+  deleteEducation(id: string): Observable<UpdateApplicantCredentials> {
+    return this.http.delete<UpdateApplicantCredentials>(
+      `${environment.apiUrl}/education/${id}`,
+      {},
+    );
+  }
+
+  addOrUpdateSkill(payload: UserSkill): Observable<UpdateApplicantCredentials> {
+    return this.http.put<UpdateApplicantCredentials>(`${environment.apiUrl}/skills`, {
+      skills: [payload],
+    });
+  }
+
+  deleteSkill(id: string): Observable<UpdateApplicantCredentials> {
+    return this.http.delete<UpdateApplicantCredentials>(`${environment.apiUrl}/skill/${id}`, {});
+  }
+
+  getResumeInfo(): Observable<ResumeInfoResponse> {
+    return this.http.get<ResumeInfoResponse>(`${environment.apiUrl}/resume-info`);
+  }
+
+  downloadResume(): Observable<Blob> {
+    return this.http.get(`${environment.apiUrl}/resume`, {
+      responseType: 'blob',
+    });
+  }
+
+  generateResume(): Observable<ResumeInfoResponse> {
+    return this.http.post<ResumeInfoResponse>(`${environment.apiUrl}/generate-resume`, {});
+  }
+
+  deleteResume(): Observable<UpdateApplicantCredentials> {
+    return this.http.delete<UpdateApplicantCredentials>(`${environment.apiUrl}/resume`);
+  }
+
+  uploadResume(file: File): Observable<UpdateApplicantCredentials> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<UpdateApplicantCredentials>(`${environment.apiUrl}/resume`, formData);
+  }
+
+  uploadProfilePicture(file: File): Observable<UpdateApplicantCredentials> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<UpdateApplicantCredentials>(`${environment.apiUrl}/profile-picture`, formData);
   }
 
   // job posting services
@@ -86,10 +175,8 @@ export class ApiService {
     );
   }
 
-  streamApplicationAssessment(
-    jobId: string,
-    token: string,
-  ): Observable<AssessmentStreamResponse> {
+  // SSE stream for AI resume assessment
+  streamApplicationAssessment(jobId: string, token: string): Observable<AssessmentStreamResponse> {
     return new Observable((observer) => {
       this.eventSource = new EventSource(`${environment.apiUrl}/assess/${jobId}?token=${token}`);
 

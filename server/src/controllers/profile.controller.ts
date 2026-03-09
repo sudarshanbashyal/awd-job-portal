@@ -6,6 +6,7 @@ import contentDisposition from "content-disposition";
 import {
   prisma,
   checkFile,
+  uploadImage,
   AuthRequest,
   generateResumeFromProfile,
 } from "../lib";
@@ -134,7 +135,7 @@ export const addOrUpdateSkills: RequestHandler = async (
     res.status(201).json({
       ok: true,
       data: {
-        msg: "Applicant skills updated.",
+        message: "Applicant skills updated.",
       },
     });
   } catch (error) {
@@ -172,7 +173,7 @@ export const addOrUpdateEducation: RequestHandler = async (
     res.status(201).json({
       ok: true,
       data: {
-        msg: "Applicant education updated.",
+        message: "Applicant education updated.",
       },
     });
   } catch (error) {
@@ -210,7 +211,7 @@ export const addOrUpdateExperience: RequestHandler = async (
     res.status(201).json({
       ok: true,
       data: {
-        msg: "Applicant experience updated.",
+        message: "Applicant experience updated.",
       },
     });
   } catch (error) {
@@ -250,17 +251,26 @@ export const generateResume: RequestHandler = async (
       where: {
         applicantId,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     const educations = await prisma.education.findMany({
       where: {
         applicantId,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     const experiences = await prisma.professionalExperience.findMany({
       where: {
         applicantId,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
@@ -326,47 +336,44 @@ export const uploadProfilePicture: RequestHandler = async (
   req: AuthRequest,
   res: Response,
 ) => {
-  const userId = req.user?.id;
-  const file = req.file;
-  if (!file) {
-    res.status(401).json({
-      ok: false,
-      errors: ["No file uploaded."],
-    });
-    return;
-  }
+  try {
+    const userId = req.user?.id;
+    const file = req.file;
+    if (!file) {
+      res.status(401).json({
+        ok: false,
+        errors: ["No file uploaded."],
+      });
+      return;
+    }
 
-  if (!file.mimetype.startsWith("image/")) {
-    res.status(401).json({
-      ok: false,
-      errors: ["Invalid file format. Only images allowed."],
-    });
-    return;
-  }
+    if (!file.mimetype.startsWith("image/")) {
+      res.status(401).json({
+        ok: false,
+        errors: ["Invalid file format. Only images allowed."],
+      });
+      return;
+    }
 
-  await prisma.$transaction(async (_tx) => {
-    await prisma.uploadedFile.create({
-      data: {
-        originalName: file.originalname,
-        storedName: file.filename,
-        mimeType: file.mimetype,
-        size: file.size,
-        uploadType: UploadType.PROFILE_PICTURE,
-        userId: userId as string,
-      },
-    });
+    const fileEncoding = file.buffer.toString("base64");
+    const fileUrl = await uploadImage(fileEncoding, file.filename);
+    if (!fileUrl?.url) {
+      res.status(500).json({
+        ok: false,
+        errors: ["Coudln't upload profile picture"],
+      });
+      return;
+    }
 
     await prisma.user.update({
       where: {
         id: userId as string,
       },
       data: {
-        profilePicture: file.filename,
+        profilePicture: fileUrl.url,
       },
     });
-  });
 
-  try {
     res.json({
       ok: true,
       data: {
@@ -582,12 +589,24 @@ export const getprofile: RequestHandler = async (
         recruiter: !!authUser?.recruiterId,
         applicant: authUser?.applicantId
           ? {
-              include: {
-                skills: true,
-                education: true,
-                professionalExperience: true,
+            include: {
+              skills: {
+                orderBy: {
+                  createdAt: "desc",
+                },
               },
-            }
+              education: {
+                orderBy: {
+                  createdAt: "desc",
+                },
+              },
+              professionalExperience: {
+                orderBy: {
+                  createdAt: "desc",
+                },
+              },
+            },
+          }
           : false,
       },
     });
@@ -602,6 +621,159 @@ export const getprofile: RequestHandler = async (
     res.json({
       ok: true,
       data: user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const deleteExperience: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const id = req.params?.id;
+    const applicantId = req.user?.applicantId;
+
+    await prisma.professionalExperience.delete({
+      where: {
+        id,
+        applicantId,
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        message: "Experience deleted",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const deleteEducation: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const id = req.params?.id;
+    const applicantId = req.user?.applicantId;
+
+    await prisma.education.delete({
+      where: {
+        id,
+        applicantId,
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        message: "Education deleted",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const deleteSkill: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const id = req.params?.id;
+    const applicantId = req.user?.applicantId;
+
+    await prisma.skills.delete({
+      where: {
+        id,
+        applicantId,
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        message: "Skill deleted",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const getResumeInfo: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const applicantId = req.user?.applicantId;
+
+    const applicant = await prisma.applicant.findFirst({
+      where: {
+        id: applicantId,
+      },
+    });
+
+    if (!applicant?.resumeLink) {
+      res.json({
+        ok: false,
+        errors: ["Applicant resume not found"],
+      });
+      return;
+    }
+
+    const fileInfo = await prisma.uploadedFile.findFirst({
+      where: {
+        AND: [
+          {
+            storedName: applicant?.resumeLink,
+          },
+          {
+            userId: applicant.userId,
+          },
+        ],
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: fileInfo,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};
+
+export const deleteResume: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const applicantId = req.user?.applicantId;
+
+    await prisma.applicant.update({
+      where: {
+        id: applicantId,
+      },
+      data: {
+        resumeLink: null,
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        message: "Resume deleted.",
+      },
     });
   } catch (error) {
     console.error(error);

@@ -6,9 +6,12 @@ import { Component, effect } from '@angular/core';
 // services
 import { AuthService } from '../../services';
 
+// components
+import { ProfilePicture } from '../profile-picture/profile-picture';
+
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ProfilePicture],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })

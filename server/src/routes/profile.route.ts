@@ -5,7 +5,7 @@ import { Router } from "express";
 import * as Controller from "../controllers";
 
 // libs
-import { isApplicant, isAuth, isRecruiter, upload } from "../lib";
+import { isApplicant, isAuth, isRecruiter, memoryUpload, upload } from "../lib";
 
 export const profileRouter = Router();
 
@@ -27,10 +27,21 @@ profileRouter.patch(
   isApplicant,
   Controller.updateApplicantProfile,
 );
+
+profileRouter.delete("/resume", isApplicant, Controller.deleteResume);
 profileRouter.put("/skills", isApplicant, Controller.addOrUpdateSkills);
+profileRouter.get("/resume-info", isApplicant, Controller.getResumeInfo);
 profileRouter.put("/education", isApplicant, Controller.addOrUpdateEducation);
 profileRouter.post("/generate-resume", isApplicant, Controller.generateResume);
 profileRouter.put("/experience", isApplicant, Controller.addOrUpdateExperience);
+
+profileRouter.delete(
+  "/experience/:id",
+  isApplicant,
+  Controller.deleteExperience,
+);
+profileRouter.delete("/skill/:id", isApplicant, Controller.deleteSkill);
+profileRouter.delete("/education/:id", isApplicant, Controller.deleteEducation);
 
 // recruiter functionalities
 profileRouter.patch(
@@ -43,7 +54,7 @@ profileRouter.patch(
 profileRouter.post(
   "/profile-picture",
   isAuth,
-  upload.single("file"),
+  memoryUpload.single("file"),
   Controller.uploadProfilePicture,
 );
 profileRouter.get("/profile", isAuth, Controller.getprofile);

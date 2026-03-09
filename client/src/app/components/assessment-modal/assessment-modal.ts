@@ -60,7 +60,7 @@ export class AssessmentModal {
           }
         },
         error: (err) => {
-          console.log('err: ', err);
+          console.error('err: ', err);
           if (!this.applicationAssessment) {
             this.assessmentFailed = true;
           }

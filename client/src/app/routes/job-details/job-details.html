@@ -9,8 +9,11 @@
     </div>
 
     <div class="header-section">
-      <img src="user-icon.svg" />
-      <span>{{ job?.postedBy?.firstName }} {{ job?.postedBy?.lastName }}</span>
+      <app-profile-picture
+        [profile]="job?.postedBy"
+        [profilePicture]="job?.postedBy?.user?.profilePicture"
+      />
+      <span class="posted-by">{{ job?.postedBy?.firstName }} {{ job?.postedBy?.lastName }}</span>
     </div>
   </div>
 
@@ -28,7 +31,10 @@
         <span>{{ job?.arrangement?.toLowerCase() }}</span>
       </div>
 
-      <div *ngIf="job?.salaryTo || job?.salaryFrom" class="header-section header-lower work-arrangement">
+      <div
+        *ngIf="job?.salaryTo || job?.salaryFrom"
+        class="header-section header-lower work-arrangement"
+      >
         <app-icon-euro />
         <span>{{ job?.salaryFrom || 'N/A ' }} - </span>
         <span>{{ job?.salaryTo || ' N/A' }}</span>
@@ -60,5 +66,9 @@
     </button>
   </div>
 
-  <app-assessment-modal *ngIf="isPopupOpen" [jobId]="jobId" (closeModalEmitter)="closeModal()"></app-assessment-modal>
+  <app-assessment-modal
+    *ngIf="isPopupOpen"
+    [jobId]="jobId"
+    (closeModalEmitter)="closeModal()"
+  ></app-assessment-modal>
 </div>

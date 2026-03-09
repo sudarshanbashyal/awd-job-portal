@@ -1,0 +1,30 @@
+<div class="modal-container">
+  <div class="modal-content">
+    <div class="modal-title">
+      <h3>{{ skill ? 'Update Skill' : 'Add Skill' }}</h3>
+      <button (click)="closeModal()">
+        <app-icon-close />
+      </button>
+    </div>
+
+    <div class="education-form">
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label class="required" for="skill">Skill Name</label>
+        <input id="skill" formControlName="skill" placeholder="Leadership" />
+        <p *ngIf="submitted && form.get('skill')?.errors?.['required']" class="error">
+          Skill is required
+        </p>
+
+        <div class="action-buttons">
+          <button type="button" class="btn-secondary delete-btn" *ngIf="skill" (click)="deleteSkill()">
+            Delete
+          </button>
+
+          <button type="submit" class="btn-primary">
+            {{ skill ? 'Update Skill' : 'Add Skill' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

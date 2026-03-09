@@ -6,10 +6,11 @@ import { CommonModule, formatDate } from '@angular/common';
 // components
 import { Tag } from '../tag/tag';
 import { IconsModule } from '../icons/icons-module';
+import { ProfilePicture } from '../profile-picture/profile-picture';
 
 @Component({
   selector: 'app-job-entry',
-  imports: [Tag, IconsModule, CommonModule, RouterModule],
+  imports: [Tag, IconsModule, CommonModule, RouterModule, ProfilePicture],
   templateUrl: './job-entry.html',
   styleUrl: './job-entry.scss',
 })

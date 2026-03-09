@@ -21,6 +21,10 @@ type PDFFile = PDFKit.PDFDocument;
 const PAGE_MARGIN = 50;
 const PAGE_BOTTOM = 750;
 
+const formatDate = (date: Date) => {
+  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+};
+
 export const generateResumeFromProfile = async (
   applicant: Applicant,
   user: User,
@@ -102,7 +106,9 @@ function renderExperience(doc: PDFFile, experience: ProfessionalExperience[]) {
     doc
       .font("Helvetica-Oblique")
       .fontSize(10)
-      .text(`${job.startedAt} - ${job.endedAt || "current"}`);
+      .text(
+        `${formatDate(job.startedAt)} - ${job.endedAt ? formatDate(job.endedAt) : "current"}`,
+      );
 
     doc.moveDown(0.3);
 
@@ -136,7 +142,9 @@ function renderEducation(doc: PDFFile, education: Education[]) {
     doc
       .font("Helvetica-Oblique")
       .fontSize(10)
-      .text(`${edu.startedAt} - ${edu.endedAt || "current"}`);
+      .text(
+        `${formatDate(edu.startedAt)} - ${edu.endedAt ? formatDate(edu.endedAt) : "current"}`,
+      );
 
     edu.description &&
       doc.moveDown().font("Helvetica-Bold").fontSize(10).text(edu.description);

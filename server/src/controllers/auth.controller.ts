@@ -47,6 +47,10 @@ interface ResetPasswordDto {
   newPassword: string;
 }
 
+interface GenerateResetTokenRequest {
+  email: string;
+}
+
 export const register: RequestHandler = async (req: Request, res: Response) => {
   try {
     const registerUserDto: RegisterUserDto = req.body;
@@ -209,11 +213,11 @@ export const generateResetToken: RequestHandler = async (
   res: Response,
 ) => {
   try {
-    const userId = req?.user?.id;
+    const resetTokenDto: GenerateResetTokenRequest = req.body;
 
     const user = await prisma.user.findFirst({
       where: {
-        id: userId as string,
+        email: resetTokenDto.email,
       },
       include: {
         applicant: true,
@@ -232,7 +236,7 @@ export const generateResetToken: RequestHandler = async (
     const resetToken = await prisma.resetTokens.create({
       data: {
         token: generateToken(),
-        userId: userId as string,
+        userId: user.id,
         expiresAt: new Date(new Date().getTime() + 60 * 60 * 1000),
       },
     });
