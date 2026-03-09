@@ -101,6 +101,10 @@ export class ApiService {
     return this.http.post<ResumeInfoResponse>(`${environment.apiUrl}/generate-resume`, {});
   }
 
+  deleteResume(): Observable<UpdateApplicantCredentials> {
+    return this.http.delete<UpdateApplicantCredentials>(`${environment.apiUrl}/resume`);
+  }
+
   // job posting services
   getJobPostings(params: GetJobPostingsRequest): Observable<JobPostingsResponse> {
     return this.http.get<JobPostingsResponse>(`${environment.apiUrl}/my-jobs`, {

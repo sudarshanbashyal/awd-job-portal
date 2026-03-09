@@ -752,3 +752,31 @@ export const getResumeInfo: RequestHandler = async (
     res.status(500).json({ ok: false });
   }
 };
+
+export const deleteResume: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const applicantId = req.user?.applicantId;
+
+    await prisma.applicant.update({
+      where: {
+        id: applicantId,
+      },
+      data: {
+        resumeLink: null,
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        message: "Resume deleted.",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};

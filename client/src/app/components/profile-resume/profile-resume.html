@@ -14,12 +14,12 @@
         <button class="text-btn upload-resume">Upload Another File</button>
       </div>
 
-      <button class="delete-btn"><app-icon-delete /></button>
+      <button class="delete-btn" (click)="deleteResume()"><app-icon-delete /></button>
     </div>
 
-    <div *ngIf="!resumeInfo" class="resume-info">
+    <div *ngIf="!resumeInfo">
       <div class="resume-name">
-        <h3>No Resume Uploaded Yet</h3>
+        <h3>No Resume Uploaded</h3>
       </div>
 
       <div class="action-buttons">

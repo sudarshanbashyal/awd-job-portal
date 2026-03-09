@@ -37,8 +37,11 @@ export class ProfileResume {
   loadResumeInfo() {
     this.apiService.getResumeInfo().subscribe({
       next: (res) => {
-        if (res.ok) {
+        console.log('profile res: ', res);
+        if (res?.data?.originalName) {
           this.resumeInfo = res.data;
+        } else {
+          this.resumeInfo = null;
         }
       },
     });
@@ -87,6 +90,23 @@ export class ProfileResume {
               positionClass: 'toast-top-center',
             },
           );
+        }
+      },
+      error: (err) => {
+        console.error('Download failed', err);
+      },
+    });
+  }
+
+  deleteResume() {
+    this.apiService.deleteResume().subscribe({
+      next: (res) => {
+        if (res.ok) {
+          this.authService.loadUser();
+          this.toastr.success('Your resume has been removed.', 'Resume deleted', {
+            progressBar: false,
+            positionClass: 'toast-top-center',
+          });
         }
       },
       error: (err) => {
