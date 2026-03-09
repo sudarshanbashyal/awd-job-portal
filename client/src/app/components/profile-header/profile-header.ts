@@ -6,13 +6,20 @@ import { Component, effect } from '@angular/core';
 import { AuthService } from '../../services';
 
 // components
+import { ProfileResume } from '../profile-resume/profile-resume';
 import { ProfilePicture } from '../profile-picture/profile-picture';
 import { ApplicantProfileForm } from '../applicant-profile-form/applicant-profile-form';
 import { RecruiterProfileForm } from '../recruiter-profile-form/recruiter-profile-form';
 
 @Component({
   selector: 'app-profile-header',
-  imports: [CommonModule, ProfilePicture, ApplicantProfileForm, RecruiterProfileForm],
+  imports: [
+    CommonModule,
+    ProfileResume,
+    ProfilePicture,
+    ApplicantProfileForm,
+    RecruiterProfileForm,
+  ],
   templateUrl: './profile-header.html',
   styleUrl: './profile-header.scss',
 })

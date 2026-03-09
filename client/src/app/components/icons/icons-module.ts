@@ -11,8 +11,10 @@ import { IconBack } from './back-icon';
 import { IconInfo } from './info-icon';
 import { IconEuro } from './euro-icon';
 import { IconClose } from './close-icon';
+import { IconDelete } from './delete-icon';
 import { IconSearch } from './search-icon';
 import { IconLocation } from './location-icon';
+import { IconDownload } from './download-icon';
 
 const iconComponents = [
   IconAi,
@@ -23,8 +25,10 @@ const iconComponents = [
   IconInfo,
   IconEuro,
   IconClose,
+  IconDelete,
   IconSearch,
   IconLocation,
+  IconDownload,
 ];
 
 @NgModule({
@@ -32,4 +36,4 @@ const iconComponents = [
   imports: [CommonModule],
   exports: iconComponents,
 })
-export class IconsModule { }
+export class IconsModule {}

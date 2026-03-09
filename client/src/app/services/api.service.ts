@@ -13,7 +13,7 @@ export class ApiService {
   constructor(
     private zone: NgZone,
     private http: HttpClient,
-  ) { }
+  ) {}
 
   // auth services
   login(credentials: LoginRequest): Observable<LoginResponse> {
@@ -85,6 +85,20 @@ export class ApiService {
 
   deleteSkill(id: string): Observable<UpdateApplicantCredentials> {
     return this.http.delete<UpdateApplicantCredentials>(`${environment.apiUrl}/skill/${id}`, {});
+  }
+
+  getResumeInfo(): Observable<ResumeInfoResponse> {
+    return this.http.get<ResumeInfoResponse>(`${environment.apiUrl}/resume-info`);
+  }
+
+  downloadResume(): Observable<Blob> {
+    return this.http.get(`${environment.apiUrl}/resume`, {
+      responseType: 'blob',
+    });
+  }
+
+  generateResume(): Observable<ResumeInfoResponse> {
+    return this.http.post<ResumeInfoResponse>(`${environment.apiUrl}/generate-resume`, {});
   }
 
   // job posting services

@@ -699,3 +699,47 @@ export const deleteSkill: RequestHandler = async (
     res.status(500).json({ ok: false });
   }
 };
+
+export const getResumeInfo: RequestHandler = async (
+  req: AuthRequest,
+  res: Response,
+) => {
+  try {
+    const applicantId = req.user?.applicantId;
+
+    const applicant = await prisma.applicant.findFirst({
+      where: {
+        id: applicantId,
+      },
+    });
+
+    if (!applicant?.resumeLink) {
+      res.json({
+        ok: false,
+        errors: ["Applicant resume not found"],
+      });
+      return;
+    }
+
+    const fileInfo = await prisma.uploadedFile.findFirst({
+      where: {
+        AND: [
+          {
+            storedName: applicant?.resumeLink,
+          },
+          {
+            userId: applicant.userId,
+          },
+        ],
+      },
+    });
+
+    res.json({
+      ok: true,
+      data: fileInfo,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false });
+  }
+};

@@ -92,3 +92,8 @@ interface AssessmentReport {
   summary: string;
   suggestedImprovements: string[];
 }
+
+interface ResumeInfo {
+  originalName: string;
+  size: number;
+}

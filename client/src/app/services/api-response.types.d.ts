@@ -67,14 +67,14 @@ interface AssessmentStreamResponse {
 
 interface ProfileResponse extends BaseApiResponse {
   data:
-  | ({
-    id: string;
-    email: string;
-    profilePicture: string | null;
-  } & {
-    applicant: Applicant;
-  })
-  | { recruiter: Recruiter };
+    | ({
+        id: string;
+        email: string;
+        profilePicture: string | null;
+      } & {
+        applicant: Applicant;
+      })
+    | { recruiter: Recruiter };
 }
 
 interface UpdateProfileResponse extends BaseApiResponse {
@@ -93,4 +93,8 @@ interface UpdateApplicantCredentials extends BaseApiResponse {
   data: {
     mesage: string;
   };
+}
+
+interface ResumeInfoResponse extends BaseApiResponse {
+  data: ResumeInfo;
 }

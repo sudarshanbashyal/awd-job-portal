@@ -3,11 +3,14 @@
     <div class="user-info-section">
       <h1 class="user-name">
         {{
-        profile?.applicant
-        ? `${profile?.applicant?.firstName} ${profile?.applicant?.lastName}`
-        : `${profile?.recruiter?.firstName} ${profile?.recruiter?.lastName}`
+          profile?.applicant
+            ? `${profile?.applicant?.firstName} ${profile?.applicant?.lastName}`
+            : `${profile?.recruiter?.firstName} ${profile?.recruiter?.lastName}`
         }}
       </h1>
+      <span class="user-email">{{profile?.email}}</span>
+
+      <app-profile-resume *ngIf="profile?.applicant" />
 
       <hr />
       <app-applicant-profile-form *ngIf="profile?.applicant" />
@@ -15,8 +18,11 @@
     </div>
 
     <div class="user-profile-picture">
-      <app-profile-picture [profile]="profile?.applicant || profile?.recruiter"
-        [profilePicture]="profile?.profilePicture" [avatarType]="'Big'" />
+      <app-profile-picture
+        [profile]="profile?.applicant || profile?.recruiter"
+        [profilePicture]="profile?.profilePicture"
+        [avatarType]="'Big'"
+      />
 
       <button class="text-btn">Change Profile</button>
     </div>

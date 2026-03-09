@@ -15,7 +15,7 @@ import { DeleteAccount } from '../../components/delete-account/delete-account';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, ProfileHeader, Experience, Education, Skill, DeleteAccount],
+  imports: [Skill, CommonModule, ProfileHeader, Experience, Education, DeleteAccount],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })

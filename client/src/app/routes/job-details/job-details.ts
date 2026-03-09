@@ -91,7 +91,7 @@ export class JobDetails {
             this.getJobApplication();
           }
         },
-        error: () => { },
+        error: () => {},
       });
   }
 
@@ -115,7 +115,7 @@ export class JobDetails {
             }
           }
         },
-        error: () => { },
+        error: () => {},
       });
   }
 
@@ -158,7 +158,7 @@ export class JobDetails {
             this.formattedDate = formatDate(res.data.createdAt, 'dd MMM, yyyy', 'en-US');
           }
         },
-        error: () => { },
+        error: () => {},
       });
   }
 }
