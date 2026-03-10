@@ -69,7 +69,7 @@ export class JobSearch {
             this.jobs = res.data;
           }
         },
-        error: () => { },
+        error: () => {},
       });
   }
 }

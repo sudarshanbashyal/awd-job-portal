@@ -97,3 +97,11 @@ interface ResumeInfo {
   originalName: string;
   size: number;
 }
+
+interface JobApplication {
+  id: string;
+  status: string;
+  createdAt: Date;
+  jobId: string;
+  jobPosting: JobPosting & { postedBy: Recruiter };
+}
