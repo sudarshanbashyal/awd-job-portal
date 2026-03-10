@@ -38,6 +38,10 @@ export class ApiService {
     );
   }
 
+  getMyApplications(): Observable<{ ok: boolean; data: any[] }> {
+  return this.http.get<{ ok: boolean; data: any[] }>(`${environment.apiUrl}/my-applications`);
+}
+
   updateRecruiterProfile(
     payload: UpdateRecruiterProfileRequest,
   ): Observable<UpdateProfileResponse> {

@@ -9,6 +9,7 @@ import { JobSearch } from './routes/job-search/job-search';
 import { CreateJob } from './routes/create-job/create-job';
 import { JobDetails } from './routes/job-details/job-details';
 import { JobPostings } from './routes/job-postings/job-postings';
+import { JobApplication } from './components/job-application/job-application';
 
 export const routes: Routes = [
   { path: '', component: Login },
@@ -18,6 +19,7 @@ export const routes: Routes = [
 
   { path: 'profile', component: Profile },
 
+  { path: 'job-application', component: JobApplication },
   { path: 'job-post', component: CreateJob },
   { path: 'job-post/:id', component: CreateJob },
   { path: 'job-postings', component: JobPostings },
