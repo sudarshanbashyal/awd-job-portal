@@ -75,6 +75,14 @@ export class JobDetails {
   }
 
   apply() {
+    if (!this.user?.applicant?.resumeLink) {
+      this.toastr.error('Please upload a resume from your profile before applying.', 'No Resume', {
+        progressBar: false,
+        positionClass: 'toast-top-center',
+      });
+      return;
+    }
+
     this.apiService
       .createApplication(this.jobId)
       .pipe(
