@@ -1,4 +1,4 @@
-import { Component, effect, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { environment } from '../../environments/environment';
 
 @Component({

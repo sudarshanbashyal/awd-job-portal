@@ -20,4 +20,31 @@ describe('RecruiterProfileForm', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // testing form creation with empty values
+  it('should initialize the form with empty values', () => {
+    const form = component.form;
+    expect(form).toBeDefined();
+    expect(form.get('firstName')?.value).toBe('');
+    expect(form.get('lastName')?.value).toBe('');
+    expect(form.get('companyName')?.value).toBe('');
+    expect(form.get('companyAddress')?.value).toBe('');
+  });
+
+  // testing form with empty values
+  it('should mark form as invalid if empty', () => {
+    component.submit();
+    expect(component.submitted).toBeTrue();
+    expect(component.form.invalid).toBeTrue();
+  });
+
+  // valid form test
+  it('should mark form as valid when valid values are present', () => {
+    component.form.get('firstName')?.setValue('John');
+    component.form.get('lastName')?.setValue('Doe');
+    component.form.get('companyName')?.setValue('Company abc');
+    component.form.get('companyAddress')?.setValue('Hildesheim');
+    component.submit();
+    expect(component.form.valid).toBeTrue();
+  });
 });
