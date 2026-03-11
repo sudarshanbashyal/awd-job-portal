@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Component, effect } from '@angular/core';
 
 // services
-import { AuthService } from '../../services';
+import { AuthService, ToastService } from '../../services';
 
 // components
 import { ProfilePicture } from '../profile-picture/profile-picture';
@@ -29,7 +29,10 @@ export class Navbar {
     { link: '/job-post', name: 'Add Job' },
   ];
 
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly toastService: ToastService,
+  ) {
     effect(() => {
       const user = this.authService.getUser();
       this.isAuth = !!user;
@@ -39,5 +42,6 @@ export class Navbar {
 
   logout() {
     this.authService.logout();
+    this.toastService.show('Logged out', 'You have been logged out of the session');
   }
 }

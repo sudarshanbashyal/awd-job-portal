@@ -1,10 +1,9 @@
 // packages
-import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect } from '@angular/core';
 
 // services
-import { ApiService, AuthService } from '../../services';
+import { ApiService, AuthService, ToastService } from '../../services';
 
 // components
 import { ProfileResume } from '../profile-resume/profile-resume';
@@ -27,11 +26,10 @@ import { RecruiterProfileForm } from '../recruiter-profile-form/recruiter-profil
 export class ProfileHeader {
   profile: UserProfile | null = null;
 
-  toastr = inject(ToastrService);
-
   constructor(
-    private authService: AuthService,
     private apiService: ApiService,
+    private authService: AuthService,
+    private readonly toastService: ToastService,
   ) {
     effect(() => {
       const user = this.authService.getUser();
@@ -47,22 +45,15 @@ export class ProfileHeader {
 
     const [profileFile] = fileList;
     if (profileFile.type !== 'image/jpeg' && profileFile.type !== 'image/png') {
-      this.toastr.error('Only png and jpeg are allowed', 'Invalid file format', {
-        progressBar: false,
-        positionClass: 'toast-top-center',
-      });
+      this.toastService.show('Invalid file format', 'Only png and jpeg are allowed', 'error');
       return;
     }
 
     this.apiService.uploadProfilePicture(profileFile).subscribe({
       next: (res) => {
         if (res.ok) {
-          console.log('profile picture: ', res);
           this.authService.loadUser();
-          this.toastr.success('Your profile picture has been changed.', 'Profile updated.', {
-            progressBar: false,
-            positionClass: 'toast-top-center',
-          });
+          this.toastService.show('Profile updated.', 'Your profile picture has been changed.');
         }
       },
     });

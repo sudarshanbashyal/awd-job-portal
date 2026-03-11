@@ -7,7 +7,7 @@
     </button>
   </div>
 
-  @for (item of userProfile?.applicant?.professionalExperience; track item) {
+  @for (item of userProfile?.applicant?.professionalExperience; track $index) {
     <div class="experience-entry">
       <div class="experience-info">
         <div>

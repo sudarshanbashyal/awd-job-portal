@@ -1,15 +1,14 @@
 // packages
 import { finalize } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect } from '@angular/core';
 
 // forms
 import { FormGroup, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 // services
-import { ApiService, AuthService } from '../../services';
+import { ApiService, AuthService, ToastService } from '../../services';
 
 // libs
 import { passwordMatchValidator } from '../../lib';
@@ -26,13 +25,12 @@ export class Register {
   public submissionSuccessful = false;
   public loading = false;
 
-  toastr = inject(ToastrService);
-
   constructor(
     private fb: FormBuilder,
     private readonly router: Router,
     private readonly apiService: ApiService,
     private readonly authService: AuthService,
+    private readonly toastService: ToastService,
   ) {
     // redirect user to main page if already logged in
     effect(() => {
@@ -98,10 +96,7 @@ export class Register {
           next: (res) => {
             if (res.ok) {
               this.submissionSuccessful = true;
-              this.toastr.success('Redirecting you to login', 'Account created', {
-                progressBar: false,
-                positionClass: 'toast-top-center',
-              });
+              this.toastService.show('Account created', 'Redirecting you to login');
               setTimeout(() => {
                 this.router.navigate(['/login']);
               }, 1000);

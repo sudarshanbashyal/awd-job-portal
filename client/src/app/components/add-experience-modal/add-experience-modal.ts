@@ -1,11 +1,10 @@
 // packages
-import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { Component, effect, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, effect, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 // services
-import { ApiService } from '../../services';
+import { ApiService, ToastService } from '../../services';
 
 // components
 import { IconsModule } from '../icons/icons-module';
@@ -22,7 +21,6 @@ import { dateRangeValidator } from '../../lib';
 export class AddExperienceModal {
   public form: FormGroup;
   public submitted = false;
-  toastr = inject(ToastrService);
 
   @Input() experience: ProfessionalExperience | null = null;
   @Output() closeModalEmitter = new EventEmitter();
@@ -30,6 +28,7 @@ export class AddExperienceModal {
   constructor(
     private fb: FormBuilder,
     private readonly apiService: ApiService,
+    private readonly toastService: ToastService,
   ) {
     effect(() => {
       if (this.experience) {
@@ -76,14 +75,11 @@ export class AddExperienceModal {
         .subscribe({
           next: (res) => {
             if (res.ok) {
-              this.toastr.success('Your experience has been updated', 'Experience update', {
-                progressBar: false,
-                positionClass: 'toast-top-center',
-              });
+              this.toastService.show('Experience updated', 'Your experience has been updated');
               this.closeModal();
             }
           },
-          error: () => { },
+          error: () => {},
         });
     }
   }
@@ -94,14 +90,11 @@ export class AddExperienceModal {
     this.apiService.deleteExperience(this.experience.id).subscribe({
       next: (res) => {
         if (res.ok) {
-          this.toastr.success('Your experience has been updated', 'Experience Deleted', {
-            progressBar: false,
-            positionClass: 'toast-top-center',
-          });
+          this.toastService.show('Experience updated', 'Your experience has been updated');
           this.closeModal();
         }
       },
-      error: () => { },
+      error: () => {},
     });
   }
 
