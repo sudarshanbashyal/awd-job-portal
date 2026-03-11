@@ -1,13 +1,12 @@
 // packages
-import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect } from '@angular/core';
 
 // components
 import { IconsModule } from '../icons/icons-module';
 
 // services
-import { ApiService, AuthService } from '../../services';
+import { ApiService, AuthService, ToastService } from '../../services';
 
 @Component({
   selector: 'app-profile-resume',
@@ -19,11 +18,10 @@ export class ProfileResume {
   user: UserProfile | null = null;
   resumeInfo: ResumeInfo | null = null;
 
-  toastr = inject(ToastrService);
-
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
+    private toastSerivce: ToastService,
   ) {
     effect(() => {
       const user = this.authService.getUser();
@@ -37,8 +35,10 @@ export class ProfileResume {
   loadResumeInfo() {
     this.apiService.getResumeInfo().subscribe({
       next: (res) => {
-        if (res.ok) {
+        if (res?.data?.originalName) {
           this.resumeInfo = res.data;
+        } else {
+          this.resumeInfo = null;
         }
       },
     });
@@ -68,10 +68,11 @@ export class ProfileResume {
     const education = this.user?.applicant?.education;
 
     if (!skills?.length || !education?.length) {
-      this.toastr.warning('Please add skills and education first.', 'Cannot generate resume.', {
-        progressBar: false,
-        positionClass: 'toast-top-center',
-      });
+      this.toastSerivce.show(
+        'Cannot generate resume.',
+        'Please add skills and education first.',
+        'warning',
+      );
       return;
     }
 
@@ -79,18 +80,50 @@ export class ProfileResume {
       next: (res) => {
         if (res.ok) {
           this.authService.loadUser();
-          this.toastr.success(
-            'A new resume has been generated based on your profile.',
+          this.toastSerivce.show(
             'Resume generated',
-            {
-              progressBar: false,
-              positionClass: 'toast-top-center',
-            },
+            'A new resume has been generated based on your profile.',
           );
         }
       },
       error: (err) => {
         console.error('Download failed', err);
+      },
+    });
+  }
+
+  deleteResume() {
+    this.apiService.deleteResume().subscribe({
+      next: (res) => {
+        if (res.ok) {
+          this.authService.loadUser();
+          this.toastSerivce.show('Resume deleted', 'Your resume has been removed.');
+        }
+      },
+      error: (err) => {
+        console.error('Download failed', err);
+      },
+    });
+  }
+
+  uploadResume(event: Event) {
+    const element = event.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+
+    if (fileList?.length !== 1) return;
+
+    const [resumeFile] = fileList;
+    if (resumeFile.type !== 'application/pdf') {
+      this.toastSerivce.show('Invalid file format', 'Only pdf files are allowed', 'error');
+      return;
+    }
+
+    this.apiService.uploadResume(resumeFile).subscribe({
+      next: (res) => {
+        if (res.ok) {
+          this.authService.loadUser();
+          this.toastSerivce.show('Resume uploaded', 'Your resume has been succesfully uploaded');
+        }
       },
     });
   }

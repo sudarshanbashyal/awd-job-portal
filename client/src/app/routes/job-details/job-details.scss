@@ -37,6 +37,10 @@
       display: flex;
       align-items: center;
 
+      .posted-by {
+        margin-left: 5px;
+      }
+
       .job-title {
         font-size: 18px;
         margin-right: 5px;

@@ -101,6 +101,22 @@ export class ApiService {
     return this.http.post<ResumeInfoResponse>(`${environment.apiUrl}/generate-resume`, {});
   }
 
+  deleteResume(): Observable<UpdateApplicantCredentials> {
+    return this.http.delete<UpdateApplicantCredentials>(`${environment.apiUrl}/resume`);
+  }
+
+  uploadResume(file: File): Observable<UpdateApplicantCredentials> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<UpdateApplicantCredentials>(`${environment.apiUrl}/resume`, formData);
+  }
+
+  uploadProfilePicture(file: File): Observable<UpdateApplicantCredentials> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<UpdateApplicantCredentials>(`${environment.apiUrl}/profile-picture`, formData);
+  }
+
   // job posting services
   getJobPostings(params: GetJobPostingsRequest): Observable<JobPostingsResponse> {
     return this.http.get<JobPostingsResponse>(`${environment.apiUrl}/my-jobs`, {

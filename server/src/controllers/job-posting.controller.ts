@@ -317,7 +317,16 @@ export const findJobById: RequestHandler = async (
         ],
       },
       include: {
-        postedBy: true,
+        postedBy: {
+          include: {
+            user: {
+              select: {
+                profilePicture: true,
+                id: true,
+              },
+            },
+          },
+        },
       },
     });
 

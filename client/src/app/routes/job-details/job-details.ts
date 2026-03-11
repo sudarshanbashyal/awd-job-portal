@@ -1,21 +1,21 @@
 // packages
 import { finalize } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
 import { Component, effect, inject } from '@angular/core';
 import { CommonModule, formatDate } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 // services
-import { ApiService, AuthService } from '../../services';
+import { ApiService, AuthService, ToastService } from '../../services';
 
 // components
 import { Tag } from '../../components/tag/tag';
 import { IconsModule } from '../../components/icons/icons-module';
+import { ProfilePicture } from '../../components/profile-picture/profile-picture';
 import { AssessmentModal } from '../../components/assessment-modal/assessment-modal';
 
 @Component({
   selector: 'app-job-details',
-  imports: [Tag, IconsModule, CommonModule, RouterModule, AssessmentModal],
+  imports: [Tag, IconsModule, CommonModule, RouterModule, AssessmentModal, ProfilePicture],
   templateUrl: './job-details.html',
   styleUrl: './job-details.scss',
 })
@@ -25,7 +25,6 @@ export class JobDetails {
   job: JobResultEntry | null = null;
   jobApplicationId: string = '';
 
-  toastr = inject(ToastrService);
   private activatedRoute = inject(ActivatedRoute);
 
   public jobId = '';
@@ -38,6 +37,7 @@ export class JobDetails {
     private readonly router: Router,
     private readonly apiService: ApiService,
     private readonly authService: AuthService,
+    private readonly toastService: ToastService,
   ) {
     // redirect user to login if not logged in
     effect(() => {
@@ -74,6 +74,15 @@ export class JobDetails {
   }
 
   apply() {
+    if (!this.user?.applicant?.resumeLink) {
+      this.toastService.show(
+        'No Resume',
+        'Please upload a resume from your profile before applying.',
+        'warning',
+      );
+      return;
+    }
+
     this.apiService
       .createApplication(this.jobId)
       .pipe(
@@ -84,10 +93,7 @@ export class JobDetails {
       .subscribe({
         next: (res) => {
           if (res.ok) {
-            this.toastr.success('Your application has been made', 'Applied!', {
-              progressBar: false,
-              positionClass: 'toast-top-center',
-            });
+            this.toastService.show('Applied!', 'Your application has been made');
             this.getJobApplication();
           }
         },
@@ -107,10 +113,7 @@ export class JobDetails {
         next: (res) => {
           if (res.ok) {
             if (res.ok) {
-              this.toastr.success('Your application has been withdrawn', 'Application removed', {
-                progressBar: false,
-                positionClass: 'toast-top-center',
-              });
+              this.toastService.show('Application removed', 'Your application has been withdrawn');
               this.getJobApplication();
             }
           }
@@ -155,6 +158,7 @@ export class JobDetails {
         next: (res) => {
           if (res.ok) {
             this.job = res.data;
+            console.log('job: ', res.data);
             this.formattedDate = formatDate(res.data.createdAt, 'dd MMM, yyyy', 'en-US');
           }
         },

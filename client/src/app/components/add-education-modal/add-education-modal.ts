@@ -1,11 +1,10 @@
 // packages
-import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { Component, effect, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, effect, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 // services
-import { ApiService } from '../../services';
+import { ApiService, ToastService } from '../../services';
 
 // components
 import { IconsModule } from '../icons/icons-module';
@@ -22,13 +21,13 @@ import { dateRangeValidator } from '../../lib';
 export class AddEducationModal {
   public form: FormGroup;
   public submitted = false;
-  toastr = inject(ToastrService);
 
   @Input() education: EducationProfile | null = null;
   @Output() closeModalEmitter = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
+    private toastService: ToastService,
     private readonly apiService: ApiService,
   ) {
     effect(() => {
@@ -76,14 +75,11 @@ export class AddEducationModal {
         .subscribe({
           next: (res) => {
             if (res.ok) {
-              this.toastr.success('Your education has been updated', 'Education update', {
-                progressBar: false,
-                positionClass: 'toast-top-center',
-              });
+              this.toastService.show('Education update', 'Your education has been updated');
               this.closeModal();
             }
           },
-          error: () => { },
+          error: () => {},
         });
     }
   }
@@ -94,14 +90,11 @@ export class AddEducationModal {
     this.apiService.deleteEducation(this.education.id).subscribe({
       next: (res) => {
         if (res.ok) {
-          this.toastr.success('Your education has been updated', 'Education Deleted', {
-            progressBar: false,
-            positionClass: 'toast-top-center',
-          });
+          this.toastService.show('Education Deleted', 'Your education has been updated');
           this.closeModal();
         }
       },
-      error: () => { },
+      error: () => {},
     });
   }
 

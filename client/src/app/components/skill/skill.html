@@ -8,12 +8,16 @@
   </div>
 
   <div class="skill-tag-wrapper">
-    @for (item of userProfile?.applicant?.skills; track item) {
-    <span class="skill-tag" (click)="openModal(item)">
-      <app-tag [title]="item.skill" [type]="'Info'" />
-    </span>
+    @for (item of userProfile?.applicant?.skills; track $index) {
+      <span class="skill-tag" (click)="openModal(item)">
+        <app-tag [title]="item.skill" [type]="'Info'" />
+      </span>
     }
   </div>
 
-  <app-add-skill-modal *ngIf="modalOpen" [skill]="editingSkill" (closeModalEmitter)="closeModal()" />
+  <app-add-skill-modal
+    *ngIf="modalOpen"
+    [skill]="editingSkill"
+    (closeModalEmitter)="closeModal()"
+  />
 </div>

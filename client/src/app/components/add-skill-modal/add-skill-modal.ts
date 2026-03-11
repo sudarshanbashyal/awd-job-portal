@@ -1,12 +1,13 @@
 // packages
-import { Component, effect, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, effect, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+// services
+import { ApiService, ToastService } from '../../services';
 
 // components
 import { IconsModule } from '../icons/icons-module';
-import { ToastrService } from 'ngx-toastr';
-import { ApiService } from '../../services';
 
 @Component({
   selector: 'app-add-skill-modal',
@@ -17,7 +18,6 @@ import { ApiService } from '../../services';
 export class AddSkillModal {
   public form: FormGroup;
   public submitted = false;
-  toastr = inject(ToastrService);
 
   @Input() skill: UserSkill | null = null;
   @Output() closeModalEmitter = new EventEmitter();
@@ -25,6 +25,7 @@ export class AddSkillModal {
   constructor(
     private fb: FormBuilder,
     private readonly apiService: ApiService,
+    private readonly toastService: ToastService,
   ) {
     effect(() => {
       if (this.skill) {
@@ -49,10 +50,7 @@ export class AddSkillModal {
         .subscribe({
           next: (res) => {
             if (res.ok) {
-              this.toastr.success('Your skills have been udpated', 'Skill updated', {
-                progressBar: false,
-                positionClass: 'toast-top-center',
-              });
+              this.toastService.show('Skill updated', 'Your skills have been udpated');
               this.closeModal();
             }
           },
@@ -67,10 +65,7 @@ export class AddSkillModal {
     this.apiService.deleteSkill(this.skill.id).subscribe({
       next: (res) => {
         if (res.ok) {
-          this.toastr.success('Your skills have been updated', 'Skills updated', {
-            progressBar: false,
-            positionClass: 'toast-top-center',
-          });
+          this.toastService.show('Skill removed', 'Your skills have been udpated');
           this.closeModal();
         }
       },

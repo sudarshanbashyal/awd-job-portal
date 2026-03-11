@@ -27,6 +27,8 @@ profileRouter.patch(
   isApplicant,
   Controller.updateApplicantProfile,
 );
+
+profileRouter.delete("/resume", isApplicant, Controller.deleteResume);
 profileRouter.put("/skills", isApplicant, Controller.addOrUpdateSkills);
 profileRouter.get("/resume-info", isApplicant, Controller.getResumeInfo);
 profileRouter.put("/education", isApplicant, Controller.addOrUpdateEducation);
