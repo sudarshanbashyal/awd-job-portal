@@ -21,7 +21,7 @@ export class Navbar {
 
   applicantRoutes = [
     { link: '/search', name: 'Home' },
-    { link: 'my-applications', name: 'My Applications' },
+    { link: '/job-application', name: 'My Applications' },
   ];
 
   recruiterRoutes = [

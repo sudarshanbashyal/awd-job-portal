@@ -98,3 +98,7 @@ interface UpdateApplicantCredentials extends BaseApiResponse {
 interface ResumeInfoResponse extends BaseApiResponse {
   data: ResumeInfo;
 }
+
+interface MyApplicationsResponse extends BaseApiResponse {
+  data: JobApplication[];
+}

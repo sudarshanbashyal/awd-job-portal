@@ -18,6 +18,12 @@
     align-items: center;
     justify-content: space-between;
 
+    .back-icon {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
     .job-title {
       font-size: 20px;
       color: black;
