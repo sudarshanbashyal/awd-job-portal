@@ -1,9 +1,8 @@
 // packages
-import { ToastrService } from 'ngx-toastr';
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 
 // services
-import { ApiService, AuthService } from '../../services';
+import { ApiService, AuthService, ToastService } from '../../services';
 
 @Component({
   selector: 'app-delete-account',
@@ -12,25 +11,21 @@ import { ApiService, AuthService } from '../../services';
   styleUrl: './delete-account.scss',
 })
 export class DeleteAccount {
-  toastr = inject(ToastrService);
-
   constructor(
     private readonly apiService: ApiService,
     private readonly authService: AuthService,
-  ) {}
+    private readonly toastService: ToastService,
+  ) { }
 
   deleteAccount() {
     this.apiService.deleteAccount().subscribe({
       next: (res) => {
         if (res.ok) {
-          this.toastr.success('Your account has been deleted', 'Account Deleted', {
-            progressBar: false,
-            positionClass: 'toast-top-center',
-          });
+          this.toastService.show('Account Deleted', 'Your account has been deleted');
           this.authService.logout();
         }
       },
-      error: () => {},
+      error: () => { },
     });
   }
 }

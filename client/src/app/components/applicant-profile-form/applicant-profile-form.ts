@@ -1,11 +1,10 @@
 // packages
-import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 // services
-import { ApiService, AuthService } from '../../services';
+import { ApiService, AuthService, ToastService } from '../../services';
 
 // libs
 import { phoneNumberValidator } from '../../lib';
@@ -22,12 +21,11 @@ export class ApplicantProfileForm {
 
   profile: UserProfile | null = null;
 
-  toastr = inject(ToastrService);
-
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
     private authService: AuthService,
+    private toastService: ToastService,
   ) {
     effect(() => {
       const user = this.authService.getUser();
@@ -46,17 +44,13 @@ export class ApplicantProfileForm {
 
   submit() {
     this.submitted = true;
-    console.log('form err: ', this.form.get('phoneNumber')?.errors?.['invalidPhoneNumber']);
     if (this.form.valid) {
       this.apiService.updateApplicantProfile(this.form.value).subscribe({
         next: (res) => {
           if (res.ok) {
             this.authService.loadUser();
           }
-          this.toastr.success('Your profile has been successfully updated', 'Profile Updated', {
-            progressBar: false,
-            positionClass: 'toast-top-center',
-          });
+          this.toastService.show('Profile Updated', 'Your profile has been successfully updated');
         },
         error: () => { },
       });

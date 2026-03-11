@@ -1,0 +1,46 @@
+@use '../../../styles.scss' as *;
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  color: white;
+  font-weight: 500;
+  animation: slideIn 0.3s ease;
+  width: 250px;
+
+  .toast-title {
+    margin-bottom: 8px;
+  }
+
+  .toast-text {
+    opacity: 0.75;
+  }
+}
+
+.success {
+  background-color: $success-bg;
+  color: $success-text;
+}
+
+.error {
+  background-color: $error-bg;
+  color: $error-text;
+}
+
+.warning {
+  background-color: $warning-bg;
+  color: $warning-text;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}

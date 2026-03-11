@@ -1,0 +1,4 @@
+<div *ngIf="toast$ | async as toast" class="toast" [ngClass]="toast.type">
+  <h4 class="toast-title">{{ toast.title }}</h4>
+  <p class="toast-text">{{ toast.text }}</p>
+</div>

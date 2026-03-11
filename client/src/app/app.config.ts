@@ -5,7 +5,6 @@ import {
   provideZoneChangeDetection,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
-import { provideToastr } from 'ngx-toastr';
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -22,7 +21,6 @@ import { initAuth, initUser, tokenInterceptor } from './lib';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideToastr(),
     {
       provide: APP_INITIALIZER,
       useFactory: initAuth,
