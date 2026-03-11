@@ -1,6 +1,5 @@
 // packages
 import { finalize } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { Component, effect, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -10,7 +9,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { IconsModule } from '../../components/icons/icons-module';
 
 // services
-import { ApiService, AuthService } from '../../services';
+import { ApiService, AuthService, ToastService } from '../../services';
 
 // libs
 import { minWords, salaryRangeValidator } from '../../lib';
@@ -34,7 +33,6 @@ export class CreateJob {
   public jobId = '';
   public previousJob: JobPosting | null = null;
 
-  toastr = inject(ToastrService);
   private activatedRoute = inject(ActivatedRoute);
 
   constructor(
@@ -42,6 +40,7 @@ export class CreateJob {
     private readonly router: Router,
     private readonly apiService: ApiService,
     private readonly authService: AuthService,
+    private readonly toastService: ToastService,
   ) {
     effect(() => {
       const token = this.authService.getUserToken();
@@ -123,14 +122,11 @@ export class CreateJob {
         next: (res) => {
           if (res.ok) {
             this.submissionSuccessful = true;
-            this.toastr.success('Your job has been updated', 'Job Updated', {
-              progressBar: false,
-              positionClass: 'toast-top-center',
-            });
+            this.toastService.show('Job Updated', 'Your job has been updated');
             this.getJob();
           }
         },
-        error: () => { },
+        error: () => {},
       });
   }
 
@@ -156,16 +152,13 @@ export class CreateJob {
             next: (res) => {
               if (res.ok) {
                 this.submissionSuccessful = true;
-                this.toastr.success('A new job has been created!', 'Job Posted', {
-                  progressBar: false,
-                  positionClass: 'toast-top-center',
-                });
+                this.toastService.show('Job Posted', 'A new job has been created!');
                 setTimeout(() => {
                   this.router.navigate(['/job-postings']);
                 }, 1000);
               }
             },
-            error: () => { },
+            error: () => {},
           });
       } else {
         this.updateJob(this.form.value);
