@@ -1,7 +1,7 @@
 // packages
 import { finalize } from 'rxjs';
 import { Component, effect, inject } from '@angular/core';
-import { CommonModule, formatDate } from '@angular/common';
+import { CommonModule, formatDate, Location } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 // services
@@ -35,6 +35,7 @@ export class JobDetails {
 
   constructor(
     private readonly router: Router,
+    private readonly location: Location,
     private readonly apiService: ApiService,
     private readonly authService: AuthService,
     private readonly toastService: ToastService,
@@ -164,5 +165,9 @@ export class JobDetails {
         },
         error: () => {},
       });
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

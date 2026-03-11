@@ -13,7 +13,7 @@ export class ApiService {
   constructor(
     private zone: NgZone,
     private http: HttpClient,
-  ) {}
+  ) { }
 
   // auth services
   login(credentials: LoginRequest): Observable<LoginResponse> {
@@ -173,6 +173,10 @@ export class ApiService {
       `${environment.apiUrl}/withdraw/${jobId}`,
       {},
     );
+  }
+
+  getMyApplications(): Observable<MyApplicationsResponse> {
+    return this.http.get<MyApplicationsResponse>(`${environment.apiUrl}/my-applications`);
   }
 
   // SSE stream for AI resume assessment
