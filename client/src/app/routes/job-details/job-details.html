@@ -1,9 +1,9 @@
 <div class="job-details-container">
   <div class="job-header">
     <div class="header-section">
-      <a class="edit-icon" routerLink="/job-postings">
+      <button class="back-icon" (click)="goBack()">
         <app-icon-back />
-      </a>
+      </button>
       <h3 class="job-title">{{ job?.title }}</h3>
       <app-tag [title]="job?.status?.toLowerCase() || ''" [type]="'Success'"></app-tag>
     </div>

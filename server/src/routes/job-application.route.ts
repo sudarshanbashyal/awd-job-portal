@@ -52,3 +52,4 @@ jobApplicationRouter.patch(
   isRecruiter,
   Controller.updateApplicationStatus,
 );
+
