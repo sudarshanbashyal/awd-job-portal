@@ -1,1 +1,30 @@
-<p>job-application works!</p>
+<!--<div class="applications-grid">
+    <h2 style="font-size: x-large;">My Applications</h2>
+
+    @if (applications.length > 0) {
+        <div class="applications-grid">
+            @for (application of applications; track application.id) {
+                <div class="application-grid-item">
+                        <app-job-application-card [application]="application"></app-job-application-card>
+                </div>
+            }
+        </div>
+} @else {
+  <p>No applications found.</p>
+}
+</div>-->
+<div class="job-application-page">
+  <h2>My Applications</h2>
+
+  @if (applications.length > 0) {
+    <div class="applications-grid">
+      @for (application of applications; track application.id) {
+        <div class="application-grid-item">
+          <app-job-application-card [application]="application"></app-job-application-card>
+        </div>
+      }
+    </div>
+  } @else {
+    <p>No applications found.</p>
+  }
+</div>

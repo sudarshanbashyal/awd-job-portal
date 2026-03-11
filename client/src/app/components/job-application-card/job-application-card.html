@@ -1,0 +1,36 @@
+
+
+<div class="job-application-card">
+  <div class="header">
+    <div class="application-info">
+      <a class="job-title" [routerLink]="['/job', application?.jobPosting?.id || '']">
+        {{ application?.jobPosting?.title }}
+      </a>
+
+      <app-tag
+        [title]="application?.applicationStatus || ''"
+        [type]="
+                 application?.applicationStatus === 'APPLIED' ? 'Info' :
+                 application?.applicationStatus === 'ACCEPTED' ? 'Success' :
+                 application?.applicationStatus === 'WITHDRAWN' || application?.applicationStatus === 'REJECTED' ? 'Error' :
+             'Warning'
+">
+</app-tag>
+      
+    </div>
+  </div>
+
+ 
+  <div class="meta">
+    <p class="applied-date">Applied on {{ formattedDate }}</p>
+    <span class="dot"></span>
+    <p class="company-name">{{ application?.jobPosting?.postedBy?.companyName }}</p>
+    <span class="dot"></span>
+    <p class="location">{{ application?.jobPosting?.location }}</p>
+  </div>
+
+  <hr />
+
+
+  <p class="summary">{{ application?.jobPosting?.summary }}</p>
+</div>

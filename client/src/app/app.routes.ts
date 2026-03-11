@@ -9,7 +9,7 @@ import { JobSearch } from './routes/job-search/job-search';
 import { CreateJob } from './routes/create-job/create-job';
 import { JobDetails } from './routes/job-details/job-details';
 import { JobPostings } from './routes/job-postings/job-postings';
-import { JobApplication } from './components/job-application/job-application';
+import { JobApplication } from './routes/job-application/job-application';
 
 export const routes: Routes = [
   { path: '', component: Login },

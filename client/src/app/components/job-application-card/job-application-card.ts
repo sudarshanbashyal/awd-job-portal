@@ -1,8 +1,8 @@
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Component, Input } from '@angular/core';
+import { Input } from '@angular/core';
 import { CommonModule, formatDate } from '@angular/common';
-
-import { Tag } from '../../../tag/tag';
+import { Tag } from '../tag/tag';
 
 @Component({
   selector: 'app-job-application-card',
