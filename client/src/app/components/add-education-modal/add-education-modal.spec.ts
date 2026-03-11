@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddEducationModal } from './add-education-modal';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AddEducationModal', () => {
   let component: AddEducationModal;
@@ -8,9 +9,8 @@ describe('AddEducationModal', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddEducationModal]
-    })
-    .compileComponents();
+      imports: [AddEducationModal, HttpClientTestingModule],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AddEducationModal);
     component = fixture.componentInstance;

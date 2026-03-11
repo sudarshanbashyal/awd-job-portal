@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { JobDetails } from './job-details';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('JobDetails', () => {
   let component: JobDetails;
@@ -8,9 +10,8 @@ describe('JobDetails', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [JobDetails]
-    })
-    .compileComponents();
+      imports: [JobDetails, HttpClientTestingModule, RouterTestingModule],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(JobDetails);
     component = fixture.componentInstance;

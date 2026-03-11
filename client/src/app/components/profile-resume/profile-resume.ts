@@ -8,6 +8,8 @@ import { IconsModule } from '../icons/icons-module';
 // services
 import { ApiService, AuthService, ToastService } from '../../services';
 
+const MAX_FILE_SIZE = 4;
+
 @Component({
   selector: 'app-profile-resume',
   imports: [IconsModule, CommonModule],
@@ -21,7 +23,7 @@ export class ProfileResume {
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
-    private toastSerivce: ToastService,
+    private toastService: ToastService,
   ) {
     effect(() => {
       const user = this.authService.getUser();
@@ -68,7 +70,7 @@ export class ProfileResume {
     const education = this.user?.applicant?.education;
 
     if (!skills?.length || !education?.length) {
-      this.toastSerivce.show(
+      this.toastService.show(
         'Cannot generate resume.',
         'Please add skills and education first.',
         'warning',
@@ -80,7 +82,7 @@ export class ProfileResume {
       next: (res) => {
         if (res.ok) {
           this.authService.loadUser();
-          this.toastSerivce.show(
+          this.toastService.show(
             'Resume generated',
             'A new resume has been generated based on your profile.',
           );
@@ -97,7 +99,7 @@ export class ProfileResume {
       next: (res) => {
         if (res.ok) {
           this.authService.loadUser();
-          this.toastSerivce.show('Resume deleted', 'Your resume has been removed.');
+          this.toastService.show('Resume deleted', 'Your resume has been removed.');
         }
       },
       error: (err) => {
@@ -114,7 +116,13 @@ export class ProfileResume {
 
     const [resumeFile] = fileList;
     if (resumeFile.type !== 'application/pdf') {
-      this.toastSerivce.show('Invalid file format', 'Only pdf files are allowed', 'error');
+      this.toastService.show('Invalid file format', 'Only pdf files are allowed', 'error');
+      return;
+    }
+
+    const fileSizeMB = resumeFile.size / (1024 * 1024);
+    if (fileSizeMB <= MAX_FILE_SIZE) {
+      this.toastService.show('File too large', 'The uploaded resume must be under 4MB', 'error');
       return;
     }
 
@@ -122,7 +130,7 @@ export class ProfileResume {
       next: (res) => {
         if (res.ok) {
           this.authService.loadUser();
-          this.toastSerivce.show('Resume uploaded', 'Your resume has been succesfully uploaded');
+          this.toastService.show('Resume uploaded', 'Your resume has been succesfully uploaded');
         }
       },
     });
