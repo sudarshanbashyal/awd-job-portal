@@ -1,44 +1,13 @@
-/*.job-application-page {
-  padding: 24px;
+@use '../../../styles.scss' as *;
 
-  h2 {
-    margin-bottom: 28px;
-    font-size: 32px;
-    font-weight: 700;
-  }
-
-  .applications-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(320px, 1fr));
-    gap: 28px;
-    align-items: stretch;
-  }
-
-  .application-grid-item {
-    display: grid;
-    width: 100%;
-  }
-
-  app-job-application-card {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-}
-
-@media (max-width: 1000px) {
-  .job-application-page {
-    .applications-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-}*/
 .job-application-page {
+  max-width: $max-width;
+  margin: auto;
   padding: 24px;
 
   h2 {
     margin-bottom: 28px;
-    font-size: 32px;
+    font-size: 18px;
     font-weight: 700;
   }
 
@@ -69,4 +38,3 @@
     }
   }
 }
- 

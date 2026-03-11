@@ -1,5 +1,3 @@
-
-
 <div class="job-application-card">
   <div class="header">
     <div class="application-info">
@@ -8,29 +6,29 @@
       </a>
 
       <app-tag
-        [title]="application?.applicationStatus || ''"
+        class="application-status"
+        [title]="application?.applicationStatus?.toLowerCase() || ''"
         [type]="
-                 application?.applicationStatus === 'APPLIED' ? 'Info' :
-                 application?.applicationStatus === 'ACCEPTED' ? 'Success' :
-                 application?.applicationStatus === 'WITHDRAWN' || application?.applicationStatus === 'REJECTED' ? 'Error' :
-             'Warning'
-">
-</app-tag>
-      
+          application?.applicationStatus === 'APPLIED'
+            ? 'Info'
+            : application?.applicationStatus === 'WITHDRAWN' ||
+                application?.applicationStatus === 'REJECTED'
+              ? 'Error'
+              : 'Success'
+        "
+      >
+      </app-tag>
     </div>
   </div>
 
- 
   <div class="meta">
     <p class="applied-date">Applied on {{ formattedDate }}</p>
     <span class="dot"></span>
     <p class="company-name">{{ application?.jobPosting?.postedBy?.companyName }}</p>
     <span class="dot"></span>
-    <p class="location">{{ application?.jobPosting?.location }}</p>
   </div>
 
   <hr />
-
 
   <p class="summary">{{ application?.jobPosting?.summary }}</p>
 </div>
