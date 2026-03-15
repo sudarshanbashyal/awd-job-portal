@@ -10,13 +10,15 @@ import { CreateJob } from './routes/create-job/create-job';
 import { JobDetails } from './routes/job-details/job-details';
 import { JobPostings } from './routes/job-postings/job-postings';
 import { JobApplication } from './routes/job-application/job-application';
+import { ForgotPassword } from './routes/forgot-password/forgot-password';
 
 export const routes: Routes = [
   { path: '', component: Login },
 
   { path: 'login', component: Login },
   { path: 'register', component: Register },
-
+  { path: 'forgot-password', component: ForgotPassword },
+  
   { path: 'profile', component: Profile },
 
   { path: 'job-application', component: JobApplication },
