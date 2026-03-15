@@ -23,6 +23,12 @@
 
     form {
       margin-top: 50px;
+
+      .forgot-pw-link {
+        display: block;
+        text-align: right;
+        padding-top: 10px;
+      }
     }
 
     .btn-primary {

@@ -24,6 +24,18 @@ export class ApiService {
     return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, payload);
   }
 
+  generateToken(payload: { email: string }): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/auth/reset-token`, payload);
+  }
+
+  verifyToken(payload: { email: string; token: string }): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/auth/verify-token`, payload);
+  }
+
+  resetPassword(payload: { email: string; token: string; password: string }): Observable<any> {
+    return this.http.patch<any>(`${environment.apiUrl}/auth/reset-password`, payload);
+  }
+
   // profile services
   getProfile(): Observable<ProfileResponse> {
     return this.http.get<ProfileResponse>(`${environment.apiUrl}/profile`);
