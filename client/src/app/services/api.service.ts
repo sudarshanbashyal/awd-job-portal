@@ -25,7 +25,7 @@ export class ApiService {
   }
 
   generateToken(payload: { email: string }): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/auth/forgot-password`, payload);
+    return this.http.post<any>(`${environment.apiUrl}/auth/reset-token`, payload);
   }
 
   verifyToken(payload: { email: string; token: string }): Observable<any> {
@@ -33,7 +33,7 @@ export class ApiService {
   }
 
   resetPassword(payload: { email: string; token: string; password: string }): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/auth/reset-password`, payload);
+    return this.http.patch<any>(`${environment.apiUrl}/auth/reset-password`, payload);
   }
 
   // profile services

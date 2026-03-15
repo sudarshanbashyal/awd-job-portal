@@ -39,12 +39,13 @@ interface ChangePasswordDto {
 }
 
 interface ResetTokenDto {
-  token: number;
+  token: string;
 }
 
 interface ResetPasswordDto {
-  token: number;
-  newPassword: string;
+  token: string;
+  email: string;
+  password: string;
 }
 
 interface GenerateResetTokenRequest {
@@ -285,7 +286,7 @@ export const checkToken: RequestHandler = async (
       },
     });
 
-    if (resetTokenDto.token !== latestToken?.token) {
+    if (resetTokenDto.token !== latestToken?.token?.toString()) {
       res.status(401).json({
         ok: false,
         errors: ["Token mismatch."],
@@ -306,14 +307,31 @@ export const resetPassword: RequestHandler = async (
   res: Response,
 ) => {
   try {
-    const userId = req?.user?.id;
     const resetPasswordDto: ResetPasswordDto = req.body;
+
+    const user = await prisma.user.findFirst({
+      where: {
+        email: resetPasswordDto.email,
+      },
+      include: {
+        applicant: true,
+        recruiter: true,
+      },
+    });
+
+    if (!user) {
+      res.status(404).json({
+        ok: false,
+        errors: ["User not found."],
+      });
+      return;
+    }
 
     const latestToken = await prisma.resetTokens.findFirst({
       where: {
         AND: [
           {
-            userId: userId as string,
+            userId: user.id as string,
           },
           {
             expiresAt: {
@@ -327,17 +345,17 @@ export const resetPassword: RequestHandler = async (
       },
     });
 
-    if (resetPasswordDto.token !== latestToken?.token) {
+    if (resetPasswordDto.token !== latestToken?.token?.toString()) {
       res.status(401).json({
         ok: false,
         errors: ["Token mismatch."],
       });
     }
 
-    const hashedPw = await encryptPassword(resetPasswordDto.newPassword);
+    const hashedPw = await encryptPassword(resetPasswordDto.password);
     await prisma.user.update({
       where: {
-        id: userId as string,
+        id: user.id as string,
       },
       data: {
         password: hashedPw,

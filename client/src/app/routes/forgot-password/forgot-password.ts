@@ -104,7 +104,7 @@ export class ForgotPassword {
             if (res.ok) this.stage = 'password';
           },
           error: (err: any) => {
-            if (err.status === 400 || err.status === 404) this.invalidToken = true;
+            if (err.status === 401) this.invalidToken = true;
           },
         });
     }

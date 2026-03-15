@@ -11,7 +11,7 @@ export const authRouter = Router();
 
 authRouter.post("/auth/login", Controller.login);
 authRouter.post("/auth/register", Controller.register);
-authRouter.get("/auth/token", isAuth, Controller.checkToken);
-authRouter.patch("/auth/password", isAuth, Controller.changePassword);
-authRouter.patch("/auth/reset-password", isAuth, Controller.resetPassword);
-authRouter.post("/auth/reset-token", isAuth, Controller.generateResetToken);
+authRouter.post("/auth/verify-token", Controller.checkToken);
+authRouter.patch("/auth/password", Controller.changePassword);
+authRouter.patch("/auth/reset-password", Controller.resetPassword);
+authRouter.post("/auth/reset-token", Controller.generateResetToken);
