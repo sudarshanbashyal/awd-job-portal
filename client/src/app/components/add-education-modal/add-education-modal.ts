@@ -75,11 +75,11 @@ export class AddEducationModal {
         .subscribe({
           next: (res) => {
             if (res.ok) {
-              this.toastService.show('Education update', 'Your education has been updated');
+              this.toastService.show('Education updated', 'Your experience has been updated');
               this.closeModal();
             }
           },
-          error: () => {},
+          error: () => { },
         });
     }
   }
@@ -94,7 +94,7 @@ export class AddEducationModal {
           this.closeModal();
         }
       },
-      error: () => {},
+      error: () => { },
     });
   }
 

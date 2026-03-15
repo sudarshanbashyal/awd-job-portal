@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProfileHeader } from './profile-header';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ApiService, AuthService, ToastService } from '../../services';
-import { of } from 'rxjs';
 
 describe('ProfileHeader', () => {
   let component: ProfileHeader;

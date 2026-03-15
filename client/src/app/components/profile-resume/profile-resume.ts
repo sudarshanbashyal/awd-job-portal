@@ -121,7 +121,7 @@ export class ProfileResume {
     }
 
     const fileSizeMB = resumeFile.size / (1024 * 1024);
-    if (fileSizeMB <= MAX_FILE_SIZE) {
+    if (fileSizeMB >= MAX_FILE_SIZE) {
       this.toastService.show('File too large', 'The uploaded resume must be under 4MB', 'error');
       return;
     }

@@ -1,20 +1,49 @@
+import { of } from 'rxjs';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddEducationModal } from './add-education-modal';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ApiService, ToastService } from '../../services';
 
 describe('AddEducationModal', () => {
   let component: AddEducationModal;
   let fixture: ComponentFixture<AddEducationModal>;
+  let apiService: jasmine.SpyObj<ApiService>;
+  let toastService: jasmine.SpyObj<ToastService>;
 
   beforeEach(async () => {
+    apiService = jasmine.createSpyObj('ApiService', ['deleteEducation', 'addOrUpdateEducation']);
+    toastService = jasmine.createSpyObj('ToastService', ['show']);
+
+    apiService.deleteEducation.and.returnValue(
+      of({
+        ok: true,
+        data: {
+          message: 'ok',
+        },
+        errors: [],
+      }),
+    );
+    apiService.addOrUpdateEducation.and.returnValue(
+      of({
+        ok: true,
+        data: {
+          message: 'ok',
+        },
+        errors: [],
+      }),
+    );
+
     await TestBed.configureTestingModule({
       imports: [AddEducationModal, HttpClientTestingModule],
+      providers: [
+        { provide: ApiService, useValue: apiService },
+        { provide: ToastService, useValue: toastService },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddEducationModal);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -64,5 +93,40 @@ describe('AddEducationModal', () => {
     component.form.get('endedAt')?.setValue('10/10/2025');
     component.submit();
     expect(component.form.hasError('dateRangeInvalid')).toBeTrue();
+  });
+
+  // test delete education api
+  it('should call deleteEducation API and show toast on success', () => {
+    component.education = {
+      id: 'abc',
+      instituteName: 'institute name',
+      course: 'masters',
+      location: 'hildesheim',
+      description: 'masters in software engineering',
+      startedAt: '12/12/2025',
+      endedAt: null,
+      applicantId: 'abc',
+    };
+
+    apiService.deleteEducation.and.returnValue(
+      of({
+        ok: true,
+        data: {
+          message: 'ok',
+        },
+        errors: [],
+      }),
+    );
+    spyOn(component, 'closeModal');
+    fixture.detectChanges();
+
+    component.deleteEducation();
+
+    expect(apiService.deleteEducation).toHaveBeenCalledWith('abc');
+    expect(toastService.show).toHaveBeenCalledWith(
+      'Education Deleted',
+      'Your education has been updated',
+    );
+    expect(component.closeModal).toHaveBeenCalled();
   });
 });

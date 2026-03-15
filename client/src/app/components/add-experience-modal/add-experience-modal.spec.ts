@@ -2,19 +2,48 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddExperienceModal } from './add-experience-modal';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ApiService, ToastService } from '../../services';
+import { of } from 'rxjs';
 
 describe('AddExperienceModal', () => {
   let component: AddExperienceModal;
   let fixture: ComponentFixture<AddExperienceModal>;
+  let apiService: jasmine.SpyObj<ApiService>;
+  let toastService: jasmine.SpyObj<ToastService>;
 
   beforeEach(async () => {
+    apiService = jasmine.createSpyObj('ApiService', ['deleteExperience', 'addOrUpdateExperience']);
+    toastService = jasmine.createSpyObj('ToastService', ['show']);
+
+    apiService.deleteExperience.and.returnValue(
+      of({
+        ok: true,
+        data: {
+          message: 'ok',
+        },
+        errors: [],
+      }),
+    );
+    apiService.addOrUpdateExperience.and.returnValue(
+      of({
+        ok: true,
+        data: {
+          message: 'ok',
+        },
+        errors: [],
+      }),
+    );
+
     await TestBed.configureTestingModule({
       imports: [AddExperienceModal, HttpClientTestingModule],
+      providers: [
+        { provide: ApiService, useValue: apiService },
+        { provide: ToastService, useValue: toastService },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddExperienceModal);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -66,5 +95,40 @@ describe('AddExperienceModal', () => {
     component.form.get('endedAt')?.setValue('10/10/2025');
     component.submit();
     expect(component.form.hasError('dateRangeInvalid')).toBeTrue();
+  });
+
+  // test delete education api
+  it('should call deleteExperience API and show toast on success', () => {
+    component.experience = {
+      id: 'abc',
+      companyName: 'institute name',
+      role: 'software engineer',
+      location: 'hildesheim',
+      description: 'senior software engineering',
+      startedAt: '12/12/2025',
+      endedAt: null,
+      applicantId: 'abc',
+    };
+
+    apiService.deleteExperience.and.returnValue(
+      of({
+        ok: true,
+        data: {
+          message: 'ok',
+        },
+        errors: [],
+      }),
+    );
+    spyOn(component, 'closeModal');
+    fixture.detectChanges();
+
+    component.deleteExperience();
+
+    expect(apiService.deleteExperience).toHaveBeenCalledWith('abc');
+    expect(toastService.show).toHaveBeenCalledWith(
+      'Experience updated',
+      'Your experience has been updated',
+    );
+    expect(component.closeModal).toHaveBeenCalled();
   });
 });

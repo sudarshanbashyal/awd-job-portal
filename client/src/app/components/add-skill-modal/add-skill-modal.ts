@@ -50,7 +50,7 @@ export class AddSkillModal {
         .subscribe({
           next: (res) => {
             if (res.ok) {
-              this.toastService.show('Skill updated', 'Your skills have been udpated');
+              this.toastService.show('Skill updated', 'Your skills have been updated');
               this.closeModal();
             }
           },
@@ -65,7 +65,7 @@ export class AddSkillModal {
     this.apiService.deleteSkill(this.skill.id).subscribe({
       next: (res) => {
         if (res.ok) {
-          this.toastService.show('Skill removed', 'Your skills have been udpated');
+          this.toastService.show('Skill removed', 'Your skills have been updated');
           this.closeModal();
         }
       },

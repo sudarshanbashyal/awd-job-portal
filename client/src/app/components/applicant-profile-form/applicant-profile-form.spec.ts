@@ -2,19 +2,36 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ApplicantProfileForm } from './applicant-profile-form';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { of } from 'rxjs';
+import { ApiService, AuthService, ToastService } from '../../services';
 
 describe('ApplicantProfileForm', () => {
   let component: ApplicantProfileForm;
   let fixture: ComponentFixture<ApplicantProfileForm>;
+  let apiService: jasmine.SpyObj<ApiService>;
+  let toastService: jasmine.SpyObj<ToastService>;
+  let authService: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
+    apiService = jasmine.createSpyObj('ApiService', ['updateApplicantProfile']);
+    toastService = jasmine.createSpyObj('ToastService', ['show']);
+    authService = jasmine.createSpyObj('AuthService', ['loadUser']);
+
+    apiService.updateApplicantProfile.and.returnValue(
+      of({ ok: true, data: { id: 'abc' }, errors: [] }),
+    );
+
     await TestBed.configureTestingModule({
       imports: [ApplicantProfileForm, HttpClientTestingModule],
+      providers: [
+        { provide: ApiService, useValue: apiService },
+        { provide: ToastService, useValue: toastService },
+        { provide: AuthService, useValue: authService },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ApplicantProfileForm);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -56,5 +73,25 @@ describe('ApplicantProfileForm', () => {
     component.form.get('phoneNumber')?.setValue('+123456789');
     component.submit();
     expect(component.form.get('phoneNumber')?.hasError('invalidPhoneNumber')).toBeFalse();
+  });
+
+  it('should call API and show toast when form is valid', () => {
+    component.form.setValue({
+      firstName: 'test',
+      lastName: 'user',
+      profile: '',
+      location: '',
+      phoneNumber: '+123456789',
+    });
+
+    component.submit();
+
+    expect(component.submitted).toBeTrue();
+    expect(apiService.updateApplicantProfile).toHaveBeenCalledWith(component.form.value);
+    expect(toastService.show).toHaveBeenCalledWith(
+      'Profile Updated',
+      'Your profile has been successfully updated',
+    );
+    expect(authService.loadUser).toHaveBeenCalled();
   });
 });
