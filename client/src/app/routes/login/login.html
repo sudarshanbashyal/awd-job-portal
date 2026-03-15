@@ -20,6 +20,7 @@
         formControlName="password"
         placeholder="********"
       />
+      <a routerLink="/forgot-password" class="forgot-pw-link nav-link">Forgot Password</a>
       <p *ngIf="submitted && form.get('password')?.errors?.['required']" class="error">
         Password is required
       </p>
