@@ -13,7 +13,7 @@ export class ApiService {
   constructor(
     private zone: NgZone,
     private http: HttpClient,
-  ) { }
+  ) {}
 
   // auth services
   login(credentials: LoginRequest): Observable<LoginResponse> {
@@ -24,15 +24,15 @@ export class ApiService {
     return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, payload);
   }
 
-  generateToken(payload: { email: string }): Observable<any> {
+  generateToken(payload: GenerateTokenRequest): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/auth/reset-token`, payload);
   }
 
-  verifyToken(payload: { email: string; token: string }): Observable<any> {
+  verifyToken(payload: VerifyTokenRequest): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/auth/verify-token`, payload);
   }
 
-  resetPassword(payload: { email: string; token: string; password: string }): Observable<any> {
+  resetPassword(payload: ResetPasswordRequest): Observable<any> {
     return this.http.patch<any>(`${environment.apiUrl}/auth/reset-password`, payload);
   }
 
@@ -126,7 +126,10 @@ export class ApiService {
   uploadProfilePicture(file: File): Observable<UpdateApplicantCredentials> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post<UpdateApplicantCredentials>(`${environment.apiUrl}/profile-picture`, formData);
+    return this.http.post<UpdateApplicantCredentials>(
+      `${environment.apiUrl}/profile-picture`,
+      formData,
+    );
   }
 
   // job posting services

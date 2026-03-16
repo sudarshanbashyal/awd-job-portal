@@ -53,3 +53,18 @@ interface UpdateRecruiterProfileRequest {
   companyName: string;
   companyAddress: string;
 }
+
+interface GenerateTokenRequest {
+  email: string;
+}
+
+interface VerifyTokenRequest {
+  email: string;
+  token: string;
+}
+
+interface ResetPasswordRequest {
+  email: string;
+  token: string;
+  password: string;
+}
