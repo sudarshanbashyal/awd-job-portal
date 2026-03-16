@@ -1,0 +1,19 @@
+<div class="job-details-container">
+  <div class="job-header">
+      <button class="back-icon" (click)="goBack()">
+        <app-icon-back />
+      </button>
+      <h3 class="job-title">{{ job?.title }}</h3>
+      <app-tag class="job-status" [title]="job?.status?.toLowerCase() || ''" [type]="'Success'"></app-tag>
+  </div>
+
+    <div>
+      <span class="text-muted posted-date">Posted by: {{job?.createdAt | date: 'dd/MM/yyyy'}}</span>
+    </div>
+
+    <div class="job-details">
+      <p>
+        {{job?.description}}
+      </p>
+    </div>
+</div>

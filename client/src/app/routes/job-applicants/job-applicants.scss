@@ -1,0 +1,7 @@
+@use '../../../styles.scss' as *;
+
+.job-applicants-container {
+    max-width: $max-width;
+    margin: auto;
+    margin-top: 50px;
+}
