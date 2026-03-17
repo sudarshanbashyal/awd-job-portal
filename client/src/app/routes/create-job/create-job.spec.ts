@@ -3,14 +3,35 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateJob } from './create-job';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ApiService, AuthService, ToastService } from '../../services';
+import { of, throwError } from 'rxjs';
 
 describe('CreateJob', () => {
   let component: CreateJob;
   let fixture: ComponentFixture<CreateJob>;
+  let apiService: jasmine.SpyObj<ApiService>;
+  let authService: jasmine.SpyObj<AuthService>;
+  let toastService: jasmine.SpyObj<ToastService>;
 
   beforeEach(async () => {
+    apiService = jasmine.createSpyObj('ApiService', [
+      'createJob',
+      'updateJob',
+      'getJobPosting',
+    ]);
+    authService = jasmine.createSpyObj('AuthService', ['getUserToken', 'getUser']);
+    toastService = jasmine.createSpyObj('ToastService', ['show']);
+
+    authService.getUserToken.and.returnValue('token');
+    authService.getUser.and.returnValue(null);
+
     await TestBed.configureTestingModule({
       imports: [CreateJob, HttpClientTestingModule, RouterTestingModule],
+      providers: [
+        { provide: ApiService, useValue: apiService },
+        { provide: AuthService, useValue: authService },
+        { provide: ToastService, useValue: toastService },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreateJob);
@@ -44,6 +65,10 @@ describe('CreateJob', () => {
   });
 
   it('should mark form as valid if filled with valid vales', () => {
+    apiService.createJob.and.returnValue(
+      of({ ok: true, data: { id: 'job1' }, errors: [] } as any),
+    );
+
     component.form.get('title')?.setValue('Software Engineer');
     component.form
       .get('summary')
@@ -75,5 +100,184 @@ describe('CreateJob', () => {
     component.form.get('salaryTo')?.setValue(50000);
     component.submit();
     expect(component.form.hasError('invalidSalary')).toBeFalse();
+  });
+
+  it('should create job successfully when form is valid and no previous job', () => {
+    apiService.createJob.and.returnValue(
+      of({ ok: true, data: { id: 'job1' }, errors: [] } as any),
+    );
+
+    component.form.get('title')?.setValue('Software Engineer');
+    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
+    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
+    component.form.get('location')?.setValue('Hildesheim');
+    component.form.get('jobType')?.setValue('FULL_TIME');
+    component.form.get('arrangement')?.setValue('REMOTE');
+    component.previousJob = null;
+
+    component.submit();
+
+    expect(apiService.createJob).toHaveBeenCalled();
+    expect(toastService.show).toHaveBeenCalledWith('Job Posted', 'A new job has been created!');
+  });
+
+  it('should not create job if already loading', () => {
+    component.loading = true;
+
+    component.form.get('title')?.setValue('Software Engineer');
+    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
+    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
+    component.form.get('location')?.setValue('Hildesheim');
+    component.form.get('jobType')?.setValue('FULL_TIME');
+    component.form.get('arrangement')?.setValue('REMOTE');
+
+    component.submit();
+
+    expect(apiService.createJob).not.toHaveBeenCalled();
+  });
+
+  it('should not create job if already successful', () => {
+    component.submissionSuccessful = true;
+
+    component.form.get('title')?.setValue('Software Engineer');
+    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
+    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
+    component.form.get('location')?.setValue('Hildesheim');
+    component.form.get('jobType')?.setValue('FULL_TIME');
+    component.form.get('arrangement')?.setValue('REMOTE');
+
+    component.submit();
+
+    expect(apiService.createJob).not.toHaveBeenCalled();
+  });
+
+  it('should update job when previousJob exists', () => {
+    component.previousJob = { id: 'job1', status: 'OPEN' } as any;
+    apiService.updateJob.and.returnValue(
+      of({ ok: true, data: {}, errors: [] } as any),
+    );
+    apiService.getJobPosting.and.returnValue(
+      of({ ok: true, data: { id: 'job1' }, errors: [] } as any),
+    );
+
+    component.form.get('title')?.setValue('Software Engineer');
+    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
+    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
+    component.form.get('location')?.setValue('Hildesheim');
+    component.form.get('jobType')?.setValue('FULL_TIME');
+    component.form.get('arrangement')?.setValue('REMOTE');
+
+    component.submit();
+
+    expect(apiService.updateJob).toHaveBeenCalled();
+    expect(toastService.show).toHaveBeenCalledWith('Job Updated', 'Your job has been updated');
+  });
+
+  it('should toggle job status from OPEN to CLOSED', () => {
+    component.previousJob = { id: 'job1', status: 'OPEN' } as any;
+    apiService.updateJob.and.returnValue(
+      of({ ok: true, data: {}, errors: [] } as any),
+    );
+    apiService.getJobPosting.and.returnValue(
+      of({ ok: true, data: { id: 'job1' }, errors: [] } as any),
+    );
+
+    component.updateJobStatus();
+
+    expect(apiService.updateJob).toHaveBeenCalledWith('job1', jasmine.objectContaining({ status: 'CLOSED' }));
+  });
+
+  it('should toggle job status from CLOSED to OPEN', () => {
+    component.previousJob = { id: 'job1', status: 'CLOSED' } as any;
+    apiService.updateJob.and.returnValue(
+      of({ ok: true, data: {}, errors: [] } as any),
+    );
+    apiService.getJobPosting.and.returnValue(
+      of({ ok: true, data: { id: 'job1' }, errors: [] } as any),
+    );
+
+    component.updateJobStatus();
+
+    expect(apiService.updateJob).toHaveBeenCalledWith('job1', jasmine.objectContaining({ status: 'OPEN' }));
+  });
+
+  it('should not update job status if no previousJob', () => {
+    component.previousJob = null;
+
+    component.updateJobStatus();
+
+    expect(apiService.updateJob).not.toHaveBeenCalled();
+  });
+
+  it('should get job and populate form', () => {
+    component.jobId = 'job1';
+    const mockJob = {
+      id: 'job1',
+      title: 'Software Engineer',
+      summary: 'A' + ' a'.repeat(50),
+      description: 'B' + ' b'.repeat(100),
+      location: 'Hildesheim',
+      jobType: 'FULL_TIME',
+      arrangement: 'REMOTE',
+    } as any;
+    apiService.getJobPosting.and.returnValue(
+      of({ ok: true, data: mockJob, errors: [] } as any),
+    );
+
+    component.getJob();
+
+    expect(apiService.getJobPosting).toHaveBeenCalledWith('job1');
+    expect(component.previousJob).toBeTruthy();
+    expect(component.form.get('title')?.value).toBe('Software Engineer');
+  });
+
+  it('should handle getJob error and navigate', () => {
+    component.jobId = 'job1';
+    apiService.getJobPosting.and.returnValue(throwError(() => new Error('fail')));
+
+    spyOn(component['router'], 'navigate');
+    component.getJob();
+
+    expect(component['router'].navigate).toHaveBeenCalledWith(['/job-post']);
+  });
+
+  it('should not call API if jobId is empty for getJob', () => {
+    component.jobId = '';
+
+    component.getJob();
+
+    expect(apiService.getJobPosting).not.toHaveBeenCalled();
+  });
+
+  it('should handle create job error gracefully', () => {
+    apiService.createJob.and.returnValue(throwError(() => new Error('fail')));
+    component.previousJob = null;
+
+    component.form.get('title')?.setValue('Software Engineer');
+    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
+    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
+    component.form.get('location')?.setValue('Hildesheim');
+    component.form.get('jobType')?.setValue('FULL_TIME');
+    component.form.get('arrangement')?.setValue('REMOTE');
+
+    component.submit();
+
+    expect(component.loading).toBeFalse();
+  });
+
+  it('should handle update job error gracefully', () => {
+    component.previousJob = { id: 'job1' } as any;
+    apiService.updateJob.and.returnValue(throwError(() => new Error('fail')));
+
+    component.form.get('title')?.setValue('Software Engineer');
+    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
+    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
+    component.form.get('location')?.setValue('Hildesheim');
+    component.form.get('jobType')?.setValue('FULL_TIME');
+    component.form.get('arrangement')?.setValue('REMOTE');
+
+    component.submit();
+
+    expect(component.loading).toBeFalse();
   });
 });

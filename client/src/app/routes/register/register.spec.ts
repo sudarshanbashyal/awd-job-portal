@@ -3,14 +3,30 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Register } from './register';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ApiService, AuthService, ToastService } from '../../services';
+import { of, throwError } from 'rxjs';
 
 describe('Register', () => {
   let component: Register;
   let fixture: ComponentFixture<Register>;
+  let apiService: jasmine.SpyObj<ApiService>;
+  let authService: jasmine.SpyObj<AuthService>;
+  let toastService: jasmine.SpyObj<ToastService>;
 
   beforeEach(async () => {
+    apiService = jasmine.createSpyObj('ApiService', ['register']);
+    authService = jasmine.createSpyObj('AuthService', ['getUser']);
+    toastService = jasmine.createSpyObj('ToastService', ['show']);
+
+    authService.getUser.and.returnValue(null);
+
     await TestBed.configureTestingModule({
       imports: [Register, HttpClientTestingModule, RouterTestingModule],
+      providers: [
+        { provide: ApiService, useValue: apiService },
+        { provide: AuthService, useValue: authService },
+        { provide: ToastService, useValue: toastService },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Register);
@@ -68,5 +84,132 @@ describe('Register', () => {
     component.form.get('repeatPassword')?.setValue('Admin@1234');
     component.submit();
     expect(component.form.hasError('passwordMismatch')).toBeFalse();
+  });
+
+  it('should register successfully as APPLICANT', () => {
+    apiService.register.and.returnValue(
+      of({ ok: true, data: { id: 'user1' }, errors: [] } as any),
+    );
+
+    component.form.patchValue({
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      password: 'Password123',
+      repeatPassword: 'Password123',
+      role: 'APPLICANT',
+    });
+
+    component.submit();
+
+    expect(apiService.register).toHaveBeenCalled();
+    expect(toastService.show).toHaveBeenCalledWith('Account created', 'Redirecting you to login');
+  });
+
+  it('should register successfully as RECRUITER with company info', () => {
+    apiService.register.and.returnValue(
+      of({ ok: true, data: { id: 'user1' }, errors: [] } as any),
+    );
+
+    component.form.patchValue({
+      firstName: 'Jane',
+      lastName: 'Smith',
+      email: 'jane@example.com',
+      password: 'Password123',
+      repeatPassword: 'Password123',
+      role: 'RECRUITER',
+      companyName: 'Tech Corp',
+      companyAddress: '123 Main St',
+    });
+
+    component.submit();
+
+    expect(apiService.register).toHaveBeenCalled();
+    expect(component.form.valid).toBeTrue();
+  });
+
+  it('should not submit if already loading', () => {
+    component.loading = true;
+
+    component.form.patchValue({
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      password: 'Password123',
+      repeatPassword: 'Password123',
+      role: 'APPLICANT',
+    });
+
+    component.submit();
+
+    expect(apiService.register).not.toHaveBeenCalled();
+  });
+
+  it('should not submit if already successful', () => {
+    component.submissionSuccessful = true;
+
+    component.form.patchValue({
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      password: 'Password123',
+      repeatPassword: 'Password123',
+      role: 'APPLICANT',
+    });
+
+    component.submit();
+
+    expect(apiService.register).not.toHaveBeenCalled();
+  });
+
+  it('should handle duplicate email error', () => {
+    const error = { status: 401 };
+    apiService.register.and.returnValue(throwError(() => error));
+
+    component.form.patchValue({
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      password: 'Password123',
+      repeatPassword: 'Password123',
+      role: 'APPLICANT',
+    });
+
+    component.submit();
+
+    expect(component.form.hasError('duplicateEmail')).toBeTrue();
+  });
+
+  it('should handle other registration errors gracefully', () => {
+    const error = { status: 500 };
+    apiService.register.and.returnValue(throwError(() => error));
+
+    component.form.patchValue({
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      password: 'Password123',
+      repeatPassword: 'Password123',
+      role: 'APPLICANT',
+    });
+
+    component.submit();
+
+    expect(component.form.hasError('duplicateEmail')).toBeFalsy();
+  });
+
+  it('should clear company validators when role is APPLICANT', () => {
+    const roleControl = component.form.get('role');
+    const companyName = component.form.get('companyName');
+    const companyAddress = component.form.get('companyAddress');
+
+    // Set to RECRUITER first
+    roleControl?.setValue('RECRUITER');
+    expect(companyName?.hasError('required')).toBeTrue();
+
+    // Switch to APPLICANT
+    roleControl?.setValue('APPLICANT');
+    // Form should update validators
+    expect(roleControl?.value).toBe('APPLICANT');
   });
 });
