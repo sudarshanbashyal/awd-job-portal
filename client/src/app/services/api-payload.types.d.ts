@@ -53,3 +53,8 @@ interface UpdateRecruiterProfileRequest {
   companyName: string;
   companyAddress: string;
 }
+
+interface UpdateApplicationStatusRequest {
+  status: string;
+  note?: string | null;
+}

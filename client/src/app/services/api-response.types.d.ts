@@ -102,3 +102,13 @@ interface ResumeInfoResponse extends BaseApiResponse {
 interface MyApplicationsResponse extends BaseApiResponse {
   data: JobApplication[];
 }
+
+interface JobApplicantsResposne extends BaseApiResponse {
+  data: JobApplicant[];
+}
+
+interface UpdateApplicationStatusResponse extends BaseApiResponse {
+  data: {
+    id: string;
+  };
+}

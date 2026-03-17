@@ -126,7 +126,10 @@ export class ApiService {
   uploadProfilePicture(file: File): Observable<UpdateApplicantCredentials> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post<UpdateApplicantCredentials>(`${environment.apiUrl}/profile-picture`, formData);
+    return this.http.post<UpdateApplicantCredentials>(
+      `${environment.apiUrl}/profile-picture`,
+      formData,
+    );
   }
 
   // job posting services
@@ -217,5 +220,19 @@ export class ApiService {
       this.eventSource.close();
       this.eventSource = undefined;
     }
+  }
+
+  fetchJobApplicants(jobId: string): Observable<JobApplicantsResposne> {
+    return this.http.get<JobApplicantsResposne>(`${environment.apiUrl}/${jobId}/applicants`);
+  }
+
+  downloadApplicantResume(jobId: string, applicationId: string) {
+    return this.http.get(`${environment.apiUrl}/resume/${jobId}/${applicationId}`, {
+      responseType: 'blob',
+    });
+  }
+
+  updateApplicationStatus(jobId: string, applicationId: string, payload: UpdateApplicationStatusRequest): Observable<UpdateApplicationStatusResponse> {
+    return this.http.patch<UpdateApplicationStatusResponse>(`${environment.apiUrl}/application-status/${jobId}/${applicationId}`, payload);
   }
 }

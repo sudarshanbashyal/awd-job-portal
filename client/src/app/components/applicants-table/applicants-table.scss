@@ -1,0 +1,81 @@
+@use '../../../styles.scss' as *;
+
+.applicant-table-container {
+  max-width: $max-width;
+  margin: auto;
+  margin-top: 100px;
+
+  table {
+    text-align: left;
+    table-layout: fixed;
+    border-collapse: collapse;
+    min-width: 100%;
+
+    .skill-tag {
+      display: inline-block;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+
+    .table-header {
+      background-color: $blue-muted;
+    }
+
+    tr {
+      th {
+        padding: 20px 15px;
+      }
+
+      td {
+        max-width: 400px;
+        padding: 15px;
+      }
+    }
+
+    .rating-low {
+      color: $red-primary
+    }
+
+    .rating-medium {
+      color: $yellow-primary
+    }
+
+    .rating-high {
+      color: $green-primary
+    }
+
+    .download-btn {
+      margin-left: 10px;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+    }
+
+    .parsing-container {
+      display: flex;
+      align-items: center;
+      color: $purple-primary;
+      animation: slow-flash 3s infinite;
+
+      img {
+        margin-right: 10px;
+      }
+    }
+
+    .failure-text {
+      color: $red-primary;
+    }
+  }
+}
+
+@keyframes slow-flash {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+}

@@ -11,6 +11,17 @@ enum UserType {
   RECRUITER = 'RECRUITER',
 }
 
+enum ParsedResumeStatus {
+  PARSING = 'PARSING',
+  PARSED = 'PARSED',
+  FAILED = 'FAILED',
+}
+
+enum SkillType {
+  HARD_SKILL = 'HARD_SKILL',
+  SOFT_SKILL = 'SOFT_SKILL',
+}
+
 interface UserProfile {
   id: string;
   email: string;
@@ -104,4 +115,44 @@ interface JobApplication {
   createdAt: Date;
   jobId: string;
   jobPosting: JobPosting & { postedBy: Recruiter };
+}
+
+interface JobApplicant {
+  id: string;
+  jobId: string;
+  applicantId: string;
+  applicationStatus: string;
+  resumeLink: string;
+  createdAt: Date;
+  updatedAt: Date;
+  applicant: Applicant & {
+    user: {
+      email: string;
+      id: string;
+    };
+  };
+  parsedResume: ParsedResume | null;
+}
+
+interface ParsedResume {
+  id: string;
+  status: ParsedResumeStatus;
+  yearsOfExperience: number;
+  rating: number;
+  applicantId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  extractedSkills: ExtractedSkill[];
+}
+
+interface ExtractedSkill {
+  id: string;
+  skill: string;
+  skillType: SkillType;
+  parsedResumeId: string;
+}
+
+interface ApplicantStatusOption {
+  value: string;
+  text: string;
 }
