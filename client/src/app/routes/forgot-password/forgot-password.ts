@@ -1,9 +1,18 @@
+// packages
+import {
+  FormGroup,
+  Validators,
+  FormBuilder,
+  AbstractControl,
+  ValidationErrors,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { finalize } from 'rxjs';
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FormGroup, Validators, FormBuilder, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 
+// services
 import { ApiService } from '../../services';
 
 function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -76,7 +85,11 @@ export class ForgotPassword {
 
       this.apiService
         .generateToken({ email: this.email })
-        .pipe(finalize(() => { this.loading = false; }))
+        .pipe(
+          finalize(() => {
+            this.loading = false;
+          }),
+        )
         .subscribe({
           next: (res: any) => {
             if (res.ok) this.stage = 'token';
@@ -98,7 +111,11 @@ export class ForgotPassword {
 
       this.apiService
         .verifyToken({ email: this.email, token: this.token })
-        .pipe(finalize(() => { this.loading = false; }))
+        .pipe(
+          finalize(() => {
+            this.loading = false;
+          }),
+        )
         .subscribe({
           next: (res: any) => {
             if (res.ok) this.stage = 'password';
@@ -123,7 +140,11 @@ export class ForgotPassword {
           token: this.token,
           password: this.passwordForm.value.password,
         })
-        .pipe(finalize(() => { this.loading = false; }))
+        .pipe(
+          finalize(() => {
+            this.loading = false;
+          }),
+        )
         .subscribe({
           next: (res: any) => {
             if (res.ok) this.stage = 'success';

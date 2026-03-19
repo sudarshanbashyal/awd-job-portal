@@ -11,6 +11,8 @@ import { ProfilePicture } from '../profile-picture/profile-picture';
 import { ApplicantProfileForm } from '../applicant-profile-form/applicant-profile-form';
 import { RecruiterProfileForm } from '../recruiter-profile-form/recruiter-profile-form';
 
+const MAX_FILE_SIZE = 4;
+
 @Component({
   selector: 'app-profile-header',
   imports: [
@@ -46,6 +48,12 @@ export class ProfileHeader {
     const [profileFile] = fileList;
     if (profileFile.type !== 'image/jpeg' && profileFile.type !== 'image/png') {
       this.toastService.show('Invalid file format', 'Only png and jpeg are allowed', 'error');
+      return;
+    }
+
+    const fileSizeMB = profileFile.size / (1024 * 1024);
+    if (fileSizeMB >= MAX_FILE_SIZE) {
+      this.toastService.show('File too large', 'The uploaded picture must be under 4MB', 'error');
       return;
     }
 

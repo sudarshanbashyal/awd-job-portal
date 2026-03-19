@@ -6,7 +6,7 @@ import { ApiService } from './api.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private token = signal<string | null>(null);
+  token = signal<string | null>(null);
   user = signal<UserProfile | null>(null);
 
   constructor(private api: ApiService) { }

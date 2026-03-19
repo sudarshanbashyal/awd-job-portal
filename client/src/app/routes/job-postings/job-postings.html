@@ -27,4 +27,8 @@
       <app-job-posting-card [jobPost]="item"></app-job-posting-card>
     }
   </div>
+
+  @if (!jobPostings.length) {
+    <app-no-data></app-no-data>
+  }
 </div>

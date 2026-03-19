@@ -53,10 +53,7 @@ interface JobByIdResponse extends BaseApiResponse {
 }
 
 interface JobApplicationByJobIdResponse extends BaseApiResponse {
-  data: {
-    id: string;
-    applicationStatus: string;
-  };
+  data: ApplicantJobApplication;
 }
 
 interface AssessmentStreamResponse {
@@ -67,14 +64,14 @@ interface AssessmentStreamResponse {
 
 interface ProfileResponse extends BaseApiResponse {
   data:
-    | ({
-        id: string;
-        email: string;
-        profilePicture: string | null;
-      } & {
-        applicant: Applicant;
-      })
-    | { recruiter: Recruiter };
+  | ({
+    id: string;
+    email: string;
+    profilePicture: string | null;
+  } & {
+    applicant: Applicant;
+  })
+  | { recruiter: Recruiter };
 }
 
 interface UpdateProfileResponse extends BaseApiResponse {
@@ -91,7 +88,13 @@ interface DeleteAccountResponse extends BaseApiResponse {
 
 interface UpdateApplicantCredentials extends BaseApiResponse {
   data: {
-    mesage: string;
+    message: string;
+  };
+}
+
+interface MessageResponse extends BaseApiResponse {
+  data: {
+    message: string;
   };
 }
 
@@ -101,4 +104,14 @@ interface ResumeInfoResponse extends BaseApiResponse {
 
 interface MyApplicationsResponse extends BaseApiResponse {
   data: JobApplication[];
+}
+
+interface JobApplicantsResposne extends BaseApiResponse {
+  data: JobApplicant[];
+}
+
+interface UpdateApplicationStatusResponse extends BaseApiResponse {
+  data: {
+    id: string;
+  };
 }

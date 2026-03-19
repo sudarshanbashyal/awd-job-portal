@@ -57,8 +57,15 @@
   </div>
 
   <div class="action-buttons">
-    <button class="btn-primary apply-btn" (click)="changeApplicationStatus()">
-      {{ jobApplicationId ? 'Withdraw Application' : 'Apply' }}
+    <button *ngIf="jobApplication?.applicationStatus === 'REJECTED'" class="btn-primary rejected-info">
+      Rejected
+    </button>
+    <button
+      *ngIf="jobApplication?.applicationStatus !== 'REJECTED'"
+      class="btn-primary apply-btn"
+      (click)="changeApplicationStatus()"
+    >
+      {{ jobApplication ? 'Withdraw Application' : 'Apply' }}
     </button>
     <button class="btn-secondary" (click)="analyzeApplication()">
       <img src="ai-icon.svg" />

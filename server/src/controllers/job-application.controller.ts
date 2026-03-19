@@ -275,6 +275,11 @@ export const getApplicantsByJobId: RequestHandler = async (
     const applicants = await prisma.jobApplication.findMany({
       where: whereConditions,
       include: {
+        parsedResume: {
+          include: {
+            extractedSkills: true,
+          },
+        },
         applicant: {
           include: {
             user: {

@@ -2,6 +2,8 @@
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
+
+// env
 import { environment } from '../environments/environment';
 
 @Injectable({
@@ -13,7 +15,7 @@ export class ApiService {
   constructor(
     private zone: NgZone,
     private http: HttpClient,
-  ) { }
+  ) {}
 
   // auth services
   login(credentials: LoginRequest): Observable<LoginResponse> {
@@ -24,16 +26,16 @@ export class ApiService {
     return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, payload);
   }
 
-  generateToken(payload: { email: string }): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/auth/reset-token`, payload);
+  generateToken(payload: GenerateTokenRequest): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${environment.apiUrl}/auth/reset-token`, payload);
   }
 
-  verifyToken(payload: { email: string; token: string }): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/auth/verify-token`, payload);
+  verifyToken(payload: VerifyTokenRequest): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${environment.apiUrl}/auth/verify-token`, payload);
   }
 
-  resetPassword(payload: { email: string; token: string; password: string }): Observable<any> {
-    return this.http.patch<any>(`${environment.apiUrl}/auth/reset-password`, payload);
+  resetPassword(payload: ResetPasswordRequest): Observable<MessageResponse> {
+    return this.http.patch<MessageResponse>(`${environment.apiUrl}/auth/reset-password`, payload);
   }
 
   // profile services
@@ -126,7 +128,10 @@ export class ApiService {
   uploadProfilePicture(file: File): Observable<UpdateApplicantCredentials> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post<UpdateApplicantCredentials>(`${environment.apiUrl}/profile-picture`, formData);
+    return this.http.post<UpdateApplicantCredentials>(
+      `${environment.apiUrl}/profile-picture`,
+      formData,
+    );
   }
 
   // job posting services
@@ -217,5 +222,31 @@ export class ApiService {
       this.eventSource.close();
       this.eventSource = undefined;
     }
+  }
+
+  fetchJobApplicants(
+    jobId: string,
+    payload: SearchApplicantsRequest,
+  ): Observable<JobApplicantsResposne> {
+    return this.http.get<JobApplicantsResposne>(
+      `${environment.apiUrl}/${jobId}/applicants?search=${payload.search}&status=${payload.status}`,
+    );
+  }
+
+  downloadApplicantResume(jobId: string, applicationId: string) {
+    return this.http.get(`${environment.apiUrl}/resume/${jobId}/${applicationId}`, {
+      responseType: 'blob',
+    });
+  }
+
+  updateApplicationStatus(
+    jobId: string,
+    applicationId: string,
+    payload: UpdateApplicationStatusRequest,
+  ): Observable<UpdateApplicationStatusResponse> {
+    return this.http.patch<UpdateApplicationStatusResponse>(
+      `${environment.apiUrl}/application-status/${jobId}/${applicationId}`,
+      payload,
+    );
   }
 }
