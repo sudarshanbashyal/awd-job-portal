@@ -14,6 +14,7 @@ import {
 
 // libs
 import { RESUME_PATH } from "./registry";
+import { profile } from "console";
 
 // types
 type PDFFile = PDFKit.PDFDocument;
@@ -46,6 +47,7 @@ export const generateResumeFromProfile = async (
       stream.on("error", (err) => reject(err));
 
       renderHeader(doc, user, applicant);
+      applicant.profile && renderProfile(doc, applicant.profile);
       experiences?.length && renderExperience(doc, experiences);
       renderEducation(doc, educations);
       renderSkills(doc, skills);
@@ -84,11 +86,18 @@ function renderHeader(doc: PDFFile, user: User, applicant: Applicant) {
     .fontSize(20)
     .text(`${applicant.firstName} ${applicant.lastName}`);
 
-  doc
-    .moveDown(0.3)
-    .font("Helvetica")
-    .fontSize(11)
-    .text(`${user.email} | ${applicant.phoneNumber} | ${applicant.location}`);
+  let profileInfo = user.email;
+  if (applicant.phoneNumber)
+    profileInfo += ` | Phone: ${applicant.phoneNumber}`;
+  if (applicant.location) profileInfo += ` | Location: ${applicant.location}`;
+
+  doc.moveDown(0.3).font("Helvetica").fontSize(11).text(profileInfo);
+}
+
+function renderProfile(doc: PDFFile, profile: string) {
+  sectionTitle(doc, "Profile");
+
+  doc.moveDown().font("Helvetica").fontSize(10).text(profile);
 }
 
 function renderExperience(doc: PDFFile, experience: ProfessionalExperience[]) {

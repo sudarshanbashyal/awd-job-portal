@@ -1,0 +1,107 @@
+<div class="applicant-table-container">
+  <div class="form-container">
+    <form [formGroup]="form" (ngSubmit)="fetchApplicants()">
+      <input formControlName="search" placeholder="Applicant Name" />
+
+      <select formControlName="status">
+        <option value="">All Applications</option>
+        @for (status of statuses; track status.value) {
+          <option value="{{ status.value }}">{{ status.text }}</option>
+        }
+      </select>
+
+      <button class="btn-primary" type="submit">Search</button>
+    </form>
+  </div>
+
+  <table>
+    <tr class="table-header">
+      <th>Applicant Name</th>
+      <th>Years of Experience</th>
+      <th>Skills</th>
+      <th>Rating</th>
+      <th>Applied On</th>
+      <th>Status</th>
+      <th>Resume</th>
+    </tr>
+
+    @for (entry of applicants; track entry.id) {
+      <tr>
+        <td>{{ entry.applicant.firstName }} {{ entry.applicant.lastName }}</td>
+        <td>
+          @if (entry.parsedResume?.status === 'PARSED') {
+            {{ entry.parsedResume?.yearsOfExperience }} Years
+          } @else if (entry.parsedResume?.status === 'FAILED') {
+            <p class="failure-text">Failed to parse resume</p>
+          } @else {
+            <div class="parsing-container">
+              <img src="ai-icon.svg" />
+              <span>Parsing...</span>
+            </div>
+          }
+        </td>
+        <td>
+          @if (entry.parsedResume?.status === 'PARSED') {
+            @for (skill of entry.parsedResume?.extractedSkills; track skill.id) {
+              <app-tag title="{{ skill.skill }}" type="Info" class="skill-tag"></app-tag>
+            }
+          } @else if (entry.parsedResume?.status === 'FAILED') {
+            <p class="failure-text">Failed to parse resume</p>
+          } @else {
+            <div class="parsing-container">
+              <img src="ai-icon.svg" />
+              <span>Analyzing...</span>
+            </div>
+          }
+        </td>
+
+        <td>
+          @if (entry.parsedResume?.status === 'PARSED') {
+            <span
+              class="{{
+                +(entry.parsedResume?.rating || 0) >= 8
+                  ? 'rating-high'
+                  : +(entry.parsedResume?.rating || 0) <= 4
+                    ? 'rating-low'
+                    : 'rating-medium'
+              }}"
+              >{{ entry.parsedResume?.rating }}</span
+            >/10
+          } @else if (entry.parsedResume?.status === 'FAILED') {
+            <p class="failure-text">Failed to parse resume</p>
+          } @else {
+            <div class="parsing-container">
+              <img src="ai-icon.svg" />
+              <span>Reviewing...</span>
+            </div>
+          }
+        </td>
+        <td>{{ entry.createdAt | date: 'mediumDate' }}</td>
+
+        <td>
+          <select [ngModel]="entry.applicationStatus" (change)="changeStatus($event, entry)">
+            @for (status of statuses; track status.value) {
+              <option value="{{ status.value }}">{{ status.text }}</option>
+            }
+          </select>
+        </td>
+        <td class="download-column">
+          <button class="download-btn" (click)="downloadResume(entry.id, entry.applicant)">
+            <app-icon-download></app-icon-download>
+          </button>
+        </td>
+      </tr>
+    }
+  </table>
+
+  @if (!applicants.length) {
+    <app-no-data></app-no-data>
+  }
+
+  <app-change-status-modal
+    *ngIf="modalOpen"
+    [selectedStatus]="selectedValue"
+    [application]="selectedApplication"
+    (closeModalEmitter)="closeModal()"
+  ></app-change-status-modal>
+</div>

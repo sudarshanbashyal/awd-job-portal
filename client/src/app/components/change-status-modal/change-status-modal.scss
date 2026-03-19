@@ -1,0 +1,45 @@
+@use '../../../styles.scss' as *;
+
+.modal-content {
+  .modal-title {
+    display: flex;
+    align-items: center;
+
+    .ai-image {
+      margin-left: 10px;
+    }
+
+    .ai-image-flashing {
+      animation: slow-flash 3s infinite;
+    }
+  }
+
+  .modal-body {
+    margin-top: 20px;
+    font-size: 12px;
+
+    .action-buttons {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      .btn-primary {
+        width: 200px !important;
+      }
+
+      .cancel-btn {
+        margin-right: 30px;
+      }
+    }
+
+    .application-status {
+      text-transform: capitalize;
+      color: $purple-primary;
+    }
+
+    form {
+      margin-top: 10px;
+    }
+  }
+}

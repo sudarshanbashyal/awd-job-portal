@@ -1,7 +1,7 @@
 <div class="job-post-card">
   <div class="header">
     <div class="job-info">
-      <a class="job-title" routerLink="/job-post/{{ jobPost?.id || '' }}">{{ jobPost?.title }}</a>
+      <a class="job-title" routerLink="/job-applicants/{{ jobPost?.id || '' }}">{{ jobPost?.title }}</a>
       <app-tag [type]="jobPost?.status === 'OPEN' ? 'Success' : 'Error'"
         [title]="jobPost?.status?.toLowerCase() || ''"></app-tag>
     </div>
