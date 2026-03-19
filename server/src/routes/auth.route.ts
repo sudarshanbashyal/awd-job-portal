@@ -1,9 +1,6 @@
 // packages
 import { Router } from "express";
 
-// libs
-import { isAuth } from "../lib";
-
 // controllers
 import * as Controller from "../controllers";
 
