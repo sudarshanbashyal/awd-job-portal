@@ -1,4 +1,19 @@
 <div class="applicant-table-container">
+  <div class="form-container">
+    <form [formGroup]="form" (ngSubmit)="fetchApplicants()">
+      <input formControlName="search" placeholder="Applicant Name" />
+
+      <select formControlName="status">
+        <option value="">All Applications</option>
+        @for (status of statuses; track status.value) {
+          <option value="{{ status.value }}">{{ status.text }}</option>
+        }
+      </select>
+
+      <button class="btn-primary" type="submit">Search</button>
+    </form>
+  </div>
+
   <table>
     <tr class="table-header">
       <th>Applicant Name</th>
@@ -27,7 +42,7 @@
         </td>
         <td>
           @if (entry.parsedResume?.status === 'PARSED') {
-            @for (skill of entry.parsedResume?.extractedSkills?.slice(0, 20); track skill.id) {
+            @for (skill of entry.parsedResume?.extractedSkills; track skill.id) {
               <app-tag title="{{ skill.skill }}" type="Info" class="skill-tag"></app-tag>
             }
           } @else if (entry.parsedResume?.status === 'FAILED') {
@@ -78,6 +93,10 @@
       </tr>
     }
   </table>
+
+  @if (!applicants.length) {
+    <app-no-data></app-no-data>
+  }
 
   <app-change-status-modal
     *ngIf="modalOpen"

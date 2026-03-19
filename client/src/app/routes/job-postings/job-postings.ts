@@ -1,5 +1,6 @@
 // packages
 import { finalize } from 'rxjs';
+import { CommonModule } from '@angular/common';
 import { Component, effect } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -8,11 +9,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ApiService, AuthService } from '../../services';
 
 // components
+import { NoData } from '../../components/no-data/no-data';
 import { JobPostingCard } from '../../components/job-posting-card/job-posting-card';
 
 @Component({
   selector: 'app-job-postings',
-  imports: [ReactiveFormsModule, RouterModule, JobPostingCard],
+  imports: [ReactiveFormsModule, RouterModule, JobPostingCard, NoData, CommonModule],
   templateUrl: './job-postings.html',
   styleUrl: './job-postings.scss',
 })

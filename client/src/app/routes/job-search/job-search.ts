@@ -7,13 +7,14 @@ import { Component, effect } from '@angular/core';
 import { ApiService, AuthService } from '../../services';
 
 // components
+import { NoData } from '../../components/no-data/no-data';
 import { JobEntry } from '../../components/job-entry/job-entry';
 import { IconsModule } from '../../components/icons/icons-module';
 import { JobFilter } from '../../components/job-filter/job-filter';
 
 @Component({
   selector: 'app-job-search',
-  imports: [JobEntry, JobFilter, IconsModule],
+  imports: [JobEntry, JobFilter, IconsModule, NoData],
   templateUrl: './job-search.html',
   styleUrl: './job-search.scss',
 })

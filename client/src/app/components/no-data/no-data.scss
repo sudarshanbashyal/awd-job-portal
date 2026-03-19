@@ -1,0 +1,21 @@
+@use '../../../styles.scss' as *;
+
+.no-data-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 50px;
+
+  img {
+    width: 350px;
+  }
+
+  h3 {
+    margin-top: 20px;
+  }
+
+  p {
+    margin-top: 10px;
+    text-align: center;
+  }
+}

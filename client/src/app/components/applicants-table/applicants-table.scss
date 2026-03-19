@@ -4,6 +4,33 @@
   max-width: $max-width;
   margin: auto;
   margin-top: 100px;
+  margin-bottom: 50px;
+  border: 1px solid $border-primary;
+  border-radius: 12px;
+  background-color: white;
+
+  .form-container {
+    margin: 30px;
+
+    form {
+      display: flex;
+      align-items: center;
+
+      input {
+        width: 250px;
+        margin-right: 20px;
+      }
+
+      select {
+        width: 200px;
+        margin-right: 20px;
+      }
+
+      button {
+        width: 150px;
+      }
+    }
+  }
 
   table {
     text-align: left;
@@ -33,15 +60,15 @@
     }
 
     .rating-low {
-      color: $red-primary
+      color: $red-primary;
     }
 
     .rating-medium {
-      color: $yellow-primary
+      color: $yellow-primary;
     }
 
     .rating-high {
-      color: $green-primary
+      color: $green-primary;
     }
 
     .download-btn {
@@ -69,7 +96,6 @@
 }
 
 @keyframes slow-flash {
-
   0%,
   100% {
     opacity: 1;

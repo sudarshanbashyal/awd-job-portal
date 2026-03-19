@@ -1,11 +1,12 @@
 // packages
-import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // components
 import { Tag } from '../tag/tag';
+import { NoData } from '../no-data/no-data';
 import { IconsModule } from '../icons/icons-module';
 import { ChangeStatusModal } from '../change-status-modal/change-status-modal';
 
@@ -14,7 +15,16 @@ import { ApiService } from '../../services';
 
 @Component({
   selector: 'app-applicants-table',
-  imports: [DatePipe, IconsModule, Tag, FormsModule, ChangeStatusModal, CommonModule],
+  imports: [
+    Tag,
+    NoData,
+    DatePipe,
+    IconsModule,
+    FormsModule,
+    CommonModule,
+    ChangeStatusModal,
+    ReactiveFormsModule,
+  ],
   templateUrl: './applicants-table.html',
   styleUrl: './applicants-table.scss',
 })
@@ -61,11 +71,21 @@ export class ApplicantsTable {
   public applicants: JobApplicant[] = [];
   private activatedRoute = inject(ActivatedRoute);
 
+  public form: FormGroup;
+
   selectedApplication: JobApplicant | null = null;
   selectedValue: ApplicantStatusOption | null = null;
   modalOpen: boolean = false;
 
-  constructor(private readonly apiService: ApiService) { }
+  constructor(
+    private fb: FormBuilder,
+    private readonly apiService: ApiService,
+  ) {
+    this.form = this.fb.group({
+      search: [''],
+      status: [''],
+    });
+  }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
@@ -78,11 +98,16 @@ export class ApplicantsTable {
   }
 
   fetchApplicants() {
-    this.apiService.fetchJobApplicants(this.jobId).subscribe({
-      next: (res) => {
-        if (res.data) this.applicants = res.data;
-      },
-    });
+    this.apiService
+      .fetchJobApplicants(this.jobId, {
+        search: this.form.get('search')?.value || '',
+        status: this.form.get('status')?.value || '',
+      })
+      .subscribe({
+        next: (res) => {
+          if (res.data) this.applicants = res.data;
+        },
+      });
   }
 
   downloadResume(applicationId: string, applicant: Applicant) {

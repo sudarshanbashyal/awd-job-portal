@@ -4,7 +4,11 @@
       <app-icon-back />
     </button>
     <h3 class="job-title">{{ job?.title }}</h3>
-    <app-tag class="job-status" [title]="job?.status?.toLowerCase() || ''" [type]="'Success'"></app-tag>
+    <app-tag
+      class="job-status"
+      [title]="job?.status?.toLowerCase() || ''"
+      [type]="job?.status === 'OPEN' ? 'Success' : 'Error'"
+    ></app-tag>
   </div>
 
   <div>

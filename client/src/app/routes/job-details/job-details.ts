@@ -23,7 +23,7 @@ export class JobDetails {
   loading = true;
   user: UserProfile | null = null;
   job: JobResultEntry | null = null;
-  jobApplicationId: string = '';
+  jobApplication: ApplicantJobApplication | null = null;
 
   private activatedRoute = inject(ActivatedRoute);
 
@@ -62,6 +62,14 @@ export class JobDetails {
   }
 
   analyzeApplication() {
+    if (!this.user?.applicant?.resumeLink) {
+      this.toastService.show(
+        'No Resume',
+        'Please upload a resume from your profile before analyzing.',
+        'warning',
+      );
+      return;
+    }
     this.isPopupOpen = true;
   }
 
@@ -70,7 +78,7 @@ export class JobDetails {
   }
 
   changeApplicationStatus() {
-    if (this.jobApplicationId) this.withdraw();
+    if (this.jobApplication) this.withdraw();
     else this.apply();
   }
 
@@ -98,7 +106,7 @@ export class JobDetails {
             this.getJobApplication();
           }
         },
-        error: () => {},
+        error: () => { },
       });
   }
 
@@ -119,7 +127,7 @@ export class JobDetails {
             }
           }
         },
-        error: () => {},
+        error: () => { },
       });
   }
 
@@ -136,11 +144,11 @@ export class JobDetails {
       .subscribe({
         next: (res) => {
           if (res.ok) {
-            this.jobApplicationId = res.data.id;
+            this.jobApplication = res.data;
           }
         },
         error: () => {
-          this.jobApplicationId = '';
+          this.jobApplication = null;
         },
       });
   }
@@ -163,7 +171,7 @@ export class JobDetails {
             this.formattedDate = formatDate(res.data.createdAt, 'dd MMM, yyyy', 'en-US');
           }
         },
-        error: () => {},
+        error: () => { },
       });
   }
 

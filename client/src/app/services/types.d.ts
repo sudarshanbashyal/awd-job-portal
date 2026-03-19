@@ -156,3 +156,8 @@ interface ApplicantStatusOption {
   value: string;
   text: string;
 }
+
+interface ApplicantJobApplication {
+  id: string;
+  applicationStatus: string;
+}
