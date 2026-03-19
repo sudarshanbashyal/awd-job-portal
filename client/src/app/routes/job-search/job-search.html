@@ -7,7 +7,13 @@
 
     <div class="job-list">
       @for (item of jobs; track item) {
-      <app-job-entry [jobEntry]="item"></app-job-entry>
+        <app-job-entry [jobEntry]="item"></app-job-entry>
+      }
+
+      @if (!jobs.length) {
+        <div class="no-result">
+          <app-no-data></app-no-data>
+        </div>
       }
     </div>
   </div>

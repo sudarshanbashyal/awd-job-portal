@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Component, effect, OnInit } from '@angular/core';
 
 // components
+import { NoData } from '../../components/no-data/no-data';
 import { JobApplicationCard } from '../../components/job-application-card/job-application-card';
 
 // services
@@ -12,7 +13,7 @@ import { ApiService, AuthService } from '../../services';
 
 @Component({
   selector: 'app-job-application',
-  imports: [CommonModule, RouterModule, JobApplicationCard],
+  imports: [CommonModule, RouterModule, JobApplicationCard, NoData],
   templateUrl: './job-application.html',
   styleUrl: './job-application.scss',
 })

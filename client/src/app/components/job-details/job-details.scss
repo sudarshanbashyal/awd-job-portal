@@ -1,0 +1,39 @@
+@use '../../../styles.scss' as *;
+
+.job-details-container {
+    max-width: 800px;
+    margin: auto;
+
+    .job-header {
+        display: flex;
+        align-items: center;
+
+        .job-title {
+            font-size: 18px;
+        }
+
+        .job-status {
+            margin-left: 5px;
+        }
+
+        .back-icon {
+            margin-left: 5px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+    }
+
+    .text-muted {
+        margin-top: 5px;
+        margin-left: 15px;
+        font-size: 11px;
+    }
+
+    .job-details {
+        margin-top: 30px;
+        margin-left: 15px;
+        line-height: 17px;
+    }
+}

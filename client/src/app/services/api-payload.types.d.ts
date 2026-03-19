@@ -54,6 +54,11 @@ interface UpdateRecruiterProfileRequest {
   companyAddress: string;
 }
 
+interface UpdateApplicationStatusRequest {
+  status: string;
+  note?: string | null;
+}
+
 interface GenerateTokenRequest {
   email: string;
 }
@@ -67,4 +72,9 @@ interface ResetPasswordRequest {
   email: string;
   token: string;
   password: string;
+}
+
+interface SearchApplicantsRequest {
+  search: string;
+  status: string;
 }

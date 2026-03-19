@@ -49,5 +49,5 @@ export const generateAccessToken = (user: UserWithRecruiterOrApplicant) => {
 };
 
 export const generateToken = () => {
-  return Math.floor(Math.random() * 90000);
+  return Math.floor(Math.random() * 90000) + 10000;
 };

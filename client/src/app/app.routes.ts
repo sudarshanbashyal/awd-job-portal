@@ -9,6 +9,7 @@ import { JobSearch } from './routes/job-search/job-search';
 import { CreateJob } from './routes/create-job/create-job';
 import { JobDetails } from './routes/job-details/job-details';
 import { JobPostings } from './routes/job-postings/job-postings';
+import { JobApplicants } from './routes/job-applicants/job-applicants';
 import { JobApplication } from './routes/job-application/job-application';
 import { ForgotPassword } from './routes/forgot-password/forgot-password';
 
@@ -21,10 +22,11 @@ export const routes: Routes = [
   
   { path: 'profile', component: Profile },
 
-  { path: 'job-application', component: JobApplication },
   { path: 'job-post', component: CreateJob },
   { path: 'job-post/:id', component: CreateJob },
   { path: 'job-postings', component: JobPostings },
+  { path: 'job-application', component: JobApplication },
+  { path: 'job-applicants/:id', component: JobApplicants},
 
   { path: 'search', component: JobSearch },
   { path: 'job/:id', component: JobDetails },
