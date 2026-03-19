@@ -52,7 +52,7 @@ describe('Skill', () => {
     expect(authService.getUser).toHaveBeenCalled();
   });
 
-  it('openModal should open modal and set editingSkill if provided', () => {
+  it('openmodal should work when editing old skill', () => {
     const skill = {
       id: 'abc',
       skill: 'programming',
@@ -64,14 +64,14 @@ describe('Skill', () => {
     expect(component.editingSkill).toBe(skill);
   });
 
-  it('openModal should open modal without setting editingSkill if not provided', () => {
+  it('openmodal should work when creating new skill', () => {
     component.openModal();
 
     expect(component.modalOpen).toBeTrue();
     expect(component.editingSkill).toBeNull();
   });
 
-  it('closeModal should close modal, clear editingSkill, and reload user', () => {
+  it('closemodal should reset skill that is edited and reload user profile', () => {
     const skill = { id: 'abc', course: 'programming' } as any;
     component.editingSkill = skill;
     component.modalOpen = true;

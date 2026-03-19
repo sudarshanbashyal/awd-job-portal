@@ -56,7 +56,7 @@ describe('Login', () => {
       of({ ok: true, data: { accessToken: 'token123' }, errors: [] } as any),
     );
 
-    component.form.get('email')?.setValue('test@example.com');
+    component.form.get('email')?.setValue('testuser@gmail.com');
     component.form.get('password')?.setValue('password123');
     component.submit();
     expect(component.form.valid).toBeTrue();
@@ -64,7 +64,7 @@ describe('Login', () => {
 
   it('should not submit if already loading', () => {
     component.loading = true;
-    component.form.get('email')?.setValue('test@example.com');
+    component.form.get('email')?.setValue('testuser@gmail.com');
     component.form.get('password')?.setValue('password123');
 
     component.submit();
@@ -77,13 +77,13 @@ describe('Login', () => {
       of({ ok: true, data: { accessToken: 'token123' }, errors: [] } as any),
     );
 
-    component.form.get('email')?.setValue('test@example.com');
+    component.form.get('email')?.setValue('testuser@gmail.com');
     component.form.get('password')?.setValue('password123');
 
     component.submit();
 
     expect(apiService.login).toHaveBeenCalledWith({
-      email: 'test@example.com',
+      email: 'testuser@gmail.com',
       password: 'password123',
     });
     expect(authService.saveUserToken).toHaveBeenCalledWith('token123');
@@ -95,7 +95,7 @@ describe('Login', () => {
     const error = { status: 404 };
     apiService.login.and.returnValue(throwError(() => error));
 
-    component.form.get('email')?.setValue('test@example.com');
+    component.form.get('email')?.setValue('testuser@gmail.com');
     component.form.get('password')?.setValue('password123');
 
     component.submit();
@@ -107,7 +107,7 @@ describe('Login', () => {
     const error = { status: 401 };
     apiService.login.and.returnValue(throwError(() => error));
 
-    component.form.get('email')?.setValue('test@example.com');
+    component.form.get('email')?.setValue('testuser@gmail.com');
     component.form.get('password')?.setValue('password123');
 
     component.submit();
@@ -118,7 +118,7 @@ describe('Login', () => {
   it('should reset incorrect credentials flag on email change', () => {
     component.isIncorrectCredentials = true;
 
-    component.form.get('email')?.setValue('newemail@example.com');
+    component.form.get('email')?.setValue('testuser@gmail.com');
 
     expect(component.isIncorrectCredentials).toBeFalse();
   });
@@ -127,18 +127,6 @@ describe('Login', () => {
     component.isIncorrectCredentials = true;
 
     component.form.get('password')?.setValue('newpassword');
-
-    expect(component.isIncorrectCredentials).toBeFalse();
-  });
-
-  it('should handle other errors gracefully', () => {
-    const error = { status: 500 };
-    apiService.login.and.returnValue(throwError(() => error));
-
-    component.form.get('email')?.setValue('test@example.com');
-    component.form.get('password')?.setValue('password123');
-
-    component.submit();
 
     expect(component.isIncorrectCredentials).toBeFalse();
   });

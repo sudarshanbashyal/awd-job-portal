@@ -69,7 +69,7 @@ describe('ForgotPassword', () => {
       confirmPassword: 'password1',
     });
 
-    apiService.resetPassword.and.returnValue(of({ ok: true }));
+    apiService.resetPassword.and.returnValue(of({ ok: true, data:{message:"Ok"}, errors:[] }));
     component.submitPassword();
     expect(component.passwordForm.errors?.['mismatch']).toBeFalsy();
   });
@@ -77,7 +77,7 @@ describe('ForgotPassword', () => {
   it('should move to token stage when email API succeeds', () => {
     component.emailForm.setValue({ email: 'test@gmail.com' });
 
-    apiService.generateToken.and.returnValue(of({ ok: true }));
+    apiService.generateToken.and.returnValue(of({ ok: true, data:{message:"Ok"}, errors:[] }));
 
     component.submitEmail();
 
@@ -108,7 +108,7 @@ describe('ForgotPassword', () => {
       confirmPassword: 'password123',
     });
 
-    apiService.resetPassword.and.returnValue(of({ ok: true }));
+    apiService.resetPassword.and.returnValue(of({ ok: true, data:{message:"Ok"}, errors:[] }));
 
     component.submitPassword();
 

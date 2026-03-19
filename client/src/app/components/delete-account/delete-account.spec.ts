@@ -49,7 +49,7 @@ describe('DeleteAccount', () => {
     expect(authService.logout).toHaveBeenCalled();
   });
 
-  it('should not throw on API error', () => {
+  it('should not show toast and logout on error', () => {
     apiService.deleteAccount.and.returnValue(throwError(() => new Error('fail')));
 
     expect(toastService.show).not.toHaveBeenCalled();

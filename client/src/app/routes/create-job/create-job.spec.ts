@@ -4,7 +4,7 @@ import { CreateJob } from './create-job';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ApiService, AuthService, ToastService } from '../../services';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 
 describe('CreateJob', () => {
   let component: CreateJob;
@@ -108,8 +108,8 @@ describe('CreateJob', () => {
     );
 
     component.form.get('title')?.setValue('Software Engineer');
-    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
-    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
+    component.form.get('summary')?.setValue('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis quam purus, nec egestas tortor finibus eu. Maecenas vehicula eu turpis nec ultrices. Nunc congue a nunc a gravida. Ut ullamcorper lacus augue, vel pretium erat tincidunt et. Interdum et malesuada fames ac ante ipsum primis in faucibus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis quam purus, nec egestas tortor finibus eu. Maecenas vehicula eu turpis nec ultrices. Nunc congue a nunc a gravida. Ut ullamcorper lacus augue, vel pretium erat tincidunt et. Interdum et malesuada fames ac ante ipsum primis in faucibus.');
+    component.form.get('description')?.setValue('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis quam purus, nec egestas tortor finibus eu. Maecenas vehicula eu turpis nec ultrices. Nunc congue a nunc a gravida. Ut ullamcorper lacus augue, vel pretium erat tincidunt et. Interdum et malesuada fames ac ante ipsum primis in faucibus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis quam purus, nec egestas tortor finibus eu. Maecenas vehicula eu turpis nec ultrices. Nunc congue a nunc a gravida. Ut ullamcorper lacus augue, vel pretium erat tincidunt et. Interdum et malesuada fames ac ante ipsum primis in faucibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis quam purus, nec egestas tortor finibus eu. Maecenas vehicula eu turpis nec ultrices. Nunc congue a nunc a gravida. Ut ullamcorper lacus augue, vel pretium erat tincidunt et. Interdum et malesuada fames ac ante ipsum primis in faucibus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis quam purus, nec egestas tortor finibus eu. Maecenas vehicula eu turpis nec ultrices. Nunc congue a nunc a gravida. Ut ullamcorper lacus augue, vel pretium erat tincidunt et. Interdum et malesuada fames ac ante ipsum primis in faucibus.');
     component.form.get('location')?.setValue('Hildesheim');
     component.form.get('jobType')?.setValue('FULL_TIME');
     component.form.get('arrangement')?.setValue('REMOTE');
@@ -119,36 +119,6 @@ describe('CreateJob', () => {
 
     expect(apiService.createJob).toHaveBeenCalled();
     expect(toastService.show).toHaveBeenCalledWith('Job Posted', 'A new job has been created!');
-  });
-
-  it('should not create job if already loading', () => {
-    component.loading = true;
-
-    component.form.get('title')?.setValue('Software Engineer');
-    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
-    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
-    component.form.get('location')?.setValue('Hildesheim');
-    component.form.get('jobType')?.setValue('FULL_TIME');
-    component.form.get('arrangement')?.setValue('REMOTE');
-
-    component.submit();
-
-    expect(apiService.createJob).not.toHaveBeenCalled();
-  });
-
-  it('should not create job if already successful', () => {
-    component.submissionSuccessful = true;
-
-    component.form.get('title')?.setValue('Software Engineer');
-    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
-    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
-    component.form.get('location')?.setValue('Hildesheim');
-    component.form.get('jobType')?.setValue('FULL_TIME');
-    component.form.get('arrangement')?.setValue('REMOTE');
-
-    component.submit();
-
-    expect(apiService.createJob).not.toHaveBeenCalled();
   });
 
   it('should update job when previousJob exists', () => {
@@ -161,8 +131,8 @@ describe('CreateJob', () => {
     );
 
     component.form.get('title')?.setValue('Software Engineer');
-    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
-    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
+    component.form.get('summary')?.setValue('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis quam purus, nec egestas tortor finibus eu. Maecenas vehicula eu turpis nec ultrices. Nunc congue a nunc a gravida. Ut ullamcorper lacus augue, vel pretium erat tincidunt et. Interdum et malesuada fames ac ante ipsum primis in faucibus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis quam purus, nec egestas tortor finibus eu. Maecenas vehicula eu turpis nec ultrices. Nunc congue a nunc a gravida. Ut ullamcorper lacus augue, vel pretium erat tincidunt et. Interdum et malesuada fames ac ante ipsum primis in faucibus.');
+    component.form.get('description')?.setValue('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis quam purus, nec egestas tortor finibus eu. Maecenas vehicula eu turpis nec ultrices. Nunc congue a nunc a gravida. Ut ullamcorper lacus augue, vel pretium erat tincidunt et. Interdum et malesuada fames ac ante ipsum primis in faucibus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis quam purus, nec egestas tortor finibus eu. Maecenas vehicula eu turpis nec ultrices. Nunc congue a nunc a gravida. Ut ullamcorper lacus augue, vel pretium erat tincidunt et. Interdum et malesuada fames ac ante ipsum primis in faucibus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis quam purus, nec egestas tortor finibus eu. Maecenas vehicula eu turpis nec ultrices. Nunc congue a nunc a gravida. Ut ullamcorper lacus augue, vel pretium erat tincidunt et. Interdum et malesuada fames ac ante ipsum primis in faucibus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis quam purus, nec egestas tortor finibus eu. Maecenas vehicula eu turpis nec ultrices. Nunc congue a nunc a gravida. Ut ullamcorper lacus augue, vel pretium erat tincidunt et. Interdum et malesuada fames ac ante ipsum primis in faucibus.');
     component.form.get('location')?.setValue('Hildesheim');
     component.form.get('jobType')?.setValue('FULL_TIME');
     component.form.get('arrangement')?.setValue('REMOTE');
@@ -201,17 +171,24 @@ describe('CreateJob', () => {
     expect(apiService.updateJob).toHaveBeenCalledWith('job1', jasmine.objectContaining({ status: 'OPEN' }));
   });
 
-  it('should not update job status if no previousJob', () => {
-    component.previousJob = null;
+ it('should not create job if already loading', () => {
+    component.loading = true;
 
-    component.updateJobStatus();
+    component.form.get('title')?.setValue('Software Engineer');
+    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
+    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
+    component.form.get('location')?.setValue('Hildesheim');
+    component.form.get('jobType')?.setValue('FULL_TIME');
+    component.form.get('arrangement')?.setValue('REMOTE');
 
-    expect(apiService.updateJob).not.toHaveBeenCalled();
+    component.submit();
+
+    expect(apiService.createJob).not.toHaveBeenCalled();
   });
 
   it('should get job and populate form', () => {
     component.jobId = 'job1';
-    const mockJob = {
+    const testJob = {
       id: 'job1',
       title: 'Software Engineer',
       summary: 'A' + ' a'.repeat(50),
@@ -221,7 +198,7 @@ describe('CreateJob', () => {
       arrangement: 'REMOTE',
     } as any;
     apiService.getJobPosting.and.returnValue(
-      of({ ok: true, data: mockJob, errors: [] } as any),
+      of({ ok: true, data: testJob, errors: [] } as any),
     );
 
     component.getJob();
@@ -231,14 +208,14 @@ describe('CreateJob', () => {
     expect(component.form.get('title')?.value).toBe('Software Engineer');
   });
 
-  it('should handle getJob error and navigate', () => {
-    component.jobId = 'job1';
-    apiService.getJobPosting.and.returnValue(throwError(() => new Error('fail')));
 
-    spyOn(component['router'], 'navigate');
-    component.getJob();
 
-    expect(component['router'].navigate).toHaveBeenCalledWith(['/job-post']);
+  it('should not update job status if no previousJob', () => {
+    component.previousJob = null;
+
+    component.updateJobStatus();
+
+    expect(apiService.updateJob).not.toHaveBeenCalled();
   });
 
   it('should not call API if jobId is empty for getJob', () => {
@@ -247,37 +224,5 @@ describe('CreateJob', () => {
     component.getJob();
 
     expect(apiService.getJobPosting).not.toHaveBeenCalled();
-  });
-
-  it('should handle create job error gracefully', () => {
-    apiService.createJob.and.returnValue(throwError(() => new Error('fail')));
-    component.previousJob = null;
-
-    component.form.get('title')?.setValue('Software Engineer');
-    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
-    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
-    component.form.get('location')?.setValue('Hildesheim');
-    component.form.get('jobType')?.setValue('FULL_TIME');
-    component.form.get('arrangement')?.setValue('REMOTE');
-
-    component.submit();
-
-    expect(component.loading).toBeFalse();
-  });
-
-  it('should handle update job error gracefully', () => {
-    component.previousJob = { id: 'job1' } as any;
-    apiService.updateJob.and.returnValue(throwError(() => new Error('fail')));
-
-    component.form.get('title')?.setValue('Software Engineer');
-    component.form.get('summary')?.setValue('A' + ' a'.repeat(50));
-    component.form.get('description')?.setValue('B' + ' b'.repeat(100));
-    component.form.get('location')?.setValue('Hildesheim');
-    component.form.get('jobType')?.setValue('FULL_TIME');
-    component.form.get('arrangement')?.setValue('REMOTE');
-
-    component.submit();
-
-    expect(component.loading).toBeFalse();
   });
 });

@@ -60,8 +60,8 @@ describe('Navbar', () => {
 
   it('should have applicant routes when user is applicant', () => {
     const user = {
-      id: '1',
-      applicant: { id: 'a1' },
+      id: '123',
+      applicant: { id: '123123' },
       recruiter: null,
     } as any;
 
@@ -79,9 +79,9 @@ describe('Navbar', () => {
 
   it('should have recruiter routes when user is recruiter', () => {
     const mockUser = {
-      id: '1',
+      id: '123',
       applicant: null,
-      recruiter: { id: 'r1' },
+      recruiter: { id: '123123' },
     } as any;
 
     authService.getUser.and.returnValue(mockUser);

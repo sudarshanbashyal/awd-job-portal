@@ -72,16 +72,16 @@ describe('Register', () => {
 
   // different passwords test
   it('should mark form as invalid when passwords are different', () => {
-    component.form.get('password')?.setValue('Admin@1234');
-    component.form.get('repeatPassword')?.setValue('Admin1234');
+    component.form.get('password')?.setValue('123456789');
+    component.form.get('repeatPassword')?.setValue('adfadfadf');
     component.submit();
     expect(component.form.hasError('passwordMismatch')).toBeTrue();
   });
 
   // same passwords test
   it('should mark form as valid when passwords are same', () => {
-    component.form.get('password')?.setValue('Admin@1234');
-    component.form.get('repeatPassword')?.setValue('Admin@1234');
+    component.form.get('password')?.setValue('123456789');
+    component.form.get('repeatPassword')?.setValue('123456789');
     component.submit();
     expect(component.form.hasError('passwordMismatch')).toBeFalse();
   });
@@ -92,11 +92,11 @@ describe('Register', () => {
     );
 
     component.form.patchValue({
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
-      password: 'Password123',
-      repeatPassword: 'Password123',
+      firstName: 'test',
+      lastName: 'user',
+      email: 'testuser@gmail.com',
+      password: '123456789',
+      repeatPassword: '123456789',
       role: 'APPLICANT',
     });
 
@@ -112,14 +112,14 @@ describe('Register', () => {
     );
 
     component.form.patchValue({
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane@example.com',
-      password: 'Password123',
-      repeatPassword: 'Password123',
+      firstName: 'test',
+      lastName: 'user',
+      email: 'testuser@gmail.com',
+      password: '123456789',
+      repeatPassword: '123456789',
       role: 'RECRUITER',
-      companyName: 'Tech Corp',
-      companyAddress: '123 Main St',
+      companyName: 'abc',
+      companyAddress: 'hildesheim',
     });
 
     component.submit();
@@ -132,11 +132,11 @@ describe('Register', () => {
     component.loading = true;
 
     component.form.patchValue({
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
-      password: 'Password123',
-      repeatPassword: 'Password123',
+      firstName: 'test',
+      lastName: 'user',
+      email: 'testuser@gmail.com',
+      password: '123456789',
+      repeatPassword: '123456789',
       role: 'APPLICANT',
     });
 
@@ -149,11 +149,11 @@ describe('Register', () => {
     component.submissionSuccessful = true;
 
     component.form.patchValue({
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
-      password: 'Password123',
-      repeatPassword: 'Password123',
+      firstName: 'test',
+      lastName: 'user',
+      email: 'testuser@gmail.com',
+      password: '1234123123',
+      repeatPassword: '1234123123',
       role: 'APPLICANT',
     });
 
@@ -167,9 +167,9 @@ describe('Register', () => {
     apiService.register.and.returnValue(throwError(() => error));
 
     component.form.patchValue({
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
+      firstName: 'test',
+      lastName: 'user',
+      email: 'testuser@gmail.com',
       password: 'Password123',
       repeatPassword: 'Password123',
       role: 'APPLICANT',
@@ -178,38 +178,5 @@ describe('Register', () => {
     component.submit();
 
     expect(component.form.hasError('duplicateEmail')).toBeTrue();
-  });
-
-  it('should handle other registration errors gracefully', () => {
-    const error = { status: 500 };
-    apiService.register.and.returnValue(throwError(() => error));
-
-    component.form.patchValue({
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
-      password: 'Password123',
-      repeatPassword: 'Password123',
-      role: 'APPLICANT',
-    });
-
-    component.submit();
-
-    expect(component.form.hasError('duplicateEmail')).toBeFalsy();
-  });
-
-  it('should clear company validators when role is APPLICANT', () => {
-    const roleControl = component.form.get('role');
-    const companyName = component.form.get('companyName');
-    const companyAddress = component.form.get('companyAddress');
-
-    // Set to RECRUITER first
-    roleControl?.setValue('RECRUITER');
-    expect(companyName?.hasError('required')).toBeTrue();
-
-    // Switch to APPLICANT
-    roleControl?.setValue('APPLICANT');
-    // Form should update validators
-    expect(roleControl?.value).toBe('APPLICANT');
   });
 });

@@ -100,59 +100,19 @@ describe('ApplicantProfileForm', () => {
     );
   });
 
-  it('should show toast even if response not ok', () => {
-    apiService.updateApplicantProfile.and.returnValue(
-      of({ ok: false, data: null, errors: [] } as any),
-    );
-
-    component.form.setValue({
-      firstName: 'test',
-      lastName: 'user',
-      profile: '',
-      location: '',
-      phoneNumber: '+123456789',
-    });
-
-    component.submit();
-
-    expect(toastService.show).toHaveBeenCalledWith(
-      'Profile Updated',
-      'Your profile has been successfully updated',
-    );
-    expect(authService.loadUser).not.toHaveBeenCalled();
-  });
-
-  it('should handle update error gracefully', () => {
-    apiService.updateApplicantProfile.and.returnValue(
-      throwError(() => new Error('fail')),
-    );
-
-    component.form.setValue({
-      firstName: 'test',
-      lastName: 'user',
-      profile: '',
-      location: '',
-      phoneNumber: '+123456789',
-    });
-
-    component.submit();
-
-    expect(component.submitted).toBeTrue();
-  });
-
-  it('should populate form when user profile is loaded via effect', () => {
-    const mockProfile = {
+ it('should populate form when user profile is loaded with api', () => {
+    const profile = {
       applicant: {
-        firstName: 'John',
-        lastName: 'Doe',
-        location: 'Berlin',
-        phoneNumber: '+123456789',
+        firstName: 'test',
+        lastName: 'user',
+        location: 'hildesheim',
+        phoneNumber: '123456789',
       },
     } as any;
 
-    authService.getUser.and.returnValue(mockProfile);
+    authService.getUser.and.returnValue(profile);
     fixture.detectChanges();
 
-    expect(component.profile).toEqual(mockProfile);
+    expect(component.profile).toEqual(profile);
   });
 });

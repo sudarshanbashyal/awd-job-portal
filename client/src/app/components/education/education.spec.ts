@@ -52,7 +52,7 @@ describe('Education', () => {
     expect(authService.getUser).toHaveBeenCalled();
   });
 
-  it('openModal should open modal and set editingEducation if provided', () => {
+  it('openModal should open modal and set education when editing', () => {
     const education = {
       id: 'abc',
       course: 'software engineering',
@@ -66,14 +66,14 @@ describe('Education', () => {
     expect(component.editingEducation).toBe(education);
   });
 
-  it('openModal should open modal without setting editingEducation if not provided', () => {
+  it('open modal should open even when not editing(add new education)', () => {
     component.openModal();
 
     expect(component.modalOpen).toBeTrue();
     expect(component.editingEducation).toBeNull();
   });
 
-  it('closeModal should close modal, clear editingEducation, and reload user', () => {
+  it('close modal function should reset education and reload user details as well', () => {
     const education = { id: 'abc', course: 'software engineering' } as any;
     component.editingEducation = education;
     component.modalOpen = true;

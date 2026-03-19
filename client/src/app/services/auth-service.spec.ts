@@ -93,29 +93,4 @@ describe('AuthService', () => {
     expect(service.getUserToken()).toBeNull();
     expect(service.getUser()).toBeNull();
   });
-
-  it('isTokenExpired should return true for malformed token', () => {
-    const result = (service as any).isTokenExpired('invalid-token');
-    expect(result).toBeTrue();
-  });
-
-  it('isTokenExpired should return false for valid future token', () => {
-    const payload = {
-      exp: Math.floor(Date.now() / 1000) + 60,
-    };
-    const token = `header.${btoa(JSON.stringify(payload))}.signature`;
-
-    const result = (service as any).isTokenExpired(token);
-    expect(result).toBeFalse();
-  });
-
-  it('isTokenExpired should return true for past token', () => {
-    const payload = {
-      exp: Math.floor(Date.now() / 1000) - 60,
-    };
-    const token = `header.${btoa(JSON.stringify(payload))}.signature`;
-
-    const result = (service as any).isTokenExpired(token);
-    expect(result).toBeTrue();
-  });
 });

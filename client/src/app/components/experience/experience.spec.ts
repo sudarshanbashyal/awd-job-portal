@@ -37,7 +37,7 @@ describe('Experience', () => {
     expect(component).toBeTruthy();
   });
 
-  it('openModal should open modal and set editingExperience if provided', () => {
+  it('openmodal should open same modal for editing as well', () => {
     const experience = {
       id: 'abc',
       role: 'Software Engineer',
@@ -54,7 +54,7 @@ describe('Experience', () => {
     expect(component.editingExperience).toBe(experience);
   });
 
-  it('closeModal should close modal, clear editingEducation, and reload user', () => {
+  it('close modal shold reset editing experience', () => {
     const experience = {
       id: 'abc',
       role: 'Software Engineer',

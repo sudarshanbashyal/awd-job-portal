@@ -85,10 +85,10 @@ describe('RecruiterProfileForm', () => {
 
   // valid form test
   it('should mark form as valid when valid values are present', () => {
-    component.form.get('firstName')?.setValue('John');
-    component.form.get('lastName')?.setValue('Doe');
-    component.form.get('companyName')?.setValue('Company abc');
-    component.form.get('companyAddress')?.setValue('Hildesheim');
+    component.form.get('firstName')?.setValue('test');
+    component.form.get('lastName')?.setValue('user');
+    component.form.get('companyName')?.setValue('abc');
+    component.form.get('companyAddress')?.setValue('hildesheim');
     component.submit();
     expect(component.form.valid).toBeTrue();
   });

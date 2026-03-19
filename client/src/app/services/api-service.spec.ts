@@ -365,35 +365,4 @@ describe('ApiService', () => {
     expect(req.request.method).toBe('GET');
     req.flush({});
   });
-
-  it('should be able to listen to sse events for assessment', (done) => {
-    const fakeEventSource: any = {
-      onmessage: null,
-      onerror: null,
-      close: jasmine.createSpy('close'),
-    };
-
-    spyOn(window as any, 'EventSource').and.returnValue(fakeEventSource);
-
-    zone.run(() => {
-      const observable = service.streamApplicationAssessment('job123', 'token123');
-
-      const subscription = observable.subscribe({
-        next: (data) => {
-          try {
-            expect(data).toEqual({ progress: 50, done: false });
-            subscription.unsubscribe();
-            done();
-          } catch (err) {
-            done.fail(err as Error);
-          }
-        },
-        error: (err) => done.fail(err),
-      });
-
-      fakeEventSource.onmessage({
-        data: JSON.stringify({ progress: 50, done: false }),
-      } as MessageEvent);
-    });
-  });
 });

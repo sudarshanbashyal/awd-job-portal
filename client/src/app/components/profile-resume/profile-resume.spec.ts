@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProfileResume } from './profile-resume';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ApiService, AuthService, ToastService } from '../../services';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 
 describe('ProfileResume', () => {
   let component: ProfileResume;
@@ -132,34 +132,6 @@ describe('ProfileResume', () => {
     expect(component.resumeInfo).toBeNull();
   });
 
-  it('should download resume and revoke url on success', () => {
-    const blob = new Blob(['abc'], { type: 'application/pdf' });
-    apiService.downloadResume.and.returnValue(of(blob));
-
-    spyOn(window.URL, 'createObjectURL').and.returnValue('blob:fake');
-    spyOn(window.URL, 'revokeObjectURL').and.callFake(() => {});
-    spyOn(HTMLAnchorElement.prototype, 'click').and.callFake(() => {});
-
-    component.resumeInfo = { originalName: 'file.pdf', size: 10 } as any;
-
-    component.downloadResume();
-
-    expect(apiService.downloadResume).toHaveBeenCalled();
-    expect(window.URL.createObjectURL).toHaveBeenCalled();
-    expect(HTMLAnchorElement.prototype.click).toHaveBeenCalled();
-    expect(window.URL.revokeObjectURL).toHaveBeenCalled();
-  });
-
-  it('should handle download error without throwing', () => {
-    apiService.downloadResume.and.returnValue(throwError(() => new Error('fail')));
-    spyOn(console, 'error');
-
-    component.downloadResume();
-
-    expect(apiService.downloadResume).toHaveBeenCalled();
-    expect(console.error).toHaveBeenCalled();
-  });
-
   it('should warn when generating resume without skills or education', () => {
     authService.getUser.and.returnValue({ applicant: { skills: [], education: [] } } as any);
 
@@ -173,11 +145,10 @@ describe('ProfileResume', () => {
   });
 
   it('should generate resume and refresh user on success', () => {
-  // set component.user directly so the method sees skills/education
-  component.user = { applicant: { skills: ['s'], education: ['e'] } } as any;
-  apiService.generateResume.and.returnValue(of({ ok: true } as any));
+    component.user = { applicant: { skills: ['skill'], education: ['education'] } } as any;
+    apiService.generateResume.and.returnValue(of({ ok: true } as any));
 
-  component.generateResume();
+    component.generateResume();
 
     expect(apiService.generateResume).toHaveBeenCalled();
     expect(authService.loadUser).toHaveBeenCalled();

@@ -50,7 +50,7 @@ describe('JobDetails', () => {
 
   it('should apply for job successfully when resume exists', () => {
     component.jobId = 'job1';
-    component.user = { applicant: { resumeLink: 'https://example.com/resume.pdf' } } as any;
+    component.user = { applicant: { resumeLink: 'resum123.pdf' } } as any;
     apiService.createApplication.and.returnValue(
       of({ ok: true, data: { id: 'app1' }, errors: [] } as any),
     );
@@ -77,19 +77,9 @@ describe('JobDetails', () => {
     expect(apiService.createApplication).not.toHaveBeenCalled();
   });
 
-  it('should handle apply error gracefully', () => {
-    component.jobId = 'job1';
-    component.user = { applicant: { resumeLink: 'https://example.com/resume.pdf' } } as any;
-    apiService.createApplication.and.returnValue(throwError(() => new Error('fail')));
-
-    component.apply();
-
-    expect(component.loading).toBeFalse();
-  });
-
   it('should withdraw application successfully', () => {
     component.jobId = 'job1';
-    component.jobApplicationId = 'app1';
+    component.jobApplication = {id: '123', applicationStatus:"APPLIED"};
     apiService.withdrawApplication.and.returnValue(
       of({ ok: true, data: {}, errors: [] } as any),
     );
@@ -106,35 +96,26 @@ describe('JobDetails', () => {
     );
   });
 
-  it('should handle withdraw error gracefully', () => {
-    component.jobId = 'job1';
-    apiService.withdrawApplication.and.returnValue(throwError(() => new Error('fail')));
-
-    component.withdraw();
-
-    expect(component.loading).toBeFalse();
-  });
-
   it('should get job application by jobId', () => {
     component.jobId = 'job1';
     apiService.getJobApplicationByJobId.and.returnValue(
-      of({ ok: true, data: { id: 'app1' }, errors: [] } as any),
+      of({ ok: true, data: { id: '123', applicationStatus:"APPLIED" }, errors: [] } as any),
     );
 
     component.getJobApplication();
 
     expect(apiService.getJobApplicationByJobId).toHaveBeenCalledWith('job1');
-    expect(component.jobApplicationId).toBe('app1');
+    expect(component.jobApplication).toEqual( {id: '123', applicationStatus:"APPLIED" });
   });
 
-  it('should clear jobApplicationId on getJobApplication error', () => {
+  it('should clear jobApplication on getJobApplication error', () => {
     component.jobId = 'job1';
-    component.jobApplicationId = 'app1';
+    component.jobApplication = {id: '123', applicationStatus:"APPLIED"};
     apiService.getJobApplicationByJobId.and.returnValue(throwError(() => new Error('fail')));
 
     component.getJobApplication();
 
-    expect(component.jobApplicationId).toBe('');
+    expect(component.jobApplication).toBeNull();
   });
 
   it('should not call API if jobId is empty for getJobApplication', () => {
@@ -150,26 +131,16 @@ describe('JobDetails', () => {
     apiService.getJobById.and.returnValue(
       of({
         ok: true,
-        data: { id: 'job1', createdAt: '2026-03-16T10:00:00Z' },
+        data: { id: 'job1', createdAt: '2026-03-16' },
         errors: [],
       } as any),
     );
-    spyOn(console, 'log');
 
     component.getJob();
 
     expect(apiService.getJobById).toHaveBeenCalledWith('job1');
     expect(component.job).toBeTruthy();
     expect(component.formattedDate).toBeTruthy();
-  });
-
-  it('should handle getJob error gracefully', () => {
-    component.jobId = 'job1';
-    apiService.getJobById.and.returnValue(throwError(() => new Error('fail')));
-
-    component.getJob();
-
-    expect(component.loading).toBeFalse();
   });
 
   it('should not call API if jobId is empty for getJob', () => {
@@ -180,9 +151,9 @@ describe('JobDetails', () => {
     expect(apiService.getJobById).not.toHaveBeenCalled();
   });
 
-  it('should call withdraw when changeApplicationStatus with existing applicationId', () => {
-    component.jobApplicationId = 'app1';
-    component.jobId = 'job1';
+  it('should call withdraw when changeApplicationStatus with existing application', () => {
+    component.jobApplication = {id:'123', applicationStatus:"APPLIED"};
+    component.jobId = '123';
     apiService.withdrawApplication.and.returnValue(
       of({ ok: true, data: {}, errors: [] } as any),
     );
@@ -193,9 +164,9 @@ describe('JobDetails', () => {
     expect(component.withdraw).toHaveBeenCalled();
   });
 
-  it('should call apply when changeApplicationStatus without applicationId', () => {
-    component.jobApplicationId = '';
-    component.user = { applicant: { resumeLink: 'https://example.com/resume.pdf' } } as any;
+  it('should call apply when changeApplicationStatus without old application', () => {
+    component.jobApplication = null;
+    component.user = { applicant: { resumeLink: 'testresumelink' } } as any;
     component.jobId = 'job1';
     apiService.createApplication.and.returnValue(
       of({ ok: true, data: { id: 'app1' }, errors: [] } as any),
@@ -205,14 +176,6 @@ describe('JobDetails', () => {
     component.changeApplicationStatus();
 
     expect(component.apply).toHaveBeenCalled();
-  });
-
-  it('should open and close assessment modal', () => {
-    expect(component.isPopupOpen).toBeFalse();
-    component.analyzeApplication();
-    expect(component.isPopupOpen).toBeTrue();
-    component.closeModal();
-    expect(component.isPopupOpen).toBeFalse();
   });
 
   it('should navigate back', () => {

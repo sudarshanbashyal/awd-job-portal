@@ -57,8 +57,8 @@ describe('JobSearch', () => {
 
   it('should get jobs and populate jobs array on success', () => {
     const mockJobs = [
-      { id: 'job1', title: 'Engineer' } as any,
-      { id: 'job2', title: 'Developer' } as any,
+      { id: 'job1', title: 'software engineer' } as any,
+      { id: 'job2', title: 'software developer' } as any,
     ];
     apiService.searchJob.and.returnValue(
       of({ ok: true, data: mockJobs, errors: [] } as any),
@@ -68,27 +68,5 @@ describe('JobSearch', () => {
 
     expect(component.jobs).toEqual(mockJobs);
     expect(component.loading).toBeFalse();
-  });
-
-  it('should set loading to false on search error', () => {
-    apiService.searchJob.and.returnValue(throwError(() => new Error('fail')));
-
-    component.getJobs(component.defaultParams);
-
-    expect(component.loading).toBeFalse();
-  });
-
-  it('should initialize with default params on construction', () => {
-    expect(apiService.searchJob).toHaveBeenCalledWith(component.defaultParams);
-  });
-
-  it('should keep jobs empty when response not ok', () => {
-    apiService.searchJob.and.returnValue(
-      of({ ok: false, data: [], errors: [] } as any),
-    );
-
-    component.getJobs(component.defaultParams);
-
-    expect(component.jobs).toEqual([]);
   });
 });

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChangeStatusModal } from './change-status-modal';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ChangeStatusModal', () => {
   let component: ChangeStatusModal;
@@ -8,7 +9,7 @@ describe('ChangeStatusModal', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChangeStatusModal]
+      imports: [ChangeStatusModal, HttpClientTestingModule]
     })
     .compileComponents();
 

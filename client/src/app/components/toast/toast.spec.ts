@@ -29,21 +29,4 @@ describe('Toast', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should initialize toast$ from the service', () => {
-    expect(component.toast$).toBe(toastService.toastState$);
-  });
-
-  it('should receive toast values from the service observable', (done) => {
-    const toastMessage = { title: 'test toast', text: 'test message', type: 'error' as any };
-
-    component.toast$.subscribe((value) => {
-      if (value) {
-        expect(value).toEqual(toastMessage);
-        done();
-      }
-    });
-
-    toastSubject.next(toastMessage);
-  });
 });

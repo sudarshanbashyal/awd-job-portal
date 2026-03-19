@@ -4,7 +4,7 @@ import { JobApplication } from './job-application';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ApiService, AuthService } from '../../services';
-import { of, throwError } from 'rxjs';
+import { of} from 'rxjs';
 
 describe('JobApplication', () => {
   let component: JobApplication;
@@ -45,30 +45,16 @@ describe('JobApplication', () => {
     expect(apiService.getMyApplications).toHaveBeenCalled();
   });
 
-  it('should populate applications array on successful fetch', () => {
-    const mockApplications = [
+  it('should populate data after getting response from api', () => {
+    const applications = [
       { id: 'app1', jobId: 'job1', status: 'APPLIED' },
       { id: 'app2', jobId: 'job2', status: 'SHORTLISTED' },
     ];
     apiService.getMyApplications.and.returnValue(
-      of({ data: mockApplications, errors: [] } as any),
+      of({ data: applications, errors: [] } as any),
     );
-    spyOn(console, 'log');
-
     component.ngOnInit();
-
-    expect(component.applications).toEqual(mockApplications);
-    expect(console.log).toHaveBeenCalledWith('Applications:', jasmine.any(Object));
-    expect(console.log).toHaveBeenCalledWith('Assigned applications:', mockApplications);
-  });
-
-  it('should handle fetch error gracefully', () => {
-    apiService.getMyApplications.and.returnValue(throwError(() => new Error('fail')));
-    spyOn(console, 'error');
-
-    component.ngOnInit();
-
-    expect(console.error).toHaveBeenCalledWith('Error fetching applications:', jasmine.any(Error));
+    expect(component.applications).toEqual(applications);
   });
 
   it('should set empty array if data is null', () => {

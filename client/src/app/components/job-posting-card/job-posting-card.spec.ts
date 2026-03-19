@@ -22,9 +22,9 @@ describe('JobPostingCard', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should format date when application changes', () => {
+  it('should format date', () => {
     component.jobPost = {
-      createdAt: '2025-03-01T00:00:00Z',
+      createdAt: '2025-03-01',
     } as JobPostingsWithApplicationsCount;
 
     component.ngOnChanges();

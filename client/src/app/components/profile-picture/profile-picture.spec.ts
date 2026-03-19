@@ -23,12 +23,12 @@ describe('ProfilePicture', () => {
 
   it('should generate avatar from profile name when no profilePicture exists', () => {
     component.profile = {
-      firstName: 'John',
-      lastName: 'Doe',
+      firstName: 'Test',
+      lastName: 'User',
     } as any;
 
     component.ngOnChanges();
 
-    expect(component.avatarUrl).toBe(`${environment.avatarApiUrl}&name=John+Doe`);
+    expect(component.avatarUrl).toBe(`${environment.avatarApiUrl}&name=Test+User`);
   });
 });
