@@ -79,7 +79,7 @@
         <td>{{ entry.createdAt | date: 'mediumDate' }}</td>
 
         <td>
-          <select [ngModel]="entry.applicationStatus" (change)="changeStatus($event, entry)">
+          <select [ngModel]="entry.applicationStatus" (change)="changeStatus($event, entry)" disabled="{{entry.applicationStatus==='WITHDRAWN'}}">
             @for (status of statuses; track status.value) {
               <option value="{{ status.value }}">{{ status.text }}</option>
             }
