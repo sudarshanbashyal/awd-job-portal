@@ -48,7 +48,7 @@ interface Applicant {
 interface UserSkill {
   id?: string | null;
   skill: string;
-  applicantId: string;
+  applicantId?: string;
 }
 
 interface ProfessionalExperience {

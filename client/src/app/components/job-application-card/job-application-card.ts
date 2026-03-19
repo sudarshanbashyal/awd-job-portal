@@ -16,10 +16,7 @@ export class JobApplicationCard {
   formattedDate = '';
 
   ngOnChanges() {
-    if (this.application) {
+    if (this.application)
       this.formattedDate = formatDate(this.application.createdAt, 'dd MMM, yyyy', 'en-US');
-      console.log('Card application:', this.application);
-    }
-    
   }
 }

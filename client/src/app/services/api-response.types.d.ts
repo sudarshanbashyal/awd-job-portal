@@ -88,7 +88,7 @@ interface DeleteAccountResponse extends BaseApiResponse {
 
 interface UpdateApplicantCredentials extends BaseApiResponse {
   data: {
-    mesage: string;
+    message: string;
   };
 }
 

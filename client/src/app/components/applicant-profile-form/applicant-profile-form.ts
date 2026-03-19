@@ -49,8 +49,8 @@ export class ApplicantProfileForm {
         next: (res) => {
           if (res.ok) {
             this.authService.loadUser();
+            this.toastService.show('Profile Updated', 'Your profile has been successfully updated');
           }
-          this.toastService.show('Profile Updated', 'Your profile has been successfully updated');
         },
         error: () => { },
       });

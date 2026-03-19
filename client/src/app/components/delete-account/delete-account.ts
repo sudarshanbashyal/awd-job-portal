@@ -15,7 +15,7 @@ export class DeleteAccount {
     private readonly apiService: ApiService,
     private readonly authService: AuthService,
     private readonly toastService: ToastService,
-  ) { }
+  ) {}
 
   deleteAccount() {
     this.apiService.deleteAccount().subscribe({
@@ -25,7 +25,7 @@ export class DeleteAccount {
           this.authService.logout();
         }
       },
-      error: () => { },
+      error: () => {},
     });
   }
 }
