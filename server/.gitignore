@@ -6,10 +6,4 @@ node_modules
 
 dev.db
 
-/src/registry/profile/*
-!/src/registry/profile/
-
-/src/registry/resume/*
-!/src/registry/resume/
-
 uploads/
