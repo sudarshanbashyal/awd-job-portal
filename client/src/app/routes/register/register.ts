@@ -76,7 +76,6 @@ export class Register {
   }
 
   submit() {
-    console.log(this.loading, this.submissionSuccessful);
     if (this.loading || this.submissionSuccessful) return;
 
     this.submissionSuccessful = false;
