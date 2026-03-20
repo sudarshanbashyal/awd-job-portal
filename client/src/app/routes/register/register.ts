@@ -83,7 +83,6 @@ export class Register {
 
     if (this.form.valid) {
       this.loading = true;
-      this.submissionSuccessful = true;
 
       this.apiService
         .register(this.form.value)
@@ -103,7 +102,7 @@ export class Register {
             }
           },
           error: (err) => {
-            if (err.status === 401) {
+            if (err.status === 400) {
               this.form.setErrors({ duplicateEmail: true });
             }
           },
