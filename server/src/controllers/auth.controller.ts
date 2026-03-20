@@ -60,7 +60,7 @@ export const register: RequestHandler = async (req: Request, res: Response) => {
     });
 
     if (user) {
-      res.status(401).json({
+      res.status(400).json({
         ok: false,
         errors: ["User with email already exists."],
       });
