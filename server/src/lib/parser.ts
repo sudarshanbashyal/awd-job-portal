@@ -7,12 +7,14 @@ import { getParseResumePrompt, getResumeAssessmentPrompt } from "./prompts";
 
 // prisma
 import { prisma } from "./prisma";
+import { ParsedResume } from "generated/prisma/browser";
 import { ParsedResumeStatus, SkillType } from "../../generated/prisma/enums";
 
 const geminiClient = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
 });
 const GEMINI_MODEL = "gemini-2.5-flash";
+const MAX_RETRY = 3;
 
 // types
 interface ParsedResumeResponse {
@@ -27,39 +29,6 @@ interface ResumeAssessmentResponse {
   suggestedImprovements: string[];
   rating: number;
 }
-
-const parsingTest = {
-  hardSkills: [
-    "Software Engineering",
-    "Web Engineering",
-    "Mobile Application Development",
-    "Application Programming",
-    "Database Principles",
-    "Software Development Methodologies",
-    "Web Systems & Technologies",
-    "Programming",
-    "Computer Science Fundamentals",
-    "Systems Analysis and Design",
-    "Website Development",
-    "Project Management",
-  ],
-  softSkills: ["Communication", "leadership"],
-  experienceInYears: 1,
-  rating: 2,
-};
-
-const assessmentTest = {
-  summary:
-    "You showcase extensive full-stack experience with React/Next.js, Node.js, databases, and cloud platforms, demonstrating strong ownership and collaboration skills.",
-  suggestedImprovements: [
-    "Quantify the impact and outcomes of your implemented features with metrics.",
-    "Explicitly mention your experience debugging production issues if applicable.",
-    "Add any experience with CI/CD pipelines to further align with bonus points.",
-    "Highlight instances where you balanced speed with quality in your work.",
-    "Consider adding a brief summary emphasizing end-to-end feature ownership.",
-  ],
-  rating: 9,
-};
 
 const parsePdfText = async (resumeLink: string) => {
   try {
@@ -76,12 +45,16 @@ export const parseResumeDetails = async (
   applicationId: string,
   resumePath: string,
   jobDescription: string,
-) => {
-  const parsedResume = await prisma.parsedResume.create({
-    data: {
-      applicationId,
-    },
-  });
+  retry: number = 1,
+  parseResult?: ParsedResume,
+): Promise<void> => {
+  const parsedResume =
+    parseResult ||
+    (await prisma.parsedResume.create({
+      data: {
+        applicationId,
+      },
+    }));
 
   try {
     const parsedText = await parsePdfText(resumePath);
@@ -106,15 +79,26 @@ export const parseResumeDetails = async (
 
     await saveParsedResumeDetails(parsedResume.id, parsedJson);
   } catch (error) {
-    await prisma.parsedResume.update({
-      where: {
-        id: parsedResume.id,
-      },
-      data: {
-        status: ParsedResumeStatus.FAILED,
-      },
-    });
-    console.error(error);
+    console.log(retry, retry);
+    if (retry <= MAX_RETRY)
+      return parseResumeDetails(
+        applicationId,
+        resumePath,
+        jobDescription,
+        ++retry,
+        parsedResume,
+      );
+    else {
+      await prisma.parsedResume.update({
+        where: {
+          id: parsedResume.id,
+        },
+        data: {
+          status: ParsedResumeStatus.FAILED,
+        },
+      });
+      console.error(error);
+    }
   }
 };
 
