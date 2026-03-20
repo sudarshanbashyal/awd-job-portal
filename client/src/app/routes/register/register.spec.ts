@@ -163,7 +163,7 @@ describe('Register', () => {
   });
 
   it('should handle duplicate email error', () => {
-    const error = { status: 401 };
+    const error = { status: 400 };
     apiService.register.and.returnValue(throwError(() => error));
 
     component.form.patchValue({
